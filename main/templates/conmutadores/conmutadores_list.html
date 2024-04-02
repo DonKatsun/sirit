@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Conmutadores</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+    <h1>Lista de Conmutadores</h1>
+    <a href="{% url 'conmutador_create' %}">Agregar Conmutador</a>
+    <table>
+        <thead>
+            <tr>
+                <th>No. Inventario</th>
+                <th>Activo</th>
+                <th>Dependencia</th>
+                <th>Tipo</th>
+                <th>Tecnología</th>
+                <th>Protocolo</th>
+                <th>Extensiones Soportadas</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conmutador in conmutadores %}
+            <tr>
+                <td><a href="{% url 'conmutador_detail' conmutador.pk %}">{{ conmutador.no_inventario }}</a></td>
+                <td>{% if conmutador.activo %}Sí{% else %}No{% endif %}</td>
+                <td>{{ conmutador.id_dependencia.nombre_dependencia }}</td>
+                <td>{{ conmutador.tipo }}</td>
+                <td>{{ conmutador.tecnologia }}</td>
+                <td>{{ conmutador.protocolo }}</td>
+                <td>{{ conmutador.ext_soportadas }}</td>
+                <td>{{ conmutador.modelo }}</td>
+                <td>{{ conmutador.id_marca.marca_conmutador }}</td>
+                <td><a href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
+                <td>
+                    <form id="deleteForm" action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return confirmDelete()">
+                        {% csrf_token %}
+                        <input type="submit" value="Eliminar">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script>
+    function confirmDelete() {
+        if (confirm("¿Estás seguro de que deseas eliminar este conmutador?")) {
+            return true; // Si el usuario confirma, se enviará el formulario
+        } else {
+            return false; // Si el usuario cancela, se cancelará el envío del formulario
+        }
+    }
+</script>

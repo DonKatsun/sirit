@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Conmutador</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+    <h1>Detalle de Conmutador</h1>
+    <p>No. Inventario: {{ conmutador.no_inventario }}</p>
+    <p>Activo: {% if conmutador.activo %}Sí{% else %}No{% endif %}</p>
+    <p>Tipo: {{ conmutador.tipo }}</p>
+    <!-- Agrega aquí más detalles del conmutador si lo necesitas -->
+    <a href="{% url 'conmutador_update' conmutador.pk %}">Editar</a>
+    <form action="{% url 'conmutador_delete' conmutador.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Eliminar">
+    </form>
+</body>
+</html>
