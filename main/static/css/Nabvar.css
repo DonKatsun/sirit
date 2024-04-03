@@ -84,10 +84,11 @@ body {
 
 /*  Estilos tab Inicio */
 .titulotab {
-    font-size: 3em;   
+    font-size: 4em;   
     text-align: left;
     color: #383737;
-    margin: 0 auto; /* Centra el texto horizontalmente */
+    margin-left: 30px;
+    /* margin: 0 auto; Centra el texto horizontalmente */
 }
 
 
