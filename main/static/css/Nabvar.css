@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #d9d9d9;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 15%;
+}
+
+.title {
+    font-size: 5em;
+    font-weight: bold;
+    text-align: center;
+    color: #383737;
+    margin: 0 auto; /* Centra el texto horizontalmente */
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between; /* Distribuye los botones de manera uniforme */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin-bottom: 30px;
+}
+
+.buttons {
+    color: #383737;
+    padding: 10px 20px;
+    font-size: 2em;
+    border: none;
+    width: 250px;
+    height: 60px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: #d9d9d9; /* Color de fondo inactivo */
+    text-decoration: none; /* Quita el subrayado predeterminado de los enlaces */
+    display: inline-block; /* Para que los enlaces se comporten como bloques */
+    text-align: center; /* Centra el texto dentro del botón */
+    line-height: 60px; /* Centra verticalmente el texto */
+  }
+  
+  .buttons.active {
+    background-color: #383737; /* Color de fondo activo */
+    color: white;
+  }
+  
+  .buttons:hover {
+    background-color: #989898; /* Cambia el color de fondo al hacer hover */
+  }
+  
+
+.logout-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.logout-button {
+    background-color: #d9d9d9;
+    color: #383737;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: underline; /* Subraya el texto */
+}
+
+
+/*  Estilos tab Inicio */
+.titulotab {
+    font-size: 3em;   
+    text-align: left;
+    color: #383737;
+    margin: 0 auto; /* Centra el texto horizontalmente */
+}
+
+
+  
