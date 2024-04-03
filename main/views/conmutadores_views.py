@@ -37,3 +37,4 @@ def conmutador_delete(request, pk):
         conmutador.delete()
         return redirect('conmutadores_list')
     return render(request, 'conmutadores/conmutador_confirm_delete.html', {'conmutador': conmutador})
+

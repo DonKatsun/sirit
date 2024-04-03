@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navbar</title>
+<link rel="stylesheet" href="{% static 'css/Nabvar.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo-container">
+    <img src="{% static 'images/Logo2.png' %}" alt="Logo" class="logo">
+    <span class="title">SISTEMA DE INVENTARIO</span>
+  </div>
+
+  <div class="buttons-container">
+    <a href="#" class="buttons active" data-target="content1" onclick="toggleTab(event)">Inicio</a>
+    <a href="#" class="buttons" data-target="content2" onclick="toggleTab(event)">Inventario</a>
+    <a href="#" class="buttons" data-target="content3" onclick="toggleTab(event)">Catálogo</a>
+    <a href="#" class="buttons" data-target="content4" onclick="toggleTab(event)">Clonar</a>
+    <a href="#" class="buttons" data-target="content5" onclick="toggleTab(event)">+ Nuevo</a>
+  </div>
+  <div class="logout-container">
+    <button class="logout-button">Salir</button>
+  </div>
+</div>
+
+<div id="content1" class="tab-content active">
+  <div class="titulotab"> Reporte de Inventario </div>
+  <object type="text/html" data="{% static 'components/home.html' %}" width="100%" height="490"></object>
+
+</div>
+<div id="content2" class="tab-content" style="display: none;">
+  <div class="titulotab"> Lista  de Inventario </div>
+</div>
+<div id="content3" class="tab-content" style="display: none;">
+  <div class="titulotab"> Catálogo </div>
+</div>
+<div id="content4" class="tab-content" style="display: none;">
+  <div class="titulotab"> Reporte de Inventario </div>
+</div>
+<div id="content5" class="tab-content" style="display: none;">
+  <div class="titulotab"> Reporte de Inventario </div> 
+</div>
+
+</body>
+</html>
+
+<script>
+    function toggleTab(event) {
+      var target = event.target;
+      var buttons = document.querySelectorAll('.buttons');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      target.classList.add('active');
+    
+      var tabId = target.getAttribute('data-target');
+      var tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(function(tab) {
+        if (tab.id === tabId) {
+          tab.classList.add('active');
+          tab.style.display = 'block';
+        } else {
+          tab.classList.remove('active');
+          tab.style.display = 'none';
+        }
+      });
+    
+      event.preventDefault(); // Evita que el enlace recargue la página
+    }
+    </script>

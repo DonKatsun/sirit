@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla de Reporte</title>
+<style>
+  .tabla-reporte {
+    overflow-x: auto;
+    width: 100%;
+    background-color: #d9d9d9;
+  }
+
+  table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border-bottom: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Estilos para ocultar la tabla */
+  .tabla-desactivada {
+    display: none;
+  }
+
+     /* Estilo para el combo box */
+     input {
+        background-color: white; /* Fondo blanco */
+        border: 1px solid #383737; /* Borde color #383737 */
+        color: #383737; /* Texto color #383737 */
+        border-radius: 10px; /* Borde redondeado */
+        padding: 1px; /* Espaciado interno */
+        font-size: 16px; /* Tamaño de fuente */
+        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        height: 50px;
+        margin: 30px;
+    }
+
+    /* Estilo para el combo box */
+    select {
+        background-color: white; /* Fondo blanco */
+        border: 1px solid #383737; /* Borde color #383737 */
+        color: #383737; /* Texto color #383737 */
+        border-radius: 10px; /* Borde redondeado */
+        padding: 8px; /* Espaciado interno */
+        font-size: 16px; /* Tamaño de fuente */
+        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        height: 50px;
+        margin: 30px;
+    }
+    
+    /* Estilo para las opciones del combo box */
+    select option {
+        background-color: #d9d9d9; /* Fondo blanco */
+        color: #383737; /* Texto color #383737 */
+        font-size: 16px; /* Tamaño de fuente */
+    }
+    #limpiarFiltros {
+    background-color: white;
+    color: #383737;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.buttons {
+    color: #383737;
+    padding: 10px 20px;
+    font-size: 2em;
+    border: none;
+    width: 200px;
+    height: 30px;
+    border-radius: 20px 20px 0 0; /* Solo los bordes superiores redondeados */
+    cursor: pointer;
+    background-color: white; /* Color de fondo inactivo */
+    text-decoration: none; /* Quita el subrayado predeterminado de los enlaces */
+    display: inline-block; /* Para que los enlaces se comporten como bloques */
+    text-align: center; /* Centra el texto dentro del botón */
+    text-decoration: underline; /* Subraya el texto */
+}
+
+.buttons.active {
+    background-color: #d9d9d9; /* Color de fondo activo */
+    color: #383737;
+    text-decoration: none; /* Desactiva el subrayado cuando el botón está activo */
+}
+  
+  .buttons:hover {
+    background-color: #989898; /* Cambia el color de fondo al hacer hover */
+  }
+
+/* estilos checkbox*/
+  /* Estilos originales de las casillas de verificación */
+  .fondocheckbox {
+    background-color: #d9d9d9;
+    display: flex;
+  }
+
+  .checkbox-wrapper {
+    margin-left: 50px;
+  }
+
+  .checkbox-wrapper input[type="checkbox"] {
+    display: none;
+  }
+
+  .checkbox-wrapper .terms-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .checkbox-wrapper .terms-label .label-text {
+    margin-left: 10px;
+    font-size: 1.5em;
+  }
+
+  .checkbox-wrapper .checkbox-svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .checkbox-wrapper .checkbox-box {
+    fill: white;
+    stroke: #383737;
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    transition: stroke-dashoffset 0.6s ease-in;
+  }
+
+  .checkbox-wrapper .checkbox-tick {
+    stroke: #383737;
+    stroke-dasharray: 172;
+    stroke-dashoffset: 172;
+    transition: stroke-dashoffset 0.6s ease-in;
+  }
+
+  .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
+  .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
+    stroke-dashoffset: 0;
+  }
+
+
+
+</style>
+</head>
+<body>
+  <!-- CODIGO PARA CONMBO BOX-->
+    <label for="secretarias"></label>
+    <select id="secretarias" onchange="actualizarDependencias()">
+      <option value="0">Secretaría</option>
+      <option value="1">Oficialía Mayor</option>
+      <option value="2">Procuraduría General de Justica</option>
+      <option value="3">Secretaría de Contraloría</option>
+      <!-- Agrega las 16 secretarías -->
+    </select>
+    
+    <label for="dependencias"></label>
+    <select id="dependencias">
+      <!-- Las opciones se actualizarán dinámicamente mediante JavaScript -->
+    </select>
+
+<input type="date" id="selector_anio" name="selector_anio" pattern="\d{4}" min="1900-01-01" max="2100-12-31" step="1" value="">
+
+
+<!-- CODIGO PARA CONMBO BOX-->
+<label for="categoria"></label>
+<select id="categoria" onchange="actualizarCategorias()">
+  <option value="200">Categoría</option>
+  <option value="201">Hardware</option>
+  <option value="202">Software</option>
+  <option value="203">Telecomunicaciones</option>
+  <option value="204">Usuarios</option>
+
+  <!-- Agrega las 16 secretarías -->
+</select>
+
+<label for="subcategoria"></label>
+<select id="subcategoria">
+  <!-- Las opciones se actualizarán dinámicamente mediante JavaScript -->
+</select>
+
+<!-- Agregamos el botón de limpieza -->
+<button id="limpiarFiltros">Limpiar Filtros</button>
+
+<div class="buttons-container">
+    <a href="#" class="buttons active" data-target="content1" onclick="toggleTab(event)">Secretaría</a>
+    <a href="#" class="buttons" data-target="content2" onclick="toggleTab(event)">Dependencia</a>
+  </div>
+
+  <div id="content1" class="tab-content active">
+    <div class="fondocheckbox">
+        <!-- Casilla de verificación para activar la tabla -->
+        <div class="checkbox-wrapper">
+          <input id="activoCheckbox" name="checkbox" type="checkbox" onclick="toggleTablas('activoCheckbox')">
+          <label class="terms-label" for="activoCheckbox">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 200 200" class="checkbox-svg">
+                <mask  fill="white">
+                    <rect height="200" width="200"></rect>
+                  </mask>
+                  
+                  <rect mask="url(#path-1-inside-1_476_5-37)" stroke-width="40" class="checkbox-box" height="200" width="200"></rect>
+                  <path stroke-width="15" d="M52 111.018L76.9867 136L149 64" class="checkbox-tick"></path>
+            </svg>
+            <span class="label-text">Activo</span>
+          </label>
+        </div>
+        <!-- Casilla de verificación para desactivar la tabla -->
+        <div class="checkbox-wrapper">
+          <input id="desactivadoCheckbox" name="checkbox" type="checkbox" onclick="toggleTablas('desactivadoCheckbox')">
+          <label class="terms-label" for="desactivadoCheckbox">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 200 200" class="checkbox-svg">
+              <mask fill="white">
+                <rect height="200" width="200"></rect>
+              </mask>
+               <rect mask="url(#path-1-inside-1_476_5-37)" stroke-width="40" class="checkbox-box" height="200" width="200"></rect>
+               <path stroke-width="15" d="M52 111.018L76.9867 136L149 64" class="checkbox-tick"></path>
+            </svg>
+            <span class="label-text">Desactivo</span>
+          </label>
+        </div>
+      </div>
+      <!-- Tabla de reporte activa -->
+      <div class="tabla-reporte" id="tablaActiva">
+        <div class="tabla-reporte">
+            <table>
+                <tr>
+                    <th>SECRETERÍA</th>
+                    <th>ENERGÍA</th>
+                    <th>ALMACENAMIENTO</th>
+                    <th>EQUIPO DE COMPUTO PERSONAL</th>
+                    <th>EQUIPO COMPUTO SERVIDOR</th>
+                    <th>IMPRESIÓN</th>
+                    <th>PROYECTOR</th>
+                    <th>EQUIPO TELEFONICO</th>
+                    <th>DRON</th>
+                    <th>FIREWALL</th>
+                    <th>ROUTERS</th>
+                    <th>CONMUTADOR</th>
+                    <th>HERRAMIENTA DE DESARROLLO</th>
+                    <th>SISTEMA DE INFORMACIÓN</th>
+                    <th>SISTEMA DE INFORMACIÓN MÓVIL</th>
+                    <th>ENLACE DEPENDIENTE</th>
+                    <th>ENLACE NO DEPENDIENTE</th>
+                    <th>SITE</th>
+                    <th>USUARIOS</th>
+                </tr>
+                <tr>
+                    <td>Oficialia Mayor</td>
+                    <td>Fila 1, Columna 2</td>
+                    <td>Fila 1, Columna 3</td>
+                    <td>Fila 1, Columna 4</td>
+                    <td>Fila 1, Columna 5</td>
+                    <td>Fila 1, Columna 6</td>
+                    <td>Fila 1, Columna 7</td>
+                    <td>Fila 1, Columna 8</td>
+                    <td>Fila 1, Columna 9</td>
+                    <td>Fila 1, Columna 10</td>
+                    <td>Fila 1, Columna 11</td>
+                    <td>Fila 1, Columna 12</td>
+                    <td>Fila 1, Columna 13</td>
+                    <td>Fila 1, Columna 14</td>
+                    <td>Fila 1, Columna 15</td>
+                    <td>Fila 1, Columna 16</td>
+                    <td>Fila 1, Columna 17</td>
+                    <td>Fila 1, Columna 18</td>
+                    <td>Fila 1, Columna 19</td>
+                </tr>
+                <tr>
+                    <td>Procuraduría General de Justicia</td>
+                    <td>Fila 2, Columna 2</td>
+                    <td>Fila 2, Columna 3</td>
+                    <td>Fila 2, Columna 4</td>
+                    <td>Fila 2, Columna 5</td>
+                    <td>Fila 2, Columna 6</td>
+                    <td>Fila 2, Columna 7</td>
+                    <td>Fila 2, Columna 8</td> 
+                    <td>Fila 2, Columna 9</td>
+                    <td>Fila 2, Columna 10</td>
+                    <td>Fila 2, Columna 11</td>
+                    <td>Fila 2, Columna 12</td>
+                    <td>Fila 2, Columna 13</td>
+                    <td>Fila 2, Columna 14</td>
+                    <td>Fila 2, Columna 15</td>
+                    <td>Fila 2, Columna 16</td>
+                    <td>Fila 2, Columna 17</td>
+                    <td>Fila 2, Columna 18</td>
+                    <td>Fila 2, Columna 19</td>
+                </tr>
+                <tr>
+                    <td>Secretaría de Contraloría</td>
+                    <td>Fila 2, Columna 2</td>
+                    <td>Fila 2, Columna 3</td>
+                    <td>Fila 2, Columna 4</td>
+                    <td>Fila 2, Columna 5</td>
+                    <td>Fila 2, Columna 6</td>
+                    <td>Fila 2, Columna 7</td>
+                    <td>Fila 2, Columna 8</td>
+                    <td>Fila 2, Columna 9</td>
+                    <td>Fila 2, Columna 10</td>
+                    <td>Fila 2, Columna 11</td>
+                    <td>Fila 2, Columna 12</td>
+                    <td>Fila 2, Columna 13</td>
+                    <td>Fila 2, Columna 14</td>
+                    <td>Fila 2, Columna 15</td>
+                    <td>Fila 2, Columna 16</td>
+                    <td>Fila 2, Columna 17</td>
+                    <td>Fila 2, Columna 18</td>
+                    <td>Fila 2, Columna 19</td>
+                </tr>
+                <tr>
+                    <td>Secretaría de Cultura</td>
+                    <td>Fila 2, Columna 2</td>
+                    <td>Fila 2, Columna 3</td>
+                    <td>Fila 2, Columna 4</td>
+                    <td>Fila 2, Columna 5</td>
+                    <td>Fila 2, Columna 6</td>
+                    <td>Fila 2, Columna 7</td>
+                    <td>Fila 2, Columna 8</td>
+                    <td>Fila 2, Columna 9</td>
+                    <td>Fila 2, Columna 10</td>
+                    <td>Fila 2, Columna 11</td>
+                    <td>Fila 2, Columna 12</td>
+                    <td>Fila 2, Columna 13</td>
+                    <td>Fila 2, Columna 14</td>
+                    <td>Fila 2, Columna 15</td>
+                    <td>Fila 2, Columna 16</td>
+                    <td>Fila 2, Columna 17</td>
+                    <td>Fila 2, Columna 18</td>
+                    <td>Fila 2, Columna 19</td>
+                </tr>
+                <!-- Repite este bloque de fila (tr) según sea necesario para tener más filas -->
+            </table>
+        </div>
+      </div>
+      
+      <!-- Tabla de reporte desactiva -->
+      <div class="tabla-reporte tabla-desactivada" id="tablaDesactivada">
+        <div class="tabla-reporte">
+            <table>
+                <tr>
+                    <th>SECRETERÍA</th>
+                    <th>ENERGÍA</th>
+                    <th>ALMACENAMIENTO</th>
+                    <th>EQUIPO DE COMPUTO PERSONAL</th>
+                    <th>EQUIPO COMPUTO SERVIDOR</th>
+                    <th>IMPRESIÓN</th>
+                    <th>PROYECTOR</th>
+                    <th>EQUIPO TELEFONICO</th>
+                    <th>DRON</th>
+                    <th>FIREWALL</th>
+                    <th>ROUTERS</th>
+                    <th>CONMUTADOR</th>
+                    <th>HERRAMIENTA DE DESARROLLO</th>
+                    <th>SISTEMA DE INFORMACIÓN</th>
+                    <th>SISTEMA DE INFORMACIÓN MÓVIL</th>
+                    <th>ENLACE DEPENDIENTE</th>
+                    <th>ENLACE NO DEPENDIENTE</th>
+                    <th>SITE</th>
+                    <th>USUARIOS</th>
+                </tr>
+                <tr>
+                    <td>Oficialia Mayor</td>
+                    <td>Fila 1, Columna 2</td>
+                    <td>Fila 1, Columna 3</td>
+                    <td>Fila 1, Columna 4</td>
+                    <td>Fila 1, Columna 5</td>
+                    <td>Fila 1, Columna 6</td>
+                    <td>Fila 1, Columna 7</td>
+                    <td>Fila 1, Columna 8</td>
+                    <td>Fila 1, Columna 9</td>
+                    <td>Fila 1, Columna 10</td>
+                    <td>Fila 1, Columna 11</td>
+                    <td>Fila 1, Columna 12</td>
+                    <td>Fila 1, Columna 13</td>
+                    <td>Fila 1, Columna 14</td>
+                    <td>Fila 1, Columna 15</td>
+                    <td>Fila 1, Columna 16</td>
+                    <td>Fila 1, Columna 17</td>
+                    <td>Fila 1, Columna 18</td>
+                    <td>Fila 1, Columna 19</td>
+                </tr>
+                
+                <!-- Repite este bloque de fila (tr) según sea necesario para tener más filas -->
+            </table>
+        </div>
+      </div>
+      
+
+
+    
+  </div>
+  <div id="content2" class="tab-content" style="display: none;">
+ 
+
+  </div>
+
+  <script>
+    // tabs 
+    function toggleTab(event) {
+      var target = event.target;
+      var buttons = document.querySelectorAll('.buttons');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      target.classList.add('active');
+    
+      var tabId = target.getAttribute('data-target');
+      var tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(function(tab) {
+        if (tab.id === tabId) {
+          tab.classList.add('active');
+          tab.style.display = 'block';
+        } else {
+          tab.classList.remove('active');
+          tab.style.display = 'none';
+        }
+      });
+    
+      event.preventDefault(); // Evita que el enlace recargue la página
+    }
+    </script>
+
+<script>
+    //select dependencia
+    function actualizarDependencias() {
+      var secretariaSeleccionada = document.getElementById("secretarias").value;
+      var dependenciasSelect = document.getElementById("dependencias");
+    
+      // Elimina todas las opciones actuales
+      dependenciasSelect.innerHTML = "";
+    
+      // Agrega las opciones correspondientes a la secretaría seleccionada
+      switch (secretariaSeleccionada) {
+        case "1":
+          dependenciasSelect.innerHTML += "<option value='100'>Dependencias</option>";  
+          dependenciasSelect.innerHTML += "<option value='101'>Despacho Oficialia Mayor</option>";
+          dependenciasSelect.innerHTML += "<option value='102'>Dirección General de Compras Públicas</option>";
+          dependenciasSelect.innerHTML += "<option value='103'>Dirección General de Innovación Gubernamental</option>";
+          dependenciasSelect.innerHTML += "<option value='104'>Dirección General de Patrimonio Inmobiliario</option>";
+          // Agrega más opciones según sea necesario para Oficialia Mayor
+          break;
+        case "2":
+          dependenciasSelect.innerHTML += "<option value='110'>Dependencias</option>";  
+          dependenciasSelect.innerHTML += "<option value='111 '>Centro de Atención Temprana Oriente</option>";
+          dependenciasSelect.innerHTML += "<option value='112'>Centro de Opereción Estratégica</option>";
+          dependenciasSelect.innerHTML += "<option value='113'>Despacho Procuradoría General de Justicia</option>";
+          dependenciasSelect.innerHTML += "<option value='114'>Dirección General de la Policía Investigadora</option>";
+          // Agrega más opciones según sea necesario para Secretaría 1
+          break;
+        case "3":
+          dependenciasSelect.innerHTML += "<option value='120'>Dependencias</option>";
+          dependenciasSelect.innerHTML += "<option value='121'>Dirección General de Normativa</option>";
+          dependenciasSelect.innerHTML += "<option value='122'>Dirección General de Vinculación</option>";
+          dependenciasSelect.innerHTML += "<option value='123'>Dirección General de Órganos de Control y Vigilancia</option>";
+          dependenciasSelect.innerHTML += "<option value='124'>Dirección General de Auditoría Gubernamental</option>";
+          // Agrega más opciones según sea necesario para Secretaría 2
+          break;
+        // Agrega más casos para las demás secretarías
+        default:
+          // Puedes manejar una opción por defecto aquí
+          break;
+      }
+    }
+    </script>
+
+
+<script>
+    // select subcategoria
+function actualizarCategorias() {
+  var categoriaSeleccionada = document.getElementById("categoria").value;
+  var subcategoriaSelect = document.getElementById("subcategoria");
+
+  // Elimina todas las opciones actuales
+  subcategoriaSelect.innerHTML = "";
+
+  // Agrega las opciones correspondientes a la categoría seleccionada
+  switch (categoriaSeleccionada) {
+    case "201":
+      subcategoriaSelect.innerHTML += "<option value='1000'>Subcategoria</option>";  
+      subcategoriaSelect.innerHTML += "<option value='1010'>Energia</option>";
+      subcategoriaSelect.innerHTML += "<option value='1020'>Almacenamiento</option>";
+      subcategoriaSelect.innerHTML += "<option value='1030'>Equipo de Computo Personal</option>";
+      subcategoriaSelect.innerHTML += "<option value='1040'>Equipo Telefonico</option>";
+      // Agrega más opciones según sea necesario para Oficialia Mayor
+      break;
+    case "202":
+      subcategoriaSelect.innerHTML += "<option value='1100'>Subcategoria</option>";  
+      subcategoriaSelect.innerHTML += "<option value='1110 '>Herramienta de Desarrollo</option>";
+      subcategoriaSelect.innerHTML += "<option value='1120'>Sistema de Información Movíl</option>"
+      subcategoriaSelect.innerHTML += "<option value='1130'>Sistema de Información Movíl</option>"
+      // Agrega más opciones según sea necesario para Secretaría 1
+      break;
+    case "203":
+      subcategoriaSelect.innerHTML += "<option value='1200'>Subcategoria</option>";
+      subcategoriaSelect.innerHTML += "<option value='1210'>Enlace Dependiente</option>";
+      subcategoriaSelect.innerHTML += "<option value='1220'>Enlace No Dependiente</option>";
+      subcategoriaSelect.innerHTML += "<option value='1230'>SITE</option>";
+      // Agrega más opciones según sea necesario para Secretaría 2
+      break;
+    case "204":
+      subcategoriaSelect.innerHTML += "<option value='1300'>Subcategoria</option>";
+      subcategoriaSelect.innerHTML += "<option value='1310'>Usuarios</option>";
+      
+      break;
+    // Agrega más casos para las demás categorías
+    default:
+      // Puedes manejar una opción por defecto aquí
+      break;
+  }
+}
+    </script>
+
+<script>
+    // Función para limpiar los filtros
+    document.getElementById("limpiarFiltros").addEventListener("click", function() {
+        // Reseteamos los valores de los combos a su estado inicial
+        document.getElementById("secretarias").selectedIndex = 0;
+        document.getElementById("dependencias").innerHTML = "";
+        document.getElementById("categoria").selectedIndex = 0;
+        document.getElementById("subcategoria").innerHTML = "";
+        document.getElementById("selector_anio").value = "";
+    });
+</script>
+
+<script>
+    // Obtener referencias a los elementos de las casillas de verificación
+    var checkbox1 = document.getElementById("terms-checkbox-37");
+    var checkbox2 = document.getElementById("terms-checkbox-38");
+  
+    // Agregar event listener a la primera casilla de verificación
+    checkbox1.addEventListener("change", function() {
+      // Si la casilla 1 se activa, desactivar la casilla 2
+      if (checkbox1.checked) {
+        checkbox2.checked = false;
+      }
+    });
+  
+    // Agregar event listener a la segunda casilla de verificación
+    checkbox2.addEventListener("change", function() {
+      // Si la casilla 2 se activa, desactivar la casilla 1
+      if (checkbox2.checked) {
+        checkbox1.checked = false;
+      }
+    });
+  </script>
+
+<script>
+    function toggleTablas(checkboxId) {
+      var activoCheckbox = document.getElementById("activoCheckbox");
+      var desactivadoCheckbox = document.getElementById("desactivadoCheckbox");
+      var tablaActiva = document.getElementById("tablaActiva");
+      var tablaDesactivada = document.getElementById("tablaDesactivada");
+  
+      // Si el checkbox activo es seleccionado, deselecciona el checkbox desactivado y muestra la tabla activa
+      if (checkboxId === "activoCheckbox" && activoCheckbox.checked) {
+        desactivadoCheckbox.checked = false;
+        tablaActiva.style.display = "block";
+        tablaDesactivada.style.display = "none";
+      } 
+      // Si el checkbox desactivado es seleccionado, deselecciona el checkbox activo y muestra la tabla desactivada
+      else if (checkboxId === "desactivadoCheckbox" && desactivadoCheckbox.checked) {
+        activoCheckbox.checked = false;
+        tablaActiva.style.display = "none";
+        tablaDesactivada.style.display = "block";
+      } 
+      // Si ninguna casilla está marcada, oculta ambas tablas
+      else {
+        tablaActiva.style.display = "none";
+        tablaDesactivada.style.display = "none";
+    }
+  }
+</script>
+</body>
+
+</html>
