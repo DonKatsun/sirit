@@ -60,6 +60,11 @@ class EnergiasForms(forms.ModelForm):
         model = Energias
         fields = '__all__'
 
+class EnergiaMarcasForms(forms.ModelForm):
+    class Meta:
+        model = EnergiaMarcas
+        fields = '__all__'
+
 class EnlacesForms(forms.ModelForm):
     class Meta:
         model = Enlaces
