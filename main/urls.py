@@ -6,6 +6,7 @@ from .views.conmutadores_views import (
 )
 from .views.login_view import (login)
 from .views.Nabvar_view import(Nabvar)
+from .views.catalogo_view import(catalogo)
 
 urlpatterns = [
     path('conmutador', conmutadores_list, name='conmutadores_list'),
@@ -14,5 +15,6 @@ urlpatterns = [
     path('conmutador/<int:pk>/edit/', conmutador_update, name='conmutador_update'),
     path('conmutador/<int:pk>/delete/', conmutador_delete, name='conmutador_delete'),
     path('login', login, name='login'),
+    path('Catalogo', catalogo, name='catalogo'),
     path('Nabvar', Nabvar, name='Nabvar'),
 ]
