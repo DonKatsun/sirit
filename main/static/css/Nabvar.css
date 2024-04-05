@@ -70,7 +70,7 @@ body {
     width: 100%;
 }
 
-.logout-button {
+.logout-buttons {
     background-color: #d9d9d9;
     color: #383737;
     font-size: 1.5em;
@@ -88,6 +88,7 @@ body {
     text-align: left;
     color: #383737;
     margin-left: 30px;
+    margin-top: 30px;
     /* margin: 0 auto; Centra el texto horizontalmente */
 }
 

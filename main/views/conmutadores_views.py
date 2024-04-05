@@ -6,6 +6,8 @@ def conmutadores_list(request):
     conmutadores = Conmutadores.objects.all()
     return render(request, 'conmutadores/conmutadores_list.html', {'conmutadores': conmutadores})
 
+
+
 def conmutador_detail(request, pk):
     conmutador = Conmutadores.objects.get(pk=pk)
     return render(request, 'conmutadores/conmutador_detail.html', {'conmutador': conmutador})

@@ -24,20 +24,21 @@
     <a href="#" class="buttons" data-target="content5" onclick="toggleTab(event)">+ Nuevo</a>
   </div>
   <div class="logout-container">
-    <button class="logout-button">Salir</button>
+    <button class="logout-buttons">Salir</button>
   </div>
 </div>
 
 <div id="content1" class="tab-content active">
   <div class="titulotab"> Reporte de Inventario </div>
-  <object type="text/html" data="{% static 'components/home.html' %}" width="100%" height="560"></object>
+  {% include 'components/home.html' %}
 </div>
 <div id="content2" class="tab-content" style="display: none;">
   <div class="titulotab"> Lista  de Inventario </div>
-  <object type="text/html" data="{% static 'components/inventario.html' %}" width="100%" height="560"></object>
+  {% include 'components/inventario.html' %}
 </div>
 <div id="content3" class="tab-content" style="display: none;">
   <div class="titulotab"> Catálogo </div>
+  {% include 'components/catalogo.html' %}
 </div>
 <div id="content4" class="tab-content" style="display: none;">
   <div class="titulotab"> Reporte de Inventario </div>

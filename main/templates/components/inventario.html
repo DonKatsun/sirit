@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario</title>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+  <!-- CODIGO PARA COMBO BOX-->
+    <label for="secretarias2"></label>
+    <select id="secretarias2" onchange="actualizarDependencias()">
+      <option value="0">Secretaría</option>
+      <option value="1">Oficialía Mayor</option>
+      <option value="2">Procuraduría General de Justica</option>
+      <option value="3">Secretaría de Contraloría</option>
+      <!-- Agrega las 16 secretarías -->
+    </select>
+    
+    <label for="dependencias2"></label>
+    <select id="dependencias2">
+      <!-- Las opciones se actualizarán dinámicamente mediante JavaScript -->
+    </select>
+
+<input type="date" id="selector_anio" name="selector_anio" pattern="\d{4}" min="1900-01-01" max="2100-12-31" step="1" value="">
+
+
+<!-- CODIGO PARA COMBO BOX-->
+<label for="categoria2"></label>
+   <select id="categoria2" onchange="actualizarCategorias2()">
+     <option value="200">Categoría</option>
+     <option value="201">Hardware</option>
+     <option value="202">Software</option>
+     <option value="203">Telecomunicaciones</option>
+     <option value="204">Usuarios</option>
+   </select>
+   
+   <label for="subcategoria2"></label>
+   <select id="subcategoria2" onchange="mostrarContenido2()">
+   </select>
+
+
+<!-- Agregamos el botón de limpieza -->
+<button id="limpiarFiltros2">Limpiar Filtros</button>
+
+ <!-- Aquí se colocan los elementos div para mostrar el texto de la categoría y la subcategoría -->
+ <div id="categoriaSubcategoria2">
+  <div id="seleccion2" class="seleccion" style="display: inline-block;"></div>
+  <div id="subseleccion2" class="subseleccion" style="display: inline-block; margin-left: 20px;"></div>
+</div>
+
+
+
+
+
+<script>
+  //select dependencia
+  function actualizarDependencias() {
+    var secretariaSeleccionada = document.getElementById("secretarias2").value;
+    var dependenciasSelect = document.getElementById("dependencias2");
+  
+    // Elimina todas las opciones actuales
+    dependenciasSelect.innerHTML = "";
+  
+    // Agrega las opciones correspondientes a la secretaría seleccionada
+    switch (secretariaSeleccionada) {
+      case "1":
+        dependenciasSelect.innerHTML += "<option value='100'>Dependencias</option>";  
+        dependenciasSelect.innerHTML += "<option value='101'>Despacho Oficialia Mayor</option>";
+        dependenciasSelect.innerHTML += "<option value='102'>Dirección General de Compras Públicas</option>";
+        dependenciasSelect.innerHTML += "<option value='103'>Dirección General de Innovación Gubernamental</option>";
+        dependenciasSelect.innerHTML += "<option value='104'>Dirección General de Patrimonio Inmobiliario</option>";
+        // Agrega más opciones según sea necesario para Oficialia Mayor
+        break;
+      case "2":
+        dependenciasSelect.innerHTML += "<option value='110'>Dependencias</option>";  
+        dependenciasSelect.innerHTML += "<option value='111 '>Centro de Atención Temprana Oriente</option>";
+        dependenciasSelect.innerHTML += "<option value='112'>Centro de Opereción Estratégica</option>";
+        dependenciasSelect.innerHTML += "<option value='113'>Despacho Procuradoría General de Justicia</option>";
+        dependenciasSelect.innerHTML += "<option value='114'>Dirección General de la Policía Investigadora</option>";
+        // Agrega más opciones según sea necesario para Secretaría 1
+        break;
+      case "3":
+        dependenciasSelect.innerHTML += "<option value='120'>Dependencias</option>";
+        dependenciasSelect.innerHTML += "<option value='121'>Dirección General de Normativa</option>";
+        dependenciasSelect.innerHTML += "<option value='122'>Dirección General de Vinculación</option>";
+        dependenciasSelect.innerHTML += "<option value='123'>Dirección General de Órganos de Control y Vigilancia</option>";
+        dependenciasSelect.innerHTML += "<option value='124'>Dirección General de Auditoría Gubernamental</option>";
+        // Agrega más opciones según sea necesario para Secretaría 2
+        break;
+      // Agrega más casos para las demás secretarías
+      default:
+        // Puedes manejar una opción por defecto aquí
+        break;
+    }
+  }
+  </script>
+
+
+<script>
+  // select subcategoria
+  function actualizarCategorias2() {
+    var categoriaSeleccionada2 = document.getElementById("categoria2").value;
+    var subcategoriaSelect2 = document.getElementById("subcategoria2");
+    var seleccion2 = document.getElementById("seleccion2");
+    var subseleccion2 = document.getElementById("subseleccion2");
+  
+    // Elimina todas las opciones actuales
+    subcategoriaSelect2.innerHTML = "";
+  
+    // Agrega las opciones correspondientes a la categoría seleccionada
+    switch (categoriaSeleccionada2) {
+      case "201":
+        agregarOpciones2(subcategoriaSelect2, [
+          { value: "1000", text: "Subcategoria" },
+          { value: "1010", text: "Energia" },
+          { value: "1020", text: "Almacenamiento" },
+          { value: "1030", text: "Equipo de Computo Personal" },
+          { value: "1040", text: "Equipo de Computo Servidor" },
+          { value: "1050", text: "Impresión" },
+          { value: "1060", text: "Proyector" },
+          { value: "1070", text: "Equipo Telefonico" },
+          { value: "1080", text: "Dron" },
+          { value: "1090", text: "Firewall" },
+          { value: "1091", text: "Routers" },
+          { value: "1092", text: "Conmutador" }
+        ]);
+        seleccion2.innerHTML = "Hardware";
+        break;
+      case "202":
+        agregarOpciones2(subcategoriaSelect2, [
+          { value: "1100", text: "Subcategoria" },
+          { value: "1110", text: "Herramienta de Desarrollo" },
+          { value: "1120", text: "Sistema de Información" },
+          { value: "1130", text: "Sistema de Información Movíl" }
+        ]);
+        seleccion2.innerHTML = "Software";
+        break;
+      case "203":
+        agregarOpciones2(subcategoriaSelect2, [
+          { value: "1200", text: "Subcategoria" },
+          { value: "1210", text: "Enlace Dependiente" },
+          { value: "1220", text: "Enlace No Dependiente" },
+          { value: "1230", text: "SITE" }
+        ]);
+        seleccion2.innerHTML = "Telecomunicaciones";
+        break;
+      case "204":
+        agregarOpciones2(subcategoriaSelect2, [
+          { value: "1300", text: "Subcategoria" },
+          { value: "1310", text: "Usuarios" }
+        ]);
+        seleccion2.innerHTML = "Usuarios";
+        break;
+      default:
+        // Puedes manejar una opción por defecto aquí
+        break;
+    }
+  
+    // Actualiza la subcategoría seleccionada
+    mostrarContenido2();
+  }
+  
+  // Función para agregar opciones al select
+  function agregarOpciones2(select, opciones) {
+    opciones.forEach(function(opcion) {
+      select.innerHTML += "<option value='" + opcion.value + "'>" + opcion.text + "</option>";
+    });
+  }
+
+  
+  </script>
+
+<script>
+  // Función para limpiar los filtros
+  document.getElementById("limpiarFiltros2").addEventListener("click", function() {
+      // Reseteamos los valores de los combos a su estado inicial
+      document.getElementById("secretarias2").selectedIndex = 0;
+      document.getElementById("dependencias2").innerHTML = "";
+      document.getElementById("categoria2").selectedIndex = 0;
+      document.getElementById("subcategoria2").innerHTML = "";
+      document.getElementById("selector_anio").value = "";
+  });
+</script>
