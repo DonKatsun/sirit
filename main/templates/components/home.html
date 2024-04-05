@@ -1,171 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tabla de Reporte</title>
-<style>
-  .tabla-reporte {
-    overflow-x: auto;
-    width: 100%;
-    background-color: #d9d9d9;
-  }
-
-  table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    th, td {
-        border-bottom: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    /* Estilos para ocultar la tabla */
-  .tabla-desactivada {
-    display: none;
-  }
-
-     /* Estilo para el combo box */
-     input {
-        background-color: white; /* Fondo blanco */
-        border: 1px solid #383737; /* Borde color #383737 */
-        color: #383737; /* Texto color #383737 */
-        border-radius: 10px; /* Borde redondeado */
-        padding: 1px; /* Espaciado interno */
-        font-size: 16px; /* Tamaño de fuente */
-        width: 200px; /* Ancho del combo box, ajusta según necesites */
-        height: 50px;
-        margin: 30px;
-    }
-
-    /* Estilo para el combo box */
-    select {
-        background-color: white; /* Fondo blanco */
-        border: 1px solid #383737; /* Borde color #383737 */
-        color: #383737; /* Texto color #383737 */
-        border-radius: 10px; /* Borde redondeado */
-        padding: 8px; /* Espaciado interno */
-        font-size: 16px; /* Tamaño de fuente */
-        width: 200px; /* Ancho del combo box, ajusta según necesites */
-        height: 50px;
-        margin: 30px;
-    }
-    
-    /* Estilo para las opciones del combo box */
-    select option {
-        background-color: #d9d9d9; /* Fondo blanco */
-        color: #383737; /* Texto color #383737 */
-        font-size: 16px; /* Tamaño de fuente */
-    }
-    #limpiarFiltros {
-    background-color: white;
-    color: #383737;
-    font-size: 1.5em;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.buttons {
-    color: #383737;
-    padding: 10px 20px;
-    font-size: 2em;
-    border: none;
-    width: 200px;
-    height: 30px;
-    border-radius: 20px 20px 0 0; /* Solo los bordes superiores redondeados */
-    cursor: pointer;
-    background-color: white; /* Color de fondo inactivo */
-    text-decoration: none; /* Quita el subrayado predeterminado de los enlaces */
-    display: inline-block; /* Para que los enlaces se comporten como bloques */
-    text-align: center; /* Centra el texto dentro del botón */
-    text-decoration: underline; /* Subraya el texto */
-}
-
-.buttons.active {
-    background-color: #d9d9d9; /* Color de fondo activo */
-    color: #383737;
-    text-decoration: none; /* Desactiva el subrayado cuando el botón está activo */
-}
-  
-  .buttons:hover {
-    background-color: #989898; /* Cambia el color de fondo al hacer hover */
-  }
-
-/* estilos checkbox*/
-  /* Estilos originales de las casillas de verificación */
-  .fondocheckbox {
-    background-color: #d9d9d9;
-    display: flex;
-  }
-
-  .checkbox-wrapper {
-    margin-left: 50px;
-    margin-top: 10px;
-  }
-
-  .checkbox-wrapper input[type="checkbox"] {
-    display: none;
-  }
-
-  .checkbox-wrapper .terms-label {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-
-  .checkbox-wrapper .terms-label .label-text {
-    margin-left: 10px;
-    font-size: 1.5em;
-  }
-
-  .checkbox-wrapper .checkbox-svg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .checkbox-wrapper .checkbox-box {
-    fill: white;
-    stroke: #383737;
-    stroke-dasharray: 800;
-    stroke-dashoffset: 800;
-    transition: stroke-dashoffset 0.6s ease-in;
-  }
-
-  .checkbox-wrapper .checkbox-tick {
-    stroke: #383737;
-    stroke-dasharray: 172;
-    stroke-dashoffset: 172;
-    transition: stroke-dashoffset 0.6s ease-in;
-  }
-
-  .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-box,
-  .checkbox-wrapper input[type="checkbox"]:checked + .terms-label .checkbox-tick {
-    stroke-dashoffset: 0;
-  }
-
-  .titulo-tabla {
-    font-size: 2.5em;
-    background-color: #d9d9d9;   
-    text-align: center;
-    color: #383737;
-    margin: 0 auto; /* Centra el texto horizontalmente */
-}
-
-
-
-</style>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
   <!-- CODIGO PARA CONMBO BOX-->
-    <label for="secretarias"></label>
-    <select id="secretarias" onchange="actualizarDependencias()">
+    <label for="secretarias1"></label>
+    <select id="secretarias1" onchange="actualizarDependencias1()">
       <option value="0">Secretaría</option>
       <option value="1">Oficialía Mayor</option>
       <option value="2">Procuraduría General de Justica</option>
@@ -173,8 +18,8 @@
       <!-- Agrega las 16 secretarías -->
     </select>
     
-    <label for="dependencias"></label>
-    <select id="dependencias">
+    <label for="dependencias1"></label>
+    <select id="dependencias1">
       <!-- Las opciones se actualizarán dinámicamente mediante JavaScript -->
     </select>
 
@@ -201,12 +46,14 @@
 <!-- Agregamos el botón de limpieza -->
 <button id="limpiarFiltros">Limpiar Filtros</button>
 
-<div class="buttons-container">
-    <a href="#" class="buttons active" data-target="content1" onclick="toggleTab(event)">Secretaría</a>
-    <a href="#" class="buttons" data-target="content2" onclick="toggleTab(event)">Dependencia</a>
-  </div>
 
-  <div id="content1" class="tab-content active">
+<div class="buttons-container2">
+  <a href="#" class="button active" data-target="content11" onclick="toggleTab3(event)">Secretaría</a>
+  <a href="#" class="button" data-target="content22" onclick="toggleTab3(event)">Dependencia</a>
+</div>
+
+<div id="content11" class="tab-content2 active">
+    
     
     <div class="fondocheckbox">
         <!-- Casilla de verificación para activar la tabla -->
@@ -414,7 +261,7 @@
 
 
 
-  <div id="content2" class="tab-content" >
+  <div id="content22" class="tab-content2">
  
     <div class="fondocheckbox">
       <!-- Casilla de verificación para activar la tabla -->
@@ -624,17 +471,17 @@
 </html>
 
 <script>
-  // tabs 
-  function toggleTab(event) {
+  // Función para alternar entre las tabs
+  function toggleTab3(event) {
     var target = event.target;
-    var buttons = document.querySelectorAll('.buttons');
+    var buttons = document.querySelectorAll('.buttons-container2 .button');
     buttons.forEach(function(btn) {
       btn.classList.remove('active');
     });
     target.classList.add('active');
   
     var tabId = target.getAttribute('data-target');
-    var tabs = document.querySelectorAll('.tab-content');
+    var tabs = document.querySelectorAll('.tab-content2');
     tabs.forEach(function(tab) {
       if (tab.id === tabId) {
         tab.classList.add('active');
@@ -647,13 +494,13 @@
   
     event.preventDefault(); // Evita que el enlace recargue la página
   }
-  </script>
+</script>
 
 <script>
   //select dependencia
-  function actualizarDependencias() {
-    var secretariaSeleccionada = document.getElementById("secretarias").value;
-    var dependenciasSelect = document.getElementById("dependencias");
+  function actualizarDependencias1() {
+    var secretariaSeleccionada = document.getElementById("secretarias1").value;
+    var dependenciasSelect = document.getElementById("dependencias1");
   
     // Elimina todas las opciones actuales
     dependenciasSelect.innerHTML = "";
@@ -705,17 +552,24 @@ subcategoriaSelect.innerHTML = "";
 // Agrega las opciones correspondientes a la categoría seleccionada
 switch (categoriaSeleccionada) {
   case "201":
-    subcategoriaSelect.innerHTML += "<option value='1000'>Subcategoria</option>";  
+  subcategoriaSelect.innerHTML += "<option value='1000'>Subcategoria</option>";  
     subcategoriaSelect.innerHTML += "<option value='1010'>Energia</option>";
     subcategoriaSelect.innerHTML += "<option value='1020'>Almacenamiento</option>";
     subcategoriaSelect.innerHTML += "<option value='1030'>Equipo de Computo Personal</option>";
-    subcategoriaSelect.innerHTML += "<option value='1040'>Equipo Telefonico</option>";
+    subcategoriaSelect.innerHTML += "<option value='1040'>Equipo de Computo Servidor</option>";
+    subcategoriaSelect.innerHTML += "<option value='1050'>Impresión</option>";
+    subcategoriaSelect.innerHTML += "<option value='1060'>Proyector</option>";
+    subcategoriaSelect.innerHTML += "<option value='1070'>Equipo Telefonico</option>";
+    subcategoriaSelect.innerHTML += "<option value='1080'>Dron</option>";
+    subcategoriaSelect.innerHTML += "<option value='1090'>Firewall</option>";
+    subcategoriaSelect.innerHTML += "<option value='1091'>Routers</option>";
+    subcategoriaSelect.innerHTML += "<option value='1092'>Conmutador</option>";
     // Agrega más opciones según sea necesario para Oficialia Mayor
     break;
   case "202":
     subcategoriaSelect.innerHTML += "<option value='1100'>Subcategoria</option>";  
     subcategoriaSelect.innerHTML += "<option value='1110 '>Herramienta de Desarrollo</option>";
-    subcategoriaSelect.innerHTML += "<option value='1120'>Sistema de Información Movíl</option>"
+    subcategoriaSelect.innerHTML += "<option value='1120'>Sistema de Información </option>"
     subcategoriaSelect.innerHTML += "<option value='1130'>Sistema de Información Movíl</option>"
     // Agrega más opciones según sea necesario para Secretaría 1
     break;
@@ -743,8 +597,8 @@ switch (categoriaSeleccionada) {
   // Función para limpiar los filtros
   document.getElementById("limpiarFiltros").addEventListener("click", function() {
       // Reseteamos los valores de los combos a su estado inicial
-      document.getElementById("secretarias").selectedIndex = 0;
-      document.getElementById("dependencias").innerHTML = "";
+      document.getElementById("secretarias1").selectedIndex = 0;
+      document.getElementById("dependencias1").innerHTML = "";
       document.getElementById("categoria").selectedIndex = 0;
       document.getElementById("subcategoria").innerHTML = "";
       document.getElementById("selector_anio").value = "";

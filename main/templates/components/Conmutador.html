@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla HTML con borde inferior en cada fila</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            border-bottom: 2px solid black; /* Establece el borde inferior */
+            padding: 8px;
+            text-align: left;
+        }
+        td {
+            border-bottom: 1px solid gray; /* Establece el borde inferior */
+            padding: 8px;
+            text-align: left;
+        }
+        
+        tr:last-child td {
+            border-bottom: none; /* Elimina el borde inferior de la última fila */
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'conmutador_create' %}">Agregar Conmutador</a>
+    <table>
+        <thead>
+            <tr>
+                <th>No. Inventario</th>
+                <th>Activo</th>
+                <th>Dependencia</th>
+                <th>Tipo</th>
+                <th>Tecnología</th>
+                <th>Protocolo</th>
+                <th>Extensiones Soportadas</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conmutador in conmutadores %}
+            <tr>
+                <td><a href="{% url 'conmutador_detail' conmutador.pk %}">{{ conmutador.no_inventario }}</a></td>
+                <td>{% if conmutador.activo %}Sí{% else %}No{% endif %}</td>
+                <td>{{ conmutador.id_dependencia.nombre_dependencia }}</td>
+                <td>{{ conmutador.tipo }}</td>
+                <td>{{ conmutador.tecnologia }}</td>
+                <td>{{ conmutador.protocolo }}</td>
+                <td>{{ conmutador.ext_soportadas }}</td>
+                <td>{{ conmutador.modelo }}</td>
+                <td>{{ conmutador.id_marca.marca_conmutador }}</td>
+                <td><a href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
+                <td>
+                    <form id="deleteForm" action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return confirmDelete()">
+                        {% csrf_token %}
+                        <input type="submit" value="Eliminar">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script>
+    function confirmDelete() {
+        if (confirm("¿Estás seguro de que deseas eliminar este conmutador?")) {
+            return true; // Si el usuario confirma, se enviará el formulario
+        } else {
+            return false; // Si el usuario cancela, se cancelará el envío del formulario
+        }
+    }
+</script>
