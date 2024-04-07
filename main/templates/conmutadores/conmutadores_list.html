@@ -1,14 +1,142 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Conmutadores</title>
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 55px;
+        }
+
+        a {
+            display: block;
+            margin-bottom: 20px;
+            margin-left: 20px; /* Ajusta el margen izquierdo */
+            text-align: left; /* Alinea el texto a la izquierda */
+            color: black; /* Color de texto negro */
+            font-size: 1.5em; /* Tamaño de fuente 2em */
+        }
+
+        table {
+            width: 90%; /* Reducimos el ancho de la tabla */
+            margin: 0 auto; /* Centramos la tabla horizontalmente */
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Agregamos un margen inferior */
+        }
+
+        th {
+            border-bottom: 2px solid black; /* Establece el borde inferior */
+            padding: 8px;
+            text-align: left;
+        }
+
+        td {
+            border-bottom: 1px solid gray; /* Establece el borde inferior */
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:last-child td {
+            border-bottom: none; /* Elimina el borde inferior de la última fila */
+        }
+
+        .edit-button,
+        .delete-button {
+            display: inline-block;
+            width: 120px; /* Ajustamos el ancho */
+            height: 30px; /* Ajustamos la altura */
+            line-height: 30px; /* Centramos verticalmente */
+            text-align: center; /* Centramos horizontalmente */
+            font-size: 14px; /* Ajustamos el tamaño de la fuente */
+            background-color: #fff;
+            border: 1px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none; /* Quita el subrayado del enlace */
+            vertical-align: middle; /* Centra verticalmente */
+        }
+
+        .edit-button:hover,
+        .delete-button:hover {
+            background-color: #f5f5f5; /* Cambia el color de fondo cuando pasas el mouse */
+        }
+
+        .edit-button {
+            color: #989898;
+            border-color: #989898;
+        }
+
+        .delete-button {
+            color: red;
+            border-color: red;
+        }
+
+        /* Estilos para la ventana emergente de confirmación */
+        .modal {
+            display: none; /* Por defecto, la ventana emergente está oculta */
+            position: fixed; /* Se fija en la ventana del navegador */
+            z-index: 1; /* Asegura que la ventana emergente esté por encima de todo */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Habilita el desplazamiento si es necesario */
+            background-color: rgb(0,0,0); /* Fondo oscuro */
+            background-color: rgba(0,0,0,0.4); /* Fondo oscuro con transparencia */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Centra la ventana emergente verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 10px;
+            text-align: center; /* Alinea el texto al centro */
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .modal-buttons button.yes-button {
+            background-color: red;
+            color: white;
+        }
+
+        .modal-buttons button.no-button {
+            background-color: blue;
+            color: white;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #e7e4e4;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
     <h1>Lista de Conmutadores</h1>
-    <a href="{% url 'conmutador_create' %}">Agregar Conmutador</a>
+    <a href="{% url 'conmutador_create' %}">+ Agregar Conmutador</a>
     <table>
         <thead>
             <tr>
@@ -21,6 +149,8 @@
                 <th>Extensiones Soportadas</th>
                 <th>Modelo</th>
                 <th>Marca</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>
@@ -35,26 +165,41 @@
                 <td>{{ conmutador.ext_soportadas }}</td>
                 <td>{{ conmutador.modelo }}</td>
                 <td>{{ conmutador.id_marca.marca_conmutador }}</td>
-                <td><a href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
+                <td><a class="edit-button" href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
                 <td>
-                    <form id="deleteForm" action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return confirmDelete()">
-                        {% csrf_token %}
-                        <input type="submit" value="Eliminar">
-                    </form>
+                    <button class="delete-button" onclick="openModal()">Eliminar</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Ventana emergente de confirmación -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 3em;">Eliminar</h2>
+            <p  style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar este conmutador?</p>
+            <p style="font-size: 1.5em;">La información no se podrá recuperar.</p>
+            <div class="modal-buttons">
+                <button class="yes-button" onclick="confirmDelete()">Aceptar</button>
+                <button class="no-button" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("myModal").style.display = "block"; // Muestra la ventana emergente
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none"; // Oculta la ventana emergente
+        }
+
+        function confirmDelete() {
+            alert("Conmutador eliminado"); // Por ahora solo mostrará una alerta
+            closeModal(); // Cierra la ventana emergente después de la confirmación
+        }
+    </script>
 </body>
 </html>
-
-<script>
-    function confirmDelete() {
-        if (confirm("¿Estás seguro de que deseas eliminar este conmutador?")) {
-            return true; // Si el usuario confirma, se enviará el formulario
-        } else {
-            return false; // Si el usuario cancela, se cancelará el envío del formulario
-        }
-    }
-</script>
