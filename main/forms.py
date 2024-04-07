@@ -8,6 +8,15 @@ class ConmutadorForm(forms.ModelForm):
         labels = {
             'id_dependencia': 'Dependencia: ',
             'id_marca': 'Marca: ',
+            'no_inventario' : 'Inventario:',
+            'fecha' : 'Fecha:',
+            'activo': 'Activo:',
+            'tipo': 'Tipo:',
+            'tecnologia':'Tecnología:',
+            'protocolo':'Protocólo:',
+            'modelo':'Modelo:',
+            'ext_soportadas':'Ext Soportadas:',
+            
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
