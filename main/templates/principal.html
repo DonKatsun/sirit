@@ -1,0 +1,69 @@
+<!-- tu_plantilla.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte por Secretaría y Dependencia</title>
+</head>
+<body>
+    <h1>Reporte por Secretaría y Dependencia</h1>
+
+    <form method="GET" action="{% url 'principal' %}">
+        <label for="secretaria">Selecciona una Secretaría:</label>
+        <select name="secretaria" id="secretaria">
+            <option value="" {% if not selected_secretaria %} selected {% endif %}>Todas</option>
+            {% for secretaria in secretarias %}
+                <option value="{{ secretaria.id }}" {% if secretaria.id == selected_secretaria %} selected {% endif %}>{{ secretaria.nombre_secretaria }}</option>
+            {% endfor %}
+        </select>
+
+
+
+        <input type="submit" value="Filtrar">
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Secretaría</th>
+                <th>Dependencia</th>
+                <th>Conmutadores</th>
+                <th>Energías</th>
+                <th>Asignaciones</th>
+                <th>Equipos Personales</th>
+                <th>Equipos Servidores</th>
+                <th>Impresoras</th>
+                <th>Proyectores</th>
+                <th>Enlaces</th>
+                <th>Sitios</th>
+                <th>Drones</th>
+                <th>Firewalls</th>
+                <th>Routers</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for datos in datos_por_secretaria %}
+                <tr>
+                    <td>{{ datos.nombre_secretaria }}</td>
+                    <td>{{ datos.nombre_dependencia }}</td>
+                    <td>{{ datos.num_conmutadores|default:"0" }}</td>
+                    <td>{{ datos.num_energias|default:"0" }}</td>
+                    <td>{{ datos.num_asignaciones|default:"0" }}</td>
+                    <td>{{ datos.num_equipos_personales|default:"0" }}</td>
+                    <td>{{ datos.num_equipos_servidores|default:"0" }}</td>
+                    <td>{{ datos.num_impresoras|default:"0" }}</td>
+                    <td>{{ datos.num_proyectores|default:"0" }}</td>
+                    <td>{{ datos.num_enlaces|default:"0" }}</td>
+                    <td>{{ datos.num_sitios|default:"0" }}</td>
+                    <td>{{ datos.num_drones|default:"0" }}</td>
+                    <td>{{ datos.num_firewalls|default:"0" }}</td>
+                    <td>{{ datos.num_routers|default:"0" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</body>
+</html>

@@ -7,6 +7,7 @@ from .views.conmutadores_views import (
 from .views.login_view import (login)
 from .views.Nabvar_view import(Nabvar)
 from .views.catalogo_view import(catalogo)
+from .views.pricipal_view import (principal)
 
 
 urlpatterns = [
@@ -18,5 +19,5 @@ urlpatterns = [
     path('login', login, name='login'),
     path('Catalogo', catalogo, name='catalogo'),
     path('Nabvar', Nabvar, name='Nabvar'),
-    
+    path('principal', principal, name='principal'),
 ]
