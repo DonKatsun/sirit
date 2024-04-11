@@ -199,3 +199,7 @@ class UsuariosForms(forms.ModelForm):
     class Meta:
         model = Usuarios
         fields = '__all__'
+
+class LoginForm(forms.Form):
+    email = forms.CharField(label='Email')
+    contrasenia = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
