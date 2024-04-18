@@ -4,9 +4,12 @@ from django.urls import reverse
 from ..models import *
 
 def inventario(request):
+    subcategoria = request.GET.get('subcategoriaSelec')
+    year = request.GET.get('year')
+    dependencia = request.GET.get('dependenciaSelec')
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
-
+    print(request.GET.get('dependenciaSelec'))
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
@@ -15,7 +18,7 @@ def inventario(request):
     subcategoria_seleccionada = request.GET.get('subcategoriaSelec')
     if subcategoria_seleccionada:
         if subcategoria_seleccionada == "1092":
-            return redirect(reverse('conmutadores_list') + '?dependencia=2')
+            return redirect(reverse('conmutadores_list') + '?dependencia='+dependencia+'&anio='+year)
     return render(request, 'inventario.html', {
         'secretarias': secretarias,
         'dependencias': dependencias,

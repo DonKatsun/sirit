@@ -160,6 +160,7 @@
                   var dependencias = JSON.parse(xhr.responseText);
 
                   // Agregar las opciones de dependencia al combobox
+                  dependenciaSelect.innerHTML += "<option value=''>" + "Selecciona" + "</option>"
                   dependencias.forEach(function(dependencia) {
                       dependenciaSelect.innerHTML += "<option value='" + dependencia.id + "'>" + dependencia.nombre_dependencia + "</option>";
                   });
