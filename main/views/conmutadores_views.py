@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from ..models import Conmutadores, ConmutadoresMarcas
 from ..forms import ConmutadorForm, ConmutadorMarcaForm
 
-def conmutadores_list(request):
+def conmutadores_list(request, *args, **kwargs):
     conmutadores = Conmutadores.objects.all()
     return render(request, 'conmutadores/conmutadores_list.html', {'conmutadores': conmutadores})
 

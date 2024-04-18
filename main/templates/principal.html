@@ -1,14 +1,20 @@
 <!-- tu_plantilla.html -->
-
+{% include 'navbar.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte por Secretaría y Dependencia</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
 <body>
-    <h1>Reporte por Secretaría y Dependencia</h1>
+    {% if secretaria %}
+    <h1>Reporte por Dependencia</h1>
+    {% else %}
+    <h1>Reporte por Secretaría</h1>
+    {% endif %}
 
     <form method="GET" action="{% url 'principal' %}">
         <label for="secretaria">Selecciona una Secretaría:</label>
@@ -18,7 +24,8 @@
                 <option value="{{ secretaria.id }}" {% if secretaria.id == selected_secretaria %} selected {% endif %}>{{ secretaria.nombre_secretaria }}</option>
             {% endfor %}
         </select>
-
+        <label for="year">Seleccionar Año:</label>
+            <input type="text" class="form-control" id="year" name="year" autocomplete="off">
 
 
         <input type="submit" value="Filtrar">
@@ -67,3 +74,18 @@
     </table>
 </body>
 </html>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#year').datepicker({
+            format: "yyyy",
+            startView: "years",
+            minViewMode: "years",
+            autoclose: true
+        });
+    });
+</script>
