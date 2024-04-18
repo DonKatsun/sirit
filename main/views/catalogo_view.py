@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 
 def catalogo (request):
-    #conmutadores = Conmutadores.objects.all()
-    return render(request, 'pages/Catalogo.html', )
+    categoria = request.GET.get('categoria_seleccionada')
+
+    if categoria == 'conmutador':
+        return render(request, 'conmutadores/conmutadores_list.html',)
+    
+    return render(request, 'catalogo.html', )

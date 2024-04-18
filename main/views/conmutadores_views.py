@@ -1,10 +1,30 @@
 from django.shortcuts import render, redirect
-from ..models import Conmutadores, ConmutadoresMarcas
+from ..models import Conmutadores, ConmutadoresMarcas,Dependencias, Secretarias
 from ..forms import ConmutadorForm, ConmutadorMarcaForm
 
 def conmutadores_list(request, *args, **kwargs):
-    conmutadores = Conmutadores.objects.all()
-    return render(request, 'conmutadores/conmutadores_list.html', {'conmutadores': conmutadores})
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            conmutadores = Conmutadores.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            conmutadores = Conmutadores.objects.filter(fecha__year=year)
+    else:
+        conmutadores = Conmutadores.objects.all()
+    print(conmutadores)
+    return render(request, 'conmutadores/conmutadores_list.html', {
+        'conmutadores': conmutadores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 
