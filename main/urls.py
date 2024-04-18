@@ -8,6 +8,7 @@ from .views.login_view import (login)
 from .views.Nabvar_view import(Nabvar)
 from .views.catalogo_view import(catalogo)
 from .views.pricipal_view import (principal)
+from .views.inventarios_view import (inventario,obtener_dependencias)
 
 
 urlpatterns = [
@@ -20,4 +21,6 @@ urlpatterns = [
     path('Catalogo', catalogo, name='catalogo'),
     path('Nabvar', Nabvar, name='Nabvar'),
     path('principal', principal, name='principal'),
+    path('inventario', inventario, name='inventario'),
+    path('obtener_dependencias/', obtener_dependencias, name='obtener_dependencias'),
 ]
