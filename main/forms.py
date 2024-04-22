@@ -743,3 +743,6 @@ class UsuariosForms(forms.ModelForm):
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
   
 
+class LoginForm(forms.Form):
+    email = forms.CharField(label='Email')
+    contrasenia = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
