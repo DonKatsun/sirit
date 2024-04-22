@@ -685,17 +685,12 @@ class Usuarios(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-
+    #PASSWORD_FIELD = 'contrasenia'
     objects = UsuarioManager()
 
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
     class Meta:
         managed = False
-        db_table = 'usuarios'
+        db_table = 'main_usuarios'

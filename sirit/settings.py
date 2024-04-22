@@ -79,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sirit',
         'USER': 'postgres',
-        'PASSWORD': 'root',#viccontra16
-        'HOST': 'localhost',#10.16.17.95
+        'PASSWORD': 'viccontra16',#viccontra16
+        'HOST': '10.16.17.95',#10.16.17.95
         'PORT': '5432',
     }
 }
