@@ -190,7 +190,7 @@
     
     <div class="header">
         <a href="{% url 'routers_create' %}">+ Agregar Router</a>
-        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar.....">
+   
     </div>
     <table>
         <thead>
@@ -286,27 +286,7 @@
     // Asigna el evento onclick al botón de confirmación dentro del modal
     document.getElementById("confirmButton").addEventListener("click", submitDeleteForm);
     
-    function filterTable() {
-        var searchText = document.getElementById("searchInput").value.toLowerCase();
-        var rows = document.querySelector("table").getElementsByTagName("tr");
-        for (var i = 0; i < rows.length; i++) {
-            var row = rows[i];
-            var found = false;
-            var cells = row.getElementsByTagName("td");
-            for (var j = 0; j < cells.length; j++) {
-                var cell = cells[j];
-                if (cell.innerHTML.toLowerCase().indexOf(searchText) > -1) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        }
-    }
+ 
 </script>
 </body>
 </html>

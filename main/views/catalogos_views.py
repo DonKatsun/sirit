@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from ..models import *
 from ..forms import *
 
+from django.db.models import Q
+
+
 from django.shortcuts import render, redirect
 from ..models import ConmutadoresMarcas
 from ..forms import *
@@ -126,7 +129,10 @@ def conmutadores_puerto_delete(request, pk):
 
 
 def almacenamientos_list(request):
+    search = request.GET.get('search')
     almacenamientos_list = Almacenamientos.objects.all()
+    if search:
+        almacenamientos_list = almacenamientos_list.filter(no_inventario__icontains=search)
     paginator = Paginator(almacenamientos_list, 10)  # Muestra 10 drones por página
 
     page_number = request.GET.get('page')
@@ -282,7 +288,11 @@ def dependencia_delete(request, pk):
 ########################
 
 def drones_list(request):
+    search = request.GET.get('search')
     drones_list = Drones.objects.all()
+    if search:
+        drones_list = drones_list.filter(no_inventario__icontains=search)
+
     paginator = Paginator(drones_list, 10)  # Muestra 10 drones por página
 
     page_number = request.GET.get('page')
@@ -296,7 +306,6 @@ def drones_list(request):
         drones = paginator.page(paginator.num_pages)
 
     return render(request, 'drones/drones_list.html', {'drones': drones})
-
 
 
 def drone_detail(request, pk):
@@ -502,7 +511,11 @@ def energia_marca_delete(request, pk):
 ########################
 
 def energias_list(request):
+    search = request.GET.get('search')
     energias_list = Energias.objects.all()
+    
+    if search:
+        energias_list = energias_list.filter(no_inventario__icontains=search)
     paginator = Paginator(energias_list, 10)  # 10 registros por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -549,7 +562,11 @@ def energia_delete(request, pk):
 ########################
 
 def enlaces_list(request):
+    search = request.GET.get('search')
     enlaces_list = Enlaces.objects.all()
+    
+    if search:
+        enlaces_list = enlaces_list.filter(no_inventario__icontains=search)
     paginator = Paginator(enlaces_list, 10)  # Muestra 10 enlaces por página
 
     page_number = request.GET.get('page')
@@ -662,7 +679,10 @@ def enlace_tipo_delete(request, pk):
 ########################
 
 def equipo_telefonico_list(request):
+    search = request.GET.get('search')
     equipo_telefonico_list = EquipoTelefonico.objects.all()
+    if search:
+        equipo_telefonico_list = equipo_telefonico_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipo_telefonico_list, 10)  # Muestra 10 equipos telefónicos por página
 
     page_number = request.GET.get('page')
@@ -718,7 +738,10 @@ def equipo_telefonico_delete(request, pk):
 ########################
 
 def equipos_personales_list(request):
+    search = request.GET.get('search')
     equipos_personales_list = EquiposPersonales.objects.all()
+    if search:
+        equipos_personales_list = equipos_personales_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipos_personales_list, 10)  # Muestra 10 equipos personales por página
 
     page_number = request.GET.get('page')
@@ -942,7 +965,10 @@ def equipo_personal_tipopuerto_delete(request, pk):
 ########################
 
 def equipos_servidores_list(request):
+    search = request.GET.get('search')
     equipos_servidores_list = EquiposServidores.objects.all()
+    if search:
+        equipos_servidores_list = equipos_servidores_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipos_servidores_list, 10)  # Muestra 10 equipos servidores por página
 
     page_number = request.GET.get('page')
@@ -1221,7 +1247,10 @@ def equipo_servidor_tipo_delete(request, pk):
 ########################
 
 def firewalls_list(request):
+    search = request.GET.get('search')
     firewalls_list = Firewalls.objects.all()
+    if search:
+        firewalls_list = firewalls_list.filter(no_inventario__icontains=search)
     paginator = Paginator(firewalls_list, 10)  # Muestra 10 firewalls por página
 
     page_number = request.GET.get('page')
@@ -1334,7 +1363,10 @@ def firewall_marca_delete(request, pk):
 ########################
 
 def herramientas_desarrollo_list(request):
+    search = request.GET.get('search')
     herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
+    if search:
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(no_inventario__icontains=search)
     paginator = Paginator(herramientas_desarrollo_list, 10)  # Muestra 10 herramientas de desarrollo por página
 
     page_number = request.GET.get('page')
@@ -1391,7 +1423,10 @@ def herramienta_desarrollo_delete(request, pk):
 ########################
 
 def impresoras_list(request):
+    search = request.GET.get('search')
     impresoras_list = Impresoras.objects.all()
+    if search:
+        impresoras_list = impresoras_list.filter(no_inventario__icontains=search)
     paginator = Paginator(impresoras_list, 10)  # Muestra 10 impresoras por página
 
     page_number = request.GET.get('page')
@@ -1559,7 +1594,10 @@ def municipio_delete(request, pk):
 ########################
 
 def proyectores_list(request):
+    search = request.GET.get('search')
     proyectores_list = Proyectores.objects.all()
+    if search:
+        proyectores_list = proyectores_list.filter(no_inventario__icontains=search)
     paginator = Paginator(proyectores_list, 10)  # Muestra 10 proyectores por página
 
     page_number = request.GET.get('page')
@@ -1675,7 +1713,10 @@ def proyector_marca_delete(request, pk):
 ########################
 
 def routers_list(request):
+    search = request.GET.get('search')
     routers_list = Routers.objects.all()
+    if search:
+        routers_list = routers_list.filter(no_inventario__icontains=search)
     paginator = Paginator(routers_list, 10)  # Muestra 10 routers por página
 
     page_number = request.GET.get('page')
@@ -1732,7 +1773,10 @@ def router_delete(request, pk):
 ########################
 
 def roles_list(request):
+    search = request.GET.get('search')
     roles_list = Roles.objects.all()
+    if search:
+        roles_list = roles_list.filter(no_inventario__icontains=search)
     paginator = Paginator(roles_list, 10)  # Muestra 10 routers por página
 
     page_number = request.GET.get('page')
@@ -1832,7 +1876,10 @@ def secretaria_delete(request, pk):
 ########################
 
 def sistemas_informacion_movil_list(request):
+    search = request.GET.get('search')
     sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.all()
+    if search:
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sistemas_informacion_movil_list, 10)  # Muestra 10 sistemas de información móvil por página
 
     page_number = request.GET.get('page')
@@ -1945,7 +1992,10 @@ def sistema_informacion_movil_nombre_delete(request, pk):
 ########################
 
 def sistemas_informacion_list(request):
+    search = request.GET.get('search')
     sistemas_informacion_list = SistemasInformacion.objects.all()
+    if search:
+        sistemas_informacion_list = sistemas_informacion_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sistemas_informacion_list, 10)  # Muestra 10 sistemas de información por página
 
     page_number = request.GET.get('page')
@@ -2058,7 +2108,10 @@ def sistema_informacion_nombre_delete(request, pk):
 ########################
 
 def sites_list(request):
+    search = request.GET.get('search')
     sites_list = Sites.objects.all()
+    if search:
+        sites_list = sites_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sites_list, 10)  # Muestra 10 sitios por página
 
     page_number = request.GET.get('page')
@@ -2117,6 +2170,9 @@ def usuarios_list(request):
     usuarios = Usuarios.objects.all()
     print(usuarios)
     return render(request, 'usuarios/usuarios_list.html', {'usuarios': usuarios})
+
+
+
 
 def usuario_detail(request, pk):
     usuario = Usuarios.objects.get(pk=pk)

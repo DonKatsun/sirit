@@ -9,6 +9,7 @@ def conmutadores_list(request, *args, **kwargs):
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
     dependencia = request.GET.get('dependencia')
+    search = request.GET.get('search')
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
@@ -21,6 +22,8 @@ def conmutadores_list(request, *args, **kwargs):
     else:
         conmutadores = Conmutadores.objects.all()
     
+    if search:
+        conmutadores = conmutadores.filter(no_inventario__icontains=search)
     paginator = Paginator(conmutadores, 10)  # Muestra 10 conmutadores por página
 
     page_number = request.GET.get('page')
