@@ -1,12 +1,27 @@
 from django.shortcuts import render, redirect
-from ..models import Conmutadores, ConmutadoresMarcas
+from ..models import Conmutadores, ConmutadoresMarcas,Dependencias, Secretarias
 from ..forms import ConmutadorForm, ConmutadorMarcaForm
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def conmutadores_list(request):
-    conmutadores_list = Conmutadores.objects.all()
-    paginator = Paginator(conmutadores_list, 10)  # Muestra 10 conmutadores por página
+def conmutadores_list(request, *args, **kwargs):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            conmutadores = Conmutadores.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            conmutadores = Conmutadores.objects.filter(fecha__year=year)
+    else:
+        conmutadores = Conmutadores.objects.all()
+    
+    paginator = Paginator(conmutadores, 10)  # Muestra 10 conmutadores por página
 
     page_number = request.GET.get('page')
     try:
@@ -17,8 +32,14 @@ def conmutadores_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         conmutadores = paginator.page(paginator.num_pages)
+    
+    return render(request, 'conmutadores/conmutadores_list.html', {
+        'conmutadores': conmutadores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+    })
 
-    return render(request, 'conmutadores/conmutadores_list.html', {'conmutadores': conmutadores})
 
 
 def conmutador_detail(request, pk):

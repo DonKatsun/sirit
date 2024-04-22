@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'css/Nabvar.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo-container">
+    <img src="{% static 'images/Logo2.png' %}" alt="Logo" class="logo">
+    <span class="title">SISTEMA DE INVENTARIO</span>
+  </div>
+
+  <div class="buttons-container">
+    <a href="/principal" class="buttons" >Inicio</a>
+    <a href="/inventario" class="buttons">Inventario</a>
+    <a href="/Catalogo" class="buttons">Catálogo</a>
+    <a href="/conmutadores" class="buttons" onclick="toggleTab(event)">Clonar</a>
+    <a href="/carga" class="buttons">+ Nuevo</a>
+  </div>
+  <div class="logout-container">
+    <button class="logout-buttons">Salir</button>
+  </div>
+</div>
+
+
+
+</body>
+</html>
+
+<script>
+    function toggleTab(event) {
+      var target = event.target;
+      var buttons = document.querySelectorAll('.buttons');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      target.classList.add('active');
+    
+      var tabId = target.getAttribute('data-target');
+      var tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(function(tab) {
+        if (tab.id === tabId) {
+          tab.classList.add('active');
+          tab.style.display = 'block';
+        } else {
+          tab.classList.remove('active');
+          tab.style.display = 'none';
+        }
+      });
+    
+      event.preventDefault(); // Evita que el enlace recargue la página
+    }
+    </script>

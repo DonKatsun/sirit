@@ -724,6 +724,7 @@ class UsuariosForms(forms.ModelForm):
     class Meta:
         model = Usuarios
         fields = '__all__'
+
         labels = {
             'id_dependencia': 'Dependencia: ',
             'email': 'Email:',
@@ -741,3 +742,4 @@ class UsuariosForms(forms.ModelForm):
         self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
   
+

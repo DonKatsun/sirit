@@ -1,0 +1,41 @@
+{% load static %}
+{% include 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogo</title>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+</head>
+
+<body>
+
+    <form id="filtroForm" method="GET" action="{% url 'catalogo' %}">
+        {% csrf_token %}
+        
+        <label for="categoria3">Catalogo:</label>
+        <select id="categoria3" onchange="actualizarCategorias3()">
+            <option value="">Selecciona</option>
+            <option value="conmutador">Conmutador - Marcas</option>
+            <option value="201">Hardware</option>
+            <option value="202">Software</option>
+            <option value="203">Telecomunicaciones</option>
+            <option value="204">Usuarios</option>
+        </select>
+        <!-- Campo oculto para almacenar el valor seleccionado -->
+        <input type="hidden" id="categoria_seleccionada" name="categoria_seleccionada" value="">
+        <button id="limpiarFiltros3" type="submit">Buscar</button>
+      </form>
+      
+      <script>
+        // Función para actualizar el campo oculto con el valor seleccionado del select
+        function actualizarCategorias3() {
+            var categoriaSeleccionada = document.getElementById("categoria3").value;
+            document.getElementById("categoria_seleccionada").value = categoriaSeleccionada;
+        }
+      </script>
+      
+</body>
+</html>

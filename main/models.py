@@ -7,7 +7,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class AlmacenamientoMarcas(models.Model):
     marca_almacenamiento = models.CharField(max_length=250, blank=True, null=True)
@@ -658,10 +658,23 @@ class Tecnologias(models.Model):
         managed = False
         db_table = 'tecnologias'
 
+class UsuarioManager(BaseUserManager):
+    def create_user(self, email, contrasenia=None, **extra_fields):
+        if not email:
+            raise ValueError('El email debe ser proporcionado')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(contrasenia)
+        user.save(using=self._db)
+        return user
 
-class Usuarios(models.Model):
+    def create_superuser(self, email, contrasenia=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, contrasenia, **extra_fields)
+class Usuarios(AbstractBaseUser, PermissionsMixin):
     id_dependencia = models.ForeignKey(Dependencias, models.DO_NOTHING, db_column='id_dependencia', blank=True, null=True)
-    email = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, unique=True)
     contrasenia = models.CharField(max_length=255)
     nombre = models.CharField(max_length=255, blank=True, null=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
@@ -669,7 +682,16 @@ class Usuarios(models.Model):
     apellido_paterno = models.CharField(max_length=50, blank=True, null=True)
     apellio_materno = models.CharField(max_length=50, blank=True, null=True)
     num_empleado = models.CharField(max_length=50, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    #PASSWORD_FIELD = 'contrasenia'
+    objects = UsuarioManager()
+
+    def __str__(self):
+        return self.email
 
     class Meta:
         managed = False
-        db_table = 'usuarios'
+        db_table = 'main_usuarios'

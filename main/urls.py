@@ -7,6 +7,8 @@ from .views.conmutadores_views import (
 from .views.login_view import (login)
 from .views.Nabvar_view import(Nabvar)
 from .views.catalogo_view import(catalogo)
+from .views.pricipal_view import (principal)
+from .views.inventarios_view import (inventario,obtener_dependencias)
 
 from .views.catalogos_views import(
     routers_list, router_detail, router_create, router_update, router_delete,
@@ -58,6 +60,9 @@ urlpatterns = [
     path('login', login, name='login'),
     path('Catalogo', catalogo, name='catalogo'),
     path('Nabvar', Nabvar, name='Nabvar'),
+    path('principal', principal, name='principal'),
+    path('inventario', inventario, name='inventario'),
+    path('obtener_dependencias/', obtener_dependencias, name='obtener_dependencias'),
     
     # +++++++++++++ urls conmutadores +++++++++++++++
     path('conmutador', conmutadores_list, name='conmutadores_list'),
@@ -314,7 +319,6 @@ urlpatterns = [
     path('sistema_informacion_nombre/<int:pk>/edit/', sistema_informacion_nombre_update, name='sistema_informacion_nombre_update'),
     path('sistema_informacion_nombre/0<int:pk>/delete/', sistema_informacion_nombre_delete, name='sistema_informacion_nombre_delete'),
 
-    
 ]
 
 
