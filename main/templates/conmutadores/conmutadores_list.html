@@ -17,57 +17,61 @@
             font-size: 55px;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
         a {
-            display: block;
-            margin-bottom: 20px;
-            margin-left: 20px; /* Ajusta el margen izquierdo */
-            text-align: left; /* Alinea el texto a la izquierda */
-            color: black; /* Color de texto negro */
-            font-size: 1.5em; /* Tamaño de fuente 2em */
+            color: black;
+            font-size: 1.5em;
+            text-decoration: underline;
         }
 
         table {
-            width: 90%; /* Reducimos el ancho de la tabla */
-            margin: 0 auto; /* Centramos la tabla horizontalmente */
+            width: 90%;
+            margin: 0 auto;
             border-collapse: collapse;
-            margin-bottom: 20px; /* Agregamos un margen inferior */
+            margin-bottom: 20px;
         }
 
         th {
-            border-bottom: 2px solid black; /* Establece el borde inferior */
+            border-bottom: 2px solid black;
             padding: 8px;
             text-align: left;
         }
 
         td {
-            border-bottom: 1px solid gray; /* Establece el borde inferior */
+            border-bottom: 1px solid gray;
             padding: 8px;
             text-align: left;
         }
 
         tr:last-child td {
-            border-bottom: none; /* Elimina el borde inferior de la última fila */
+            border-bottom: none;
         }
 
         .edit-button,
         .delete-button {
             display: inline-block;
-            width: 120px; /* Ajustamos el ancho */
-            height: 30px; /* Ajustamos la altura */
-            line-height: 30px; /* Centramos verticalmente */
-            text-align: center; /* Centramos horizontalmente */
-            font-size: 14px; /* Ajustamos el tamaño de la fuente */
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 14px;
             background-color: #fff;
             border: 1px solid;
             border-radius: 10px;
             cursor: pointer;
-            text-decoration: none; /* Quita el subrayado del enlace */
-            vertical-align: middle; /* Centra verticalmente */
+            text-decoration: none;
+            vertical-align: middle;
         }
 
         .edit-button:hover,
         .delete-button:hover {
-            background-color: #f5f5f5; /* Cambia el color de fondo cuando pasas el mouse */
+            background-color: #f5f5f5;
         }
 
         .edit-button {
@@ -80,28 +84,44 @@
             border-color: red;
         }
 
-        /* Estilos para la ventana emergente de confirmación */
+        #deleteForm input[type="submit"] {
+            display: inline-block;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 14px;
+            background-color: #fff;
+            border: 1px solid;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            vertical-align: middle;
+
+            color: red;
+            border-color: red;
+        }
+
         .modal {
-            display: none; /* Por defecto, la ventana emergente está oculta */
-            position: fixed; /* Se fija en la ventana del navegador */
-            z-index: 1; /* Asegura que la ventana emergente esté por encima de todo */
+            display: none;
+            position: fixed;
+            z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto; /* Habilita el desplazamiento si es necesario */
-            background-color: rgb(0,0,0); /* Fondo oscuro */
-            background-color: rgba(0,0,0,0.4); /* Fondo oscuro con transparencia */
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto; /* Centra la ventana emergente verticalmente */
+            margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 30%;
             border-radius: 10px;
-            text-align: center; /* Alinea el texto al centro */
+            text-align: center;
         }
 
         .modal-buttons {
@@ -132,16 +152,51 @@
             background-color: #e7e4e4;
             color: #000;
         }
+
+        .step-links {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 0.8em;
+            margin-right: 20px;
+        }
+        
+        .step-links a {
+            text-decoration: none;
+            color: black;
+            margin-left: 10px;
+        }
+        
+        .current {
+            font-size: 1em;
+        }
+        
+        #searchInput {
+            background-color: white;
+            border: 1px solid #383737;
+            color: #383737;
+            border-radius: 10px;
+            padding: 1px;
+            font-size: 18px;
+            text-align: center;
+            width: 200px;
+            height: 30px;
+            margin-right: 30px;
+        }
     </style>
 </head>
 <body>
     <h1>Lista de Conmutadores</h1>
-    <a href="{% url 'conmutador_create' %}">+ Agregar Conmutador</a>
+    <div class="header">
+        <a href="{% url 'conmutador_create' %}">+ Agregar Conmutador</a>
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar.....">
+    </div>
     <table>
         <thead>
             <tr>
                 <th>No. Inventario</th>
                 <th>Activo</th>
+                <th>Fecha</th>
                 <th>Dependencia</th>
                 <th>Tipo</th>
                 <th>Tecnología</th>
@@ -167,39 +222,89 @@
                 <td>{{ conmutador.id_marca.marca_conmutador }}</td>
                 <td><a class="edit-button" href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
                 <td>
-                    <button class="delete-button" onclick="openModal()">Eliminar</button>
+                    <!-- Formulario de eliminación con estilo de .delete-button -->
+                    <form action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return false;">
+                        {% csrf_token %}
+                        <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
+                    </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <div class="pagination">
+        <span class="step-links">
+            <span class="current">
+                Página {{ conmutadores.number }} de {{ conmutadores.paginator.num_pages }}.
+            </span>
+
+            {% if conmutadores.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ conmutadores.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        {% if conmutadores.has_next %}
+            <a href="?page={{ conmutadores.next_page_number }}">Siguiente</a>
+            <a href="?page={{ conmutadores.paginator.num_pages }}">Última &raquo;</a>
+        {% endif %}
+        </span>
+
     <!-- Ventana emergente de confirmación -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <h2 style="font-size: 3em;">Eliminar</h2>
-            <p  style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar este conmutador?</p>
+            <p style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar este conmutador?</p>
             <p style="font-size: 1.5em;">La información no se podrá recuperar.</p>
             <div class="modal-buttons">
-                <button class="yes-button" onclick="confirmDelete()">Aceptar</button>
+                <button id="confirmButton" class="yes-button">Aceptar</button>
                 <button class="no-button" onclick="closeModal()">Cancelar</button>
             </div>
         </div>
     </div>
 
     <script>
-        function openModal() {
-            document.getElementById("myModal").style.display = "block"; // Muestra la ventana emergente
+        let currentForm; // Variable para almacenar el formulario actual
+
+        function openModal(form) {
+            currentForm = form; // Almacena el formulario actual
+            document.querySelector(".modal").style.display = "block"; // Muestra la ventana emergente
         }
 
         function closeModal() {
-            document.getElementById("myModal").style.display = "none"; // Oculta la ventana emergente
+            document.querySelector(".modal").style.display = "none"; // Oculta la ventana emergente
         }
 
-        function confirmDelete() {
-            alert("Conmutador eliminado"); // Por ahora solo mostrará una alerta
-            closeModal(); // Cierra la ventana emergente después de la confirmación
+        function submitDeleteForm() {
+            currentForm.submit(); // Envía el formulario de eliminación actual
+            closeModal(); // Cierra el modal después de enviar el formulario
+        }
+
+        // Asigna el evento onclick al botón de confirmación dentro del modal
+        document.getElementById("confirmButton").addEventListener("click", submitDeleteForm);
+        
+        function filterTable() {
+            var searchText = document.getElementById("searchInput").value.toLowerCase();
+            var rows = document.querySelector("table").getElementsByTagName("tr");
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var found = false;
+                var cells = row.getElementsByTagName("td");
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    if (cell.innerHTML.toLowerCase().indexOf(searchText) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
         }
     </script>
+
 </body>
 </html>

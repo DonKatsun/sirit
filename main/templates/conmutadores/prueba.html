@@ -2,183 +2,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventario</title>
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <meta charset="UTF-8">
+    <title>Lista de Conmutadores</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
 </head>
 <body>
+    <h1>Lista de Conmutadores</h1>
+    <a href="{% url 'conmutador_create' %}">Agregar Conmutador</a>
+    <table>
+        <thead>
+            <tr>
+                <th>No. Inventario</th>
+                <th>Activo</th>
+                <th>Dependencia</th>
+                <th>Tipo</th>
+                <th>Tecnología</th>
+                <th>Protocolo</th>
+                <th>Extensiones Soportadas</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conmutador in conmutadores %}
+            <tr>
+                <td><a href="{% url 'conmutador_detail' conmutador.pk %}">{{ conmutador.no_inventario }}</a></td>
+                <td>{% if conmutador.activo %}Sí{% else %}No{% endif %}</td>
+                <td>{{ conmutador.id_dependencia.nombre_dependencia }}</td>
+                <td>{{ conmutador.tipo }}</td>
+                <td>{{ conmutador.tecnologia }}</td>
+                <td>{{ conmutador.protocolo }}</td>
+                <td>{{ conmutador.ext_soportadas }}</td>
+                <td>{{ conmutador.modelo }}</td>
+                <td>{{ conmutador.id_marca.marca_conmutador }}</td>
+                <td><a href="{% url 'conmutador_update' conmutador.pk %}">Editar</a></td>
+                <td>
+                    <form id="deleteForm" action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return confirmDelete()">
+                        {% csrf_token %}
+                        <input type="submit" value="Eliminar">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
 
-  <!-- Código para los combo box -->
- 
-   <!-- Combo box -->
-   <label for="categoria3"></label>
-   <select id="categoria3" onchange="actualizarCategorias3()">
-     <option value="200">Categoría</option>
-     <option value="201">Hardware</option>
-     <option value="202">Software</option>
-     <option value="203">Telecomunicaciones</option>
-     <option value="204">Usuarios</option>
-   </select>
-   
-   <label for="subcategoria3"></label>
-   <select id="subcategoria3" onchange="mostrarContenido()">
-   </select>
-   
-   <!-- Botón de limpieza -->
-   <button id="limpiarFiltros3">Limpiar Filtros</button>
- 
-    <!-- Aquí se colocan los elementos div para mostrar el texto de la categoría y la subcategoría -->
-    <div id="categoriaSubcategoria">
-     <div id="seleccion" class="seleccion" style="display: inline-block;"></div>
-     <div id="subseleccion" class="subseleccion" style="display: inline-block; margin-left: 20px;"></div>
-   </div>
- 
-   
-   <!-- Contenido dinámico -->
-   <object id="contenido" type="text/html" data="" width="100%" height="560"></object>
-   
- 
-   
-   </body>
-   </html>
-
-     <script>
-     // Función para actualizar las subcategorías
-   function actualizarCategorias3() {
-     var categoriaSeleccionada = document.getElementById("categoria3").value;
-     var subcategoriaSelect = document.getElementById("subcategoria3");
-     var seleccion = document.getElementById("seleccion");
-     var subseleccion = document.getElementById("subseleccion");
-   
-     // Elimina todas las opciones actuales
-     subcategoriaSelect.innerHTML = "";
-   
-     // Agrega las opciones correspondientes a la categoría seleccionada
-     switch (categoriaSeleccionada) {
-       case "201":
-         agregarOpciones(subcategoriaSelect, [
-           { value: "1000", text: "Subcategoria" },
-           { value: "1010", text: "Energia" },
-           { value: "1020", text: "Almacenamiento" },
-           { value: "1030", text: "Equipo de Computo Personal" },
-           { value: "1040", text: "Equipo de Computo Servidor" },
-           { value: "1050", text: "Impresión" },
-           { value: "1060", text: "Proyector" },
-           { value: "1070", text: "Equipo Telefonico" },
-           { value: "1080", text: "Dron" },
-           { value: "1090", text: "Firewall" },
-           { value: "1091", text: "Routers" },
-           { value: "1092", text: "Conmutador" }
-         ]);
-         seleccion.innerHTML = "Hardware";
-         break;
-       case "202":
-         agregarOpciones(subcategoriaSelect, [
-           { value: "1100", text: "Subcategoria" },
-           { value: "1110", text: "Herramienta de Desarrollo" },
-           { value: "1120", text: "Sistema de Información" },
-           { value: "1130", text: "Sistema de Información Movíl" }
-         ]);
-         seleccion.innerHTML = "Software";
-         break;
-       case "203":
-         agregarOpciones(subcategoriaSelect, [
-           { value: "1200", text: "Subcategoria" },
-           { value: "1210", text: "Enlace Dependiente" },
-           { value: "1220", text: "Enlace No Dependiente" },
-           { value: "1230", text: "SITE" }
-         ]);
-         seleccion.innerHTML = "Telecomunicaciones";
-         break;
-       case "204":
-         agregarOpciones(subcategoriaSelect, [
-           { value: "1300", text: "Subcategoria" },
-           { value: "1310", text: "Usuarios" }
-         ]);
-         seleccion.innerHTML = "Usuarios";
-         break;
-       default:
-         // Puedes manejar una opción por defecto aquí
-         break;
-     }
-   
-     // Actualiza la subcategoría seleccionada
-     mostrarContenido();
-   }
-   
-   // Función para agregar opciones al select
-   function agregarOpciones(select, opciones) {
-     opciones.forEach(function(opcion) {
-       select.innerHTML += "<option value='" + opcion.value + "'>" + opcion.text + "</option>";
-     });
-   }
-   
-   // Función para mostrar el contenido correspondiente a la subcategoría seleccionada
-   function mostrarContenido() {
-     var subcategoriaSelect = document.getElementById("subcategoria3");
-     var contenido = document.getElementById("contenido");
-     var subcategoriaSeleccionada = subcategoriaSelect.options[subcategoriaSelect.selectedIndex].text;
-     var categoriaSeleccionada = document.getElementById("categoria3").value;
-   
-     // Determina el archivo HTML correspondiente a la subcategoría seleccionada
-     var archivoHTML = "";
-   
-     switch (categoriaSeleccionada) {
-       case "201":
-         switch (subcategoriaSeleccionada) {
-           case "Energia":
-             archivoHTML = "energia.html";
-             break;
-           case "Almacenamiento":
-             archivoHTML = "almacenamiento.html";
-             break;
-           case "Conmutador":
-             archivoHTML = "Comutador.html";
-             break;
-           // Agrega más casos según necesites
-           default:
-             // Puedes manejar una opción por defecto aquí
-             archivoHTML = "home.html";
-             break;
-         }
-         break;
-       case "202":
-         switch (subcategoriaSeleccionada) {
-           case "Herramienta de Desarrollo":
-             archivoHTML = "herramienta_desarrollo.html";
-             break;
-           case "Sistema de Información":
-             archivoHTML = "sistema_informacion.html";
-             break;
-           // Agrega más casos según necesites
-           default:
-             // Puedes manejar una opción por defecto aquí
-             archivoHTML = "home.html";
-             break;
-         }
-         break;
-       // Agrega más casos para las otras categorías según necesites
-       default:
-         // Puedes manejar una opción por defecto aquí
-         archivoHTML = "";
-         break;
-     }
-   
-     // Actualiza el atributo 'data' del objeto <object> con el archivo HTML correspondiente
-     contenido.setAttribute("data", archivoHTML);
-     
-     // Actualiza el texto de la subselección
-     document.getElementById("subseleccion").innerHTML = subcategoriaSeleccionada;
-   }
-   
-   // Función para limpiar los filtros
-   document.getElementById("limpiarFiltros3").addEventListener("click", function() {
-     // Resetea los valores de los combos a su estado inicial
-     document.getElementById("categoria3").selectedIndex = 0;
-     document.getElementById("subcategoria3").innerHTML = "";
-     document.getElementById("seleccion").innerHTML = "";
-     document.getElementById("subseleccion").innerHTML = "";
-     document.getElementById("contenido").setAttribute("data", "");
-   });
-   </script>
+<script>
+    function confirmDelete() {
+        if (confirm("¿Estás seguro de que deseas eliminar este conmutador?")) {
+            return true; // Si el usuario confirma, se enviará el formulario
+        } else {
+            return false; // Si el usuario cancela, se cancelará el envío del formulario
+        }
+    }
+</script>

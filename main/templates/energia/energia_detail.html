@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Conmutador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 55px;
+        }
+
+        .details-container {
+            max-width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .detail {
+            width: 48%; /* Cada detalle ocupa el 48% del ancho */
+            margin-bottom: 20px; /* Aumento del espacio entre los detalles */
+        }
+
+        .detail-label {
+            font-weight: bold;
+        }
+
+        .detail p.detail-data {
+            background-color:  #e7e4e4;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0; /* Eliminamos el margen por defecto */
+            margin-top: 5px; /* Espacio entre campos */
+            box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
+        }
+
+        a {
+            display: block;
+            color: #989898; /* Color de texto negro */
+        }
+
+        .edit-button,
+        .delete-button {
+            margin-top: 10px; /* Añadimos un margen superior */
+            padding: 10px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .edit-button {
+            background-color: #fff;
+            color: #989898;
+            height: 23px;
+            border: 2px solid #989898;
+            margin-right: 10px; /* Añadimos un margen derecho entre los botones */
+        }
+
+        .delete-button {
+            background-color: #fff;
+            color: red;
+            height: 48px;
+            border: 2px solid red;
+        }
+
+        .button:hover {
+            background-color: #e7e4e4;
+            color: #000;
+        }
+
+        /* Estilos para la ventana emergente de confirmación */
+        .modal {
+            display: none; /* Por defecto, la ventana emergente está oculta */
+            position: fixed; /* Se fija en la ventana del navegador */
+            z-index: 1; /* Asegura que la ventana emergente esté por encima de todo */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Habilita el desplazamiento si es necesario */
+            background-color: rgb(0,0,0); /* Fondo oscuro */
+            background-color: rgba(0,0,0,0.4); /* Fondo oscuro con transparencia */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Centra la ventana emergente verticalmente */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 10px;
+            text-align: center; /* Alinea el texto al centro */
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .modal-buttons button.yes-button {
+            background-color: red;
+            color: white;
+        }
+
+        .modal-buttons button.no-button {
+            background-color: blue;
+            color: white;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #e7e4e4;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalle de Energia</h1>
+    <div class="details-container">
+        <div class="detail">
+            <p class="detail-label">No. Inventario:</p>
+            <p class="detail-data">{{ energia.no_inventario }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Activo:</p>
+            <p class="detail-data">{% if energia.activo %}Sí{% else %}No{% endif %}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Fecha:</p>
+            <p class="detail-data">{{ energia.fecha }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Dependencia:</p>
+            <p class="detail-data">{{ energia.id_dependencia.nombre_dependencia }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Capacidad:</p>
+            <p class="detail-data">{{ energia.capacidad }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Tipo:</p>
+            <p class="detail-data">{{ energia.tipo }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Modelo:</p>
+            <p class="detail-data">{{ energia.modelo }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Marca:</p>
+            <p class="detail-data">{{ energia.id_marca.marca_energia }}</p>
+        </div>
+       
+        <div class="details-container">
+            <a class="edit-button" href="{% url 'energia_update' energia.pk %}">Editar</a>
+            <form action="{% url 'energia_delete' energia.pk %}" method="post" onsubmit="return false;">
+                {% csrf_token %}
+                <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
+            </form>
+        </div>
+    </div>
+
+    <!-- Ventana emergente de confirmación -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 3em;">Eliminar</h2>
+            <p style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar esta Energia?</p>
+            <p style="font-size: 1.5em;">La información no se podrá recuperar.</p>
+            <div class="modal-buttons">
+                <button id="confirmButton" class="yes-button">Aceptar</button>
+                <button class="no-button" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentForm; // Variable para almacenar el formulario actual
+
+        function openModal(form) {
+            currentForm = form; // Almacena el formulario actual
+            document.getElementById("myModal").style.display = "block"; // Muestra la ventana emergente
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none"; // Oculta la ventana emergente
+        }
+
+        function submitDeleteForm() {
+            currentForm.submit(); // Envía el formulario de eliminación actual
+            closeModal(); // Cierra el modal después de enviar el formulario
+        }
+
+        // Asigna el evento onclick al botón de confirmación dentro del modal
+        document.getElementById("confirmButton").addEventListener("click", submitDeleteForm);
+    </script>
+</body>
+</html>
