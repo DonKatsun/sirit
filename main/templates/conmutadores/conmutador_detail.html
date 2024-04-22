@@ -148,31 +148,67 @@
             <p class="detail-data">{% if conmutador.activo %}Sí{% else %}No{% endif %}</p>
         </div>
         <div class="detail">
+            <p class="detail-label">Fecha:</p>
+            <p class="detail-data">{{ conmutador.fecha }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Dependencia:</p>
+            <p class="detail-data">{{ conmutador.id_dependencia.nombre_dependencia }}</p>
+        </div>
+        <div class="detail">
             <p class="detail-label">Tipo:</p>
             <p class="detail-data">{{ conmutador.tipo }}</p>
         </div>
+        <div class="detail">
+            <p class="detail-label">Tecnología:</p>
+            <p class="detail-data">{{ conmutador.tecnologia }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Protocolo:</p>
+            <p class="detail-data">{{ conmutador.protocolo }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Extensiones Soportadas:</p>
+            <p class="detail-data">{{ conmutador.ext_soportadas }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Modelo:</p>
+            <p class="detail-data">{{ conmutador.modelo }}</p>
+        </div>
+        <div class="detail">
+            <p class="detail-label">Marca:</p>
+            <p class="detail-data">{{ conmutador.id_marca.marca_conmutador }}</p>
+        </div>
+        
        
         <div class="details-container">
             <a class="edit-button" href="{% url 'conmutador_update' conmutador.pk %}">Editar</a>
-            <button type="button" class="delete-button" onclick="openModal()">Eliminar</button>
+             <!-- Formulario de eliminación con estilo de .delete-button -->
+             <form action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return false;">
+                {% csrf_token %}
+                <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
+            </form>
         </div>
     </div>
 
-    <!-- Ventana emergente de confirmación -->
-    <div id="myModal" class="modal">
+     <!-- Ventana emergente de confirmación -->
+     <div id="myModal" class="modal">
         <div class="modal-content">
             <h2 style="font-size: 3em;">Eliminar</h2>
-            <p  style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar este conmutador?</p>
+            <p style="font-size: 1.5em;">¿Estás seguro de que deseas eliminar este conmutador?</p>
             <p style="font-size: 1.5em;">La información no se podrá recuperar.</p>
             <div class="modal-buttons">
-                <button class="yes-button" onclick="confirmDelete()">Aceptar</button>
+                <button id="confirmButton" class="yes-button">Aceptar</button>
                 <button class="no-button" onclick="closeModal()">Cancelar</button>
             </div>
         </div>
     </div>
 
     <script>
-        function openModal() {
+        let currentForm; // Variable para almacenar el formulario actual
+
+        function openModal(form) {
+            currentForm = form; // Almacena el formulario actual
             document.getElementById("myModal").style.display = "block"; // Muestra la ventana emergente
         }
 
@@ -180,10 +216,13 @@
             document.getElementById("myModal").style.display = "none"; // Oculta la ventana emergente
         }
 
-        function confirmDelete() {
-            alert("Conmutador eliminado"); // Por ahora solo mostrará una alerta
-            closeModal(); // Cierra la ventana emergente después de la confirmación
+        function submitDeleteForm() {
+            currentForm.submit(); // Envía el formulario de eliminación actual
+            closeModal(); // Cierra el modal después de enviar el formulario
         }
+
+        // Asigna el evento onclick al botón de confirmación dentro del modal
+        document.getElementById("confirmButton").addEventListener("click", submitDeleteForm);
     </script>
 </body>
 </html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear/Editar Conmutador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 55px;
+        }
+
+        form {
+            max-width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .field-container {
+            width: 40%; /* Cada campo ocupa el 48% del ancho */
+            margin-bottom: 60px; /* Aumento del espacio entre los campos */
+            margin-right: 10%; /* Espacio entre columnas */
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%; /* Ajustar el ancho para que coincida con los inputs */
+            padding: 15px; /* Aumento de la altura del input */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #e7e4e4;
+            margin-top: 5px; /* Espacio entre campos */
+            box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
+        }
+
+        button[type="submit"] {
+            width: 20%;
+            height: 70px;
+            font-size: 2em;
+            font-weight: bold;
+            margin-left: 65%;
+            padding: 10px 20px;
+            background-color: #989898;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #e7e4e4;
+            color: #000;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crear/Editar Municipio</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="field-container">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
