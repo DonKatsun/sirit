@@ -1,13 +1,16 @@
 <!-- tu_plantilla.html -->
 {% include 'navbar.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte por Secretaría y Dependencia</title>
+    <link rel="stylesheet" href="{% static 'css/principal.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    
 </head>
 <body>
     {% if secretaria %}
@@ -17,6 +20,7 @@
     {% endif %}
 
     <form method="GET" action="{% url 'principal' %}">
+        <div class="inline-container">
         <label for="secretaria">Selecciona una Secretaría:</label>
         <select name="secretaria" id="secretaria">
             <option value="" {% if not selected_secretaria %} selected {% endif %}>Todas</option>
@@ -29,8 +33,9 @@
 
 
         <input type="submit" value="Filtrar">
+    </div>
     </form>
-
+    <div class="tabla-reporte">
     <table border="1">
         <thead>
             <tr>
@@ -72,6 +77,7 @@
         </tbody>
         
     </table>
+</div>
 </body>
 </html>
 

@@ -2,6 +2,7 @@
     overflow-x: auto;
     width: 100%;
     background-color: #d9d9d9;
+    margin: 30px;
   }
 
   table {
@@ -22,6 +23,42 @@
     display: none;
   }
 
+  /* Estilo para los contenedores de los elementos en línea */
+.inline-container {
+  display: flex; /* Utiliza el modelo de caja flexible para los elementos en línea */
+  align-items: center; /* Centra los elementos verticalmente */
+  margin: 30px;
+ /* Espacio entre los contenedores en línea */
+}
+
+/* Estilo para los elementos en línea */
+.inline-container label,
+.inline-container select,
+.inline-container input {
+  margin-right: 20px; /* Espacio entre los elementos en línea */
+}
+
+/* Estilo para los elementos select */
+.inline-container select {
+  width: 200px; /* Ancho de los elementos select */
+}
+
+/* Estilo para el botón de búsqueda */
+.inline-container button {
+  padding: 10px 20px; /* Espacio interno del botón */
+  border-radius: 5px; /* Borde redondeado */
+  background-color: white; /* Color de fondo */
+  border: 1px solid #383737; /* Borde */
+  color: #383737; /* Color del texto */
+  cursor: pointer; /* Cursor al pasar sobre el botón */
+}
+
+/* Estilo para el botón de búsqueda al pasar el cursor sobre él */
+.inline-container button:hover {
+  background-color: #383737; /* Color de fondo al pasar el cursor */
+  color: white; /* Color del texto al pasar el cursor */
+}
+
      /* Estilo para el combo box */
      input {
         background-color: white; /* Fondo blanco */
@@ -30,7 +67,7 @@
         border-radius: 10px; /* Borde redondeado */
         padding: 1px; /* Espaciado interno */
         font-size: 16px; /* Tamaño de fuente */
-        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        width: 120px; /* Ancho del combo box, ajusta según necesites */
         height: 50px;
         margin: 30px;
     }
@@ -43,7 +80,7 @@
         border-radius: 10px; /* Borde redondeado */
         padding: 8px; /* Espaciado interno */
         font-size: 16px; /* Tamaño de fuente */
-        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        width: 120px; /* Ancho del combo box, ajusta según necesites */
         height: 50px;
         margin: 30px;
     }
@@ -54,6 +91,25 @@
         color: #383737; /* Texto color #383737 */
         font-size: 16px; /* Tamaño de fuente */
     }
+
+    .form-control.datepicker {
+      background-color: white; /* Fondo blanco */
+      border: 1px solid #383737; /* Borde color #383737 */
+      color: #383737; /* Texto color #383737 */
+      border-radius: 10px; /* Borde redondeado */
+      padding: 8px; /* Espaciado interno */
+      font-size: 16px; /* Tamaño de fuente */
+      width: 120px; /* Ancho del input, ajusta según necesites */
+      height: 50px; /* Altura del input */
+      margin: 10px; /* Margen exterior */
+  }
+  
+  /* Opcional: Estilos para cuando el input está enfocado */
+  .form-control.datepicker:focus {
+      outline: none; /* Quita el contorno al enfocar el input */
+      border-color: #6c757d; /* Cambia el color del borde al enfocar */
+      box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); /* Agrega una sombra al enfocar */
+  }
     
     #limpiarFiltros,
     #limpiarFiltros2,
