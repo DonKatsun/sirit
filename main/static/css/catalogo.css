@@ -145,3 +145,22 @@ h2{
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.form-control.datepicker {
+    background-color: white; /* Fondo blanco */
+    border: 1px solid #383737; /* Borde color #383737 */
+    color: #383737; /* Texto color #383737 */
+    border-radius: 10px; /* Borde redondeado */
+    padding: 8px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de fuente */
+    width: 120px; /* Ancho del input, ajusta según necesites */
+    height: 50px; /* Altura del input */
+    margin: 10px; /* Margen exterior */
+}
+
+/* Opcional: Estilos para cuando el input está enfocado */
+.form-control.datepicker:focus {
+    outline: none; /* Quita el contorno al enfocar el input */
+    border-color: #6c757d; /* Cambia el color del borde al enfocar */
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); /* Agrega una sombra al enfocar */
+}

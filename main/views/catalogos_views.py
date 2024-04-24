@@ -129,8 +129,24 @@ def conmutadores_puerto_delete(request, pk):
 
 
 def almacenamientos_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    almacenamientos_list = Almacenamientos.objects.all()
+    #almacenamientos_list = Almacenamientos.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            almacenamientos_list = Almacenamientos.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            almacenamientos_list = Almacenamientos.objects.filter(fecha__year=year)
+    else:
+        almacenamientos_list = Almacenamientos.objects.all()
     if search:
         almacenamientos_list = almacenamientos_list.filter(no_inventario__icontains=search)
     paginator = Paginator(almacenamientos_list, 10)  # Muestra 10 drones por página
@@ -145,7 +161,11 @@ def almacenamientos_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         almacenamientos = paginator.page(paginator.num_pages)
 
-    return render(request, 'almacenamientos/almacenamientos_list.html', {'almacenamientos': almacenamientos})
+    return render(request, 'almacenamientos/almacenamientos_list.html', {
+        'almacenamientos': almacenamientos,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')})
     
 def almacenamiento_detail(request, pk):
     almacenamiento = Almacenamientos.objects.get(pk=pk)
@@ -288,8 +308,23 @@ def dependencia_delete(request, pk):
 ########################
 
 def drones_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    drones_list = Drones.objects.all()
+    #drones_list = Drones.objects.all()
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            drones_list = Drones.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            drones_list = Drones.objects.filter(fecha__year=year)
+    else:
+        drones_list = Drones.objects.all()
     if search:
         drones_list = drones_list.filter(no_inventario__icontains=search)
 
@@ -511,19 +546,43 @@ def energia_marca_delete(request, pk):
 ########################
 
 def energias_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     energias_list = Energias.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            energias_list = Energias.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            energias_list = Energias.objects.filter(fecha__year=year)
+    else:
+        energias_list = Energias.objects.all()
     
     if search:
         energias_list = energias_list.filter(no_inventario__icontains=search)
     paginator = Paginator(energias_list, 10)  # 10 registros por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'energia/energias_list.html', {'page_obj': page_obj})
+    return render(request, 'energia/energias_list.html', {
+        'page_obj': page_obj,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def energia_detail(request, pk):
     energia = Energias.objects.get(pk=pk)
-    return render(request, 'energia/energia_detail.html', {'energia': energia})
+    return render(request, 'energia/energia_detail.html', {
+        'energia': energia,
+        
+        })
 
 def energia_create(request):
     if request.method == 'POST':
@@ -562,8 +621,24 @@ def energia_delete(request, pk):
 ########################
 
 def enlaces_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     enlaces_list = Enlaces.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            enlaces_list = Enlaces.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            enlaces_list = Enlaces.objects.filter(fecha__year=year)
+    else:
+        enlaces_list = Enlaces.objects.all()
     
     if search:
         enlaces_list = enlaces_list.filter(no_inventario__icontains=search)
@@ -579,7 +654,12 @@ def enlaces_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         enlaces = paginator.page(paginator.num_pages)
 
-    return render(request, 'enlaces/enlaces_list.html', {'enlaces': enlaces})
+    return render(request, 'enlaces/enlaces_list.html', {
+        'enlaces': enlaces,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 def enlace_detail(request, pk):
@@ -679,8 +759,25 @@ def enlace_tipo_delete(request, pk):
 ########################
 
 def equipo_telefonico_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    equipo_telefonico_list = EquipoTelefonico.objects.all()
+    #equipo_telefonico_list = EquipoTelefonico.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            equipo_telefonico_list = EquipoTelefonico.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            equipo_telefonico_list = EquipoTelefonico.objects.filter(fecha__year=year)
+    else:
+        equipo_telefonico_list = EquipoTelefonico.objects.all()
+
     if search:
         equipo_telefonico_list = equipo_telefonico_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipo_telefonico_list, 10)  # Muestra 10 equipos telefónicos por página
@@ -695,7 +792,12 @@ def equipo_telefonico_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_telefonicos = paginator.page(paginator.num_pages)
 
-    return render(request, 'equipos/equipo_telefonico_list.html', {'equipos_telefonicos': equipos_telefonicos})
+    return render(request, 'equipos/equipo_telefonico_list.html', {
+        'equipos_telefonicos': equipos_telefonicos,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def equipo_telefonico_detail(request, pk):
     equipo = EquipoTelefonico.objects.get(pk=pk)
@@ -738,8 +840,25 @@ def equipo_telefonico_delete(request, pk):
 ########################
 
 def equipos_personales_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    equipos_personales_list = EquiposPersonales.objects.all()
+    #equipos_personales_list = EquiposPersonales.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            equipos_personales_list = EquiposPersonales.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            equipos_personales_list = EquiposPersonales.objects.filter(fecha__year=year)
+    else:
+        equipos_personales_list = EquiposPersonales.objects.all()
+
     if search:
         equipos_personales_list = equipos_personales_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipos_personales_list, 10)  # Muestra 10 equipos personales por página
@@ -754,7 +873,12 @@ def equipos_personales_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_personales = paginator.page(paginator.num_pages)
 
-    return render(request, 'equiposp/equipos_personales_list.html', {'equipos_personales': equipos_personales})
+    return render(request, 'equiposp/equipos_personales_list.html', {
+        'equipos_personales': equipos_personales,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def equipo_personal_detail(request, pk):
     equipo_personal = EquiposPersonales.objects.get(pk=pk)
@@ -965,8 +1089,24 @@ def equipo_personal_tipopuerto_delete(request, pk):
 ########################
 
 def equipos_servidores_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    equipos_servidores_list = EquiposServidores.objects.all()
+    #equipos_servidores_list = EquiposServidores.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            equipos_servidores_list = EquiposServidores.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            equipos_servidores_list = EquiposServidores.objects.filter(fecha__year=year)
+    else:
+        equipos_servidores_list = EquiposServidores.objects.all()
     if search:
         equipos_servidores_list = equipos_servidores_list.filter(no_inventario__icontains=search)
     paginator = Paginator(equipos_servidores_list, 10)  # Muestra 10 equipos servidores por página
@@ -981,7 +1121,12 @@ def equipos_servidores_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_servidores = paginator.page(paginator.num_pages)
 
-    return render(request, 'equiposs/equipos_servidores_list.html', {'equipos_servidores': equipos_servidores})
+    return render(request, 'equiposs/equipos_servidores_list.html', {
+        'equipos_servidores': equipos_servidores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 def equipo_servidor_detail(request, pk):
@@ -1247,8 +1392,25 @@ def equipo_servidor_tipo_delete(request, pk):
 ########################
 
 def firewalls_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    firewalls_list = Firewalls.objects.all()
+    #firewalls_list = Firewalls.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            firewalls_list = Firewalls.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            firewalls_list = Firewalls.objects.filter(fecha__year=year)
+    else:
+        conmufirewalls_listtadores = Firewalls.objects.all()
+
     if search:
         firewalls_list = firewalls_list.filter(no_inventario__icontains=search)
     paginator = Paginator(firewalls_list, 10)  # Muestra 10 firewalls por página
@@ -1263,7 +1425,12 @@ def firewalls_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         firewalls = paginator.page(paginator.num_pages)
 
-    return render(request, 'firewalls/firewalls_list.html', {'firewalls': firewalls})
+    return render(request, 'firewalls/firewalls_list.html', {
+        'firewalls': firewalls,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def firewall_detail(request, pk):
     firewall = Firewalls.objects.get(pk=pk)
@@ -1363,8 +1530,25 @@ def firewall_marca_delete(request, pk):
 ########################
 
 def herramientas_desarrollo_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
+    #herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(fecha__year=year)
+    else:
+        herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
+
     if search:
         herramientas_desarrollo_list = herramientas_desarrollo_list.filter(no_inventario__icontains=search)
     paginator = Paginator(herramientas_desarrollo_list, 10)  # Muestra 10 herramientas de desarrollo por página
@@ -1379,7 +1563,12 @@ def herramientas_desarrollo_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         herramientas_desarrollo = paginator.page(paginator.num_pages)
 
-    return render(request, 'herramientas/herramientas_desarrollo_list.html', {'herramientas_desarrollo': herramientas_desarrollo})
+    return render(request, 'herramientas/herramientas_desarrollo_list.html', {
+        'herramientas_desarrollo': herramientas_desarrollo,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 def herramienta_desarrollo_detail(request, pk):
@@ -1423,8 +1612,25 @@ def herramienta_desarrollo_delete(request, pk):
 ########################
 
 def impresoras_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    impresoras_list = Impresoras.objects.all()
+    #impresoras_list = Impresoras.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            impresoras_list = Impresoras.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            impresoras_list = Impresoras.objects.filter(fecha__year=year)
+    else:
+        impresoras_list = Impresoras.objects.all()
+
     if search:
         impresoras_list = impresoras_list.filter(no_inventario__icontains=search)
     paginator = Paginator(impresoras_list, 10)  # Muestra 10 impresoras por página
@@ -1439,7 +1645,12 @@ def impresoras_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         impresoras = paginator.page(paginator.num_pages)
 
-    return render(request, 'impresoras/impresoras_list.html', {'impresoras': impresoras})
+    return render(request, 'impresoras/impresoras_list.html', {
+        'impresoras': impresoras,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def impresora_detail(request, pk):
     impresora = Impresoras.objects.get(pk=pk)
@@ -1594,8 +1805,25 @@ def municipio_delete(request, pk):
 ########################
 
 def proyectores_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     proyectores_list = Proyectores.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            proyectores_list = Proyectores.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            proyectores_list = Proyectores.objects.filter(fecha__year=year)
+    else:
+        proyectores_list = Proyectores.objects.all()
+
     if search:
         proyectores_list = proyectores_list.filter(no_inventario__icontains=search)
     paginator = Paginator(proyectores_list, 10)  # Muestra 10 proyectores por página
@@ -1610,7 +1838,12 @@ def proyectores_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         proyectores = paginator.page(paginator.num_pages)
 
-    return render(request, 'proyectores/proyectores_list.html', {'proyectores': proyectores})
+    return render(request, 'proyectores/proyectores_list.html', {
+        'proyectores': proyectores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 def proyector_detail(request, pk):
@@ -1713,8 +1946,25 @@ def proyector_marca_delete(request, pk):
 ########################
 
 def routers_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     routers_list = Routers.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            routers_list = Routers.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            routers_list = Routers.objects.filter(fecha__year=year)
+    else:
+        routers_list = Routers.objects.all()
+
     if search:
         routers_list = routers_list.filter(no_inventario__icontains=search)
     paginator = Paginator(routers_list, 10)  # Muestra 10 routers por página
@@ -1729,7 +1979,12 @@ def routers_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         routers = paginator.page(paginator.num_pages)
 
-    return render(request, 'routers/routers_list.html', {'routers': routers})
+    return render(request, 'routers/routers_list.html', {
+        'routers': routers,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def router_detail(request, pk):
     router = Routers.objects.get(pk=pk)
@@ -1876,8 +2131,23 @@ def secretaria_delete(request, pk):
 ########################
 
 def sistemas_informacion_movil_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.all()
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(fecha__year=year)
+    else:
+        sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.all()
+    
     if search:
         sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sistemas_informacion_movil_list, 10)  # Muestra 10 sistemas de información móvil por página
@@ -1892,7 +2162,12 @@ def sistemas_informacion_movil_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sistemas_informacion_movil = paginator.page(paginator.num_pages)
 
-    return render(request, 'sistemas_informacion_movil/sistemas_informacion_movil_list.html', {'sistemas_informacion_movil': sistemas_informacion_movil})
+    return render(request, 'sistemas_informacion_movil/sistemas_informacion_movil_list.html', {
+        'sistemas_informacion_movil': sistemas_informacion_movil,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def sistema_informacion_movil_detail(request, pk):
     sistema_informacion_movil = SistemaDeInformacionMovil.objects.get(pk=pk)
@@ -1992,8 +2267,24 @@ def sistema_informacion_movil_nombre_delete(request, pk):
 ########################
 
 def sistemas_informacion_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    sistemas_informacion_list = SistemasInformacion.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            sistemas_informacion_list = SistemasInformacion.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            sistemas_informacion_list = SistemasInformacion.objects.filter(fecha__year=year)
+    else:
+        sistemas_informacion_list = SistemasInformacion.objects.all()
+
     if search:
         sistemas_informacion_list = sistemas_informacion_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sistemas_informacion_list, 10)  # Muestra 10 sistemas de información por página
@@ -2008,7 +2299,12 @@ def sistemas_informacion_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sistemas_informacion = paginator.page(paginator.num_pages)
 
-    return render(request, 'sistemas_informacion/sistemas_informacion_list.html', {'sistemas_informacion': sistemas_informacion})
+    return render(request, 'sistemas_informacion/sistemas_informacion_list.html', {
+        'sistemas_informacion': sistemas_informacion,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def sistema_informacion_detail(request, pk):
     sistema_informacion = SistemasInformacion.objects.get(pk=pk)
@@ -2108,8 +2404,25 @@ def sistema_informacion_nombre_delete(request, pk):
 ########################
 
 def sites_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    year = request.GET.get('anio')
+    dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     sites_list = Sites.objects.all()
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        if dependencia:
+            sites_list = Sites.objects.filter(id_dependencia=dependencia,fecha__year=year)
+        else:
+            sites_list = Sites.objects.filter(fecha__year=year)
+    else:
+        sites_list = Sites.objects.all()
+
     if search:
         sites_list = sites_list.filter(no_inventario__icontains=search)
     paginator = Paginator(sites_list, 10)  # Muestra 10 sitios por página
@@ -2124,7 +2437,12 @@ def sites_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sites = paginator.page(paginator.num_pages)
 
-    return render(request, 'sites/sites_list.html', {'sites': sites})
+    return render(request, 'sites/sites_list.html', {
+        'sites': sites,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 def site_detail(request, pk):
     site = Sites.objects.get(pk=pk)

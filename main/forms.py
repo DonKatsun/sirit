@@ -18,6 +18,9 @@ class ConmutadorForm(forms.ModelForm):
             'ext_soportadas':'Ext Soportadas:',
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -78,6 +81,9 @@ class AlmacenamientosForm(forms.ModelForm):
             'id_marca': 'Marca: ',
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -113,6 +119,9 @@ class DronesForms(forms.ModelForm):
             'radio_alcance':'Radio de Alcance:',
             'resolucion_camara':'Resolución de Camara:',
             'bateria':'Bateria:',         
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -162,6 +171,9 @@ class EnergiasForms(forms.ModelForm):
             'id_marca': 'Marca: ',
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -195,6 +207,9 @@ class EnlacesForms(forms.ModelForm):
             'id_municipio':'Municipio:',
             'id_tipo': 'Tipos: ',
             
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -231,6 +246,9 @@ class EquipoTelefonicoForms(forms.ModelForm):
             'num':'Número:',
                 
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -266,6 +284,9 @@ class EquiposPersonalesForms(forms.ModelForm):
             'mac_inalambrica':'Marca Inalambrica:',
 
                 
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
 
         
@@ -347,6 +368,9 @@ class EquiposServidoresForms(forms.ModelForm):
             'id_tipo':'Tipos:',
        
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
 
         
     def __init__(self, *args, **kwargs):
@@ -424,6 +448,9 @@ class FirewallsForms(forms.ModelForm):
             'troughput':'Troughput:',
             'id_marca': 'Marca: ',  
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -462,6 +489,9 @@ class HerramientaDeDesarrolloForms(forms.ModelForm):
             'uso_sin_licencia':'Uso sin Licencia:',
           
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -483,6 +513,9 @@ class ImpresorasForms(forms.ModelForm):
             'modelo':'Modelo:',
             'id_marca': 'Marca: ',
             
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -532,6 +565,9 @@ class ProyectoresForms(forms.ModelForm):
             'marca': 'Marca: ',
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -565,6 +601,9 @@ class RoutersForms(forms.ModelForm):
             'no_serie':'Serie:',
             'tipo':'Tipo:',
             'num_tarjetas':'Número Tarjetas:',          
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -626,6 +665,9 @@ class SistemaDeInformacionMovilForms(forms.ModelForm):
 
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -673,6 +715,9 @@ class SistemasInformacionForms(forms.ModelForm):
 
             
         }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
+        }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -712,6 +757,9 @@ class SitesForms(forms.ModelForm):
             'domicilio': 'Domicilio: ',
             'id_municipio': 'Municipio: ',
             
+        }
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'})
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
