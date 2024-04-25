@@ -1,0 +1,206 @@
+{% load static %}
+{% include 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario</title>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+</head>
+<body>
+
+  <form id="filtroForm" method="GET" action="{% url 'carga' %}">
+    {% csrf_token %}
+    <input type="hidden" id="categoria" name="categoria" value="">
+    <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
+    <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
+    <div class="inline-container">
+    <label for="categoria3">Categoría:</label>
+    <select id="categoria3" onchange="actualizarCategorias3()">
+        <option value="200">Categoría</option>
+        <option value="201">Hardware</option>
+        <option value="202">Software</option>
+        <option value="203">Telecomunicaciones</option>
+        <option value="204">Usuarios</option>
+    </select>
+  
+    <label for="subcategoria3">Subcategoría:</label>
+    <select id="subcategoria3" onchange="cambiaSub()">
+    </select>
+  
+    <label for="secretaria">Secretaría:</label>
+    <select id="secretaria" onchange="actualizarDependencias()">
+        <option value="">Seleccionar secretaría</option>
+        {% for secretaria in secretarias %}
+        <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
+        {% endfor %}
+    </select>
+  
+    <label for="dependenciagi">Dependencia:</label>
+    <select id="dependencia" onchange="cambiaDepen()">
+        <option value="">Seleccionar dependencia</option>
+    </select>
+    </div>
+    <div class="inline-container">
+    <label for="year">Año:</label>
+    <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
+    
+    <label>Archivo: </label>
+    <input type="file" id="ex" name="ex">
+    <button id="limpiarFiltros3" type="submit">Subir</button>
+    </div>  
+  </form>
+
+ 
+
+ 
+   <script>
+     // Función para actualizar las subcategorías
+     function actualizarCategorias3() {
+         var categoriaSeleccionada = document.getElementById("categoria3").value;
+         var subcategoriaSelect = document.getElementById("subcategoria3");
+         var seleccion = document.getElementById("seleccion");
+         var subseleccion = document.getElementById("subseleccion");
+         document.getElementById("categoria").value = categoriaSeleccionada;
+         // Elimina todas las opciones actuales
+         subcategoriaSelect.innerHTML = "";
+     
+         // Agrega las opciones correspondientes a la categoría seleccionada
+         switch (categoriaSeleccionada) {
+             case "201":
+                 agregarOpciones(subcategoriaSelect, [
+                     { value: "1000", text: "Subcategoria" },
+                     { value: "1010", text: "Energia" },
+                     { value: "1020", text: "Almacenamiento" },
+                     { value: "1030", text: "Equipo de Computo Personal" },
+                     { value: "1040", text: "Equipo de Computo Servidor" },
+                     { value: "1050", text: "Impresión" },
+                     { value: "1060", text: "Proyector" },
+                     { value: "1070", text: "Equipo Telefonico" },
+                     { value: "1080", text: "Dron" },
+                     { value: "1090", text: "Firewall" },
+                     { value: "1091", text: "Routers" },
+                     { value: "1092", text: "Conmutador" }
+                 ]);
+                 seleccion.innerHTML = "Hardware";
+                 break;
+             case "202":
+                 agregarOpciones(subcategoriaSelect, [
+                     { value: "1100", text: "Subcategoria" },
+                     { value: "1110", text: "Herramienta de Desarrollo" },
+                     { value: "1120", text: "Sistema de Información" },
+                     { value: "1130", text: "Sistema de Información Movíl" }
+                 ]);
+                 seleccion.innerHTML = "Software";
+                 break;
+             case "203":
+                 agregarOpciones(subcategoriaSelect, [
+                     { value: "1200", text: "Subcategoria" },
+                     { value: "1210", text: "Enlace Dependiente" },
+                     { value: "1220", text: "Enlace No Dependiente" },
+                     { value: "1230", text: "SITE" }
+                 ]);
+                 seleccion.innerHTML = "Telecomunicaciones";
+                 break;
+             case "204":
+                 agregarOpciones(subcategoriaSelect, [
+                     { value: "1300", text: "Subcategoria" },
+                     { value: "1310", text: "Usuarios" }
+                 ]);
+                 seleccion.innerHTML = "Usuarios";
+                 break;
+             default:
+                 // Puedes manejar una opción por defecto aquí
+                 break;
+         }
+     
+         // Actualiza la subcategoría seleccionada
+         mostrarContenido();
+     }
+     function cambiaSub(){
+      var subcategoria = document.getElementById("subcategoria3").value;
+      document.getElementById("subcategoriaSelec").value = subcategoria;
+     }
+     function cambiaDepen(){
+      var dependencia = document.getElementById("dependencia").value;
+      document.getElementById("dependenciaSelec").value = dependencia;
+     }
+     // Función para agregar opciones al select
+     function agregarOpciones(select, opciones) {
+         opciones.forEach(function(opcion) {
+             select.innerHTML += "<option value='" + opcion.value + "'>" + opcion.text + "</option>";
+         });
+     }
+
+     function agregarOpciones(select, opciones) {
+      opciones.forEach(function(opcion) {
+          select.innerHTML += "<option value='" + opcion.value + "'>" + opcion.text + "</option>";
+      });
+  }
+
+  // Función para cargar las dependencias correspondientes a una secretaria
+  function cargarDependencias() {
+      // Obtener los elementos necesarios del DOM
+      var secretariaSelect = document.getElementById("secretaria");
+      var dependenciaSelect = document.getElementById("dependencia");
+
+      // Obtener el valor seleccionado de la secretaria
+      var secretariaSeleccionada = secretariaSelect.value;
+
+      // Hacer una solicitud AJAX para obtener las dependencias de la secretaria seleccionada
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/obtener_dependencias/?secretaria=" + secretariaSeleccionada, true);
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status === 200) {
+                  // Limpiar el combobox de dependencias
+                  dependenciaSelect.innerHTML = "";
+
+                  // Obtener las dependencias del servidor como una lista de objetos JSON
+                  var dependencias = JSON.parse(xhr.responseText);
+
+                  // Agregar las opciones de dependencia al combobox
+                  dependenciaSelect.innerHTML += "<option value=''>" + "Selecciona" + "</option>"
+                  dependencias.forEach(function(dependencia) {
+                      dependenciaSelect.innerHTML += "<option value='" + dependencia.id + "'>" + dependencia.nombre_dependencia + "</option>";
+                  });
+              } else {
+                  console.error("Error al cargar las dependencias");
+              }
+          }
+      };
+      xhr.send();
+  }
+
+  // Evento para cargar las dependencias cuando se selecciona una secretaria
+    function actualizarDependencias() {
+        cargarDependencias();
+    }
+
+    // Cargar las dependencias al cargar la página (si hay una secretaria seleccionada)
+    var secretariaSelect = document.getElementById("secretaria");
+    if (secretariaSelect.value) {
+        cargarDependencias();
+    }
+   </script>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#year').datepicker({
+            format: "yyyy",
+            startView: "years",
+            minViewMode: "years",
+            autoclose: true
+        });
+    });
+</script>

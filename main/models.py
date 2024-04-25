@@ -686,7 +686,7 @@ class Usuarios(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    #PASSWORD_FIELD = 'contrasenia'
+    PASSWORD_FIELD = 'contrasenia'
     objects = UsuarioManager()
 
     def __str__(self):

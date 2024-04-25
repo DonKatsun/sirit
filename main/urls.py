@@ -54,6 +54,8 @@ from .views.catalogos_views import(
     sistemas_informacion_nombres_list, sistema_informacion_nombre_create, sistema_informacion_nombre_update, sistema_informacion_nombre_delete,
     
 )
+from .views.carga_view import (carga)
+from .views.clonar_view import (clonar)
 
 urlpatterns = [
     # +++++++++++++ urls paginas principaless +++++++++++++
@@ -63,6 +65,8 @@ urlpatterns = [
     path('principal', principal, name='principal'),
     path('inventario', inventario, name='inventario'),
     path('obtener_dependencias/', obtener_dependencias, name='obtener_dependencias'),
+    path('carga', carga, name='carga'),
+    path('clonar', clonar, name='clonar'),
     
     # +++++++++++++ urls conmutadores +++++++++++++++
     path('conmutador', conmutadores_list, name='conmutadores_list'),
