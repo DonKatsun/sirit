@@ -1,3 +1,16 @@
+/* Estilo para el input de tipo file */
+input[type="file"] {
+  /* Aquí puedes quitar o modificar los estilos según tus necesidades */
+  background-color: transparent; /* Cambia el color de fondo a transparente */
+  border: none; /* Quita el borde */
+  color: inherit; /* Hereda el color del texto */
+  font-size: inherit; /* Hereda el tamaño de fuente */
+  width: auto; /* Ancho automático */
+  height: auto; /* Altura automática */
+  margin: 0; /* Quita el margen */
+  padding: 0; /* Quita el padding */
+}
+
 .tabla-reporte {
     overflow-x: auto;
     width: 100%;
