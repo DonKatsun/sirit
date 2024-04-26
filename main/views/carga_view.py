@@ -10,18 +10,21 @@ def carga (request):
     year = request.GET.get('anio')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
-    archivo_excel = request.FILES['ex']
-    print(archivo_excel)
+    #archivo_excel = request.FILES['ex']
+    
 
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
 
-    if request.method == 'POST' and archivo_excel:
-        
+    if request.method == 'POST':
+        archivo_excel = request.FILES['ex']
+        print(archivo_excel)
         try:
+            print("hola")
             df = pd.read_excel(archivo_excel)
+            print("huevos")
         except Exception as e:
             return render(request, 'error.html', {'mensaje': f"Error al leer el archivo Excel: {str(e)}"})
         

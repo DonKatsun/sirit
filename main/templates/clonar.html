@@ -1,0 +1,63 @@
+{% load static %}
+{% include 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario</title>
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body>
+
+<form id="filtroForm" method="GET" action="{% url 'clonar' %}">
+    {% csrf_token %}
+    <div class="inline-container">
+    <label for="year">Año a clonar:</label>
+    <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
+    
+    <label>Año de destino: </label>
+    <input type="text" class="form-control datepicker" id="year2" name="year2" autocomplete="off">
+    <button id="limpiarFiltros3" type="button" onclick="confirmarClonacion()">Clonar</button>
+    </div>  
+</form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.datepicker').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true
+    });
+
+    // Definir la función confirmarClonacion
+    window.confirmarClonacion = function() {
+        event.preventDefault();
+        swal({
+            title: "¿Estás seguro?",
+            text: "¿Quieres clonar los registros?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willClone) => {
+            if (willClone) {
+                document.getElementById("filtroForm").submit();
+            } else {
+                // Si el usuario cancela la clonación, no hacer nada
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
