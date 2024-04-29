@@ -13,7 +13,7 @@
 </head>
 <body>
 
-  <form id="filtroForm" method="GET" action="{% url 'carga' %}">
+  <form id="filtroForm" method="POST" action="{% url 'carga' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" id="categoria" name="categoria" value="">
     <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
@@ -47,20 +47,29 @@
     </div>
     <div class="inline-container">
     <label for="year">Año:</label>
-    <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
+    <input type="date" class="form-control datepicker" id="year" name="year" autocomplet e="off">
     
-    <label>Archivo: </label>
+    <label for="ex">Archivo:</label>
     <input type="file" id="ex" name="ex">
     <button id="limpiarFiltros3" type="submit">Subir</button>
     </div>  
   </form>
 
   {% if datos %}
-  fghjklñ
+    {{msj}}
   {% else %}
-  No
+  Por favor llene todos los campos
   {% endif %}
- 
+ <script>
+    $(document).ready(function() {
+        $('#year').datepicker({
+            format: "yyyy",
+            startView: "years",
+            minViewMode: "years",
+            autoclose: true
+        });
+    });
+</script>
 
    <script>
      // Función para actualizar las subcategorías
@@ -193,18 +202,3 @@
    </script>
 </body>
 </html>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#year').datepicker({
-            format: "yyyy",
-            startView: "years",
-            minViewMode: "years",
-            autoclose: true
-        });
-    });
-</script>
