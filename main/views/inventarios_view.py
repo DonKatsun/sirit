@@ -64,7 +64,7 @@ def inventario(request):
             return redirect(reverse('sites_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch)
         
         if subcategoria_seleccionada == "1310":
-            return redirect(reverse('sites_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch)
+            return redirect(reverse('usuarios_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch)
     return render(request, 'inventario.html', {
         'secretarias': secretarias,
         'dependencias': dependencias,

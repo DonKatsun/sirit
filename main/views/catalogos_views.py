@@ -2485,11 +2485,43 @@ def site_delete(request, pk):
 ########################
 
 def usuarios_list(request):
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    dependencia = request.GET.get('dependencia')
+    search = request.GET.get('search')
     usuarios = Usuarios.objects.all()
-    print(usuarios)
-    return render(request, 'usuarios/usuarios_list.html', {'usuarios': usuarios})
 
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
 
+    if dependencia:
+        usuarios = Usuarios.objects.filter(id_dependencia=dependencia)
+
+    else:
+        usuarios = Usuarios.objects.all()
+
+    if search:
+        usuarios = usuarios.filter(email__icontains=search)
+    paginator = Paginator(usuarios, 10)  # Muestra 10 sitios por página
+
+    page_number = request.GET.get('page')
+    try:
+        usuarios = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Si el número de página no es un entero, muestra la primera página.
+        usuarios = paginator.page(1)
+    except EmptyPage:
+        # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
+        usuarios = paginator.page(paginator.num_pages)
+
+    return render(request, 'usuarios/usuarios_list.html', {
+        'usuarios': usuarios,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
 def usuario_detail(request, pk):

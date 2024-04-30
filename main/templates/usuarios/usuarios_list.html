@@ -197,8 +197,8 @@
         <thead>
             <tr>
                 <th>Dependencia</th>
-                <th>Email</th>
-                <th>Contraseña</th>
+                <th>Usuario</th>
+                {#<th>Contraseña</th>#}
                 <th>Nombre</th>
                 <th>Telefono</th>
                 <th>Rol</th>
@@ -212,12 +212,11 @@
             </tr>
         </thead>
         <tbody>
-            {{usuarios}}
             {% for usuario in usuarios %}
             <tr>
                 <td>{{ usuario.id_dependencia.nombre_dependencia }}</td>
                 <td>{{ usuario.email }}</td>
-                <td>{{ usuario.contrasenia }}</td>
+                {#<td>{{ usuario.contrasenia }}</td>#}
                 <td>{{ usuario.nombre }}</td>
                 <td>{{ usuario.telefono }}</td>
                 <td>{{ usuario.id_rol.rol }}</td>
@@ -228,7 +227,7 @@
                 <td><a class="edit-button" href="{% url 'usuario_update' usuario.pk %}">Editar</a></td>
                 <td>
                     <!-- Formulario de eliminación con estilo de .delete-button -->
-                    <form action="{% url 'usuario_delete' site.pk %}" method="post" onsubmit="return false;">
+                    <form action="{% url 'usuario_delete' usuario.pk %}" method="post" onsubmit="return false;">
                         {% csrf_token %}
                         <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
                     </form>
