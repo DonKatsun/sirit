@@ -2,7 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse 
 from ..models import *
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def inventario(request):
     subcategoria = request.GET.get('subcategoriaSelec')
     year = request.GET.get('year')
@@ -10,7 +11,10 @@ def inventario(request):
     serch = request.GET.get('serch')
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
-    print(request.GET.get('dependenciaSelec'))
+    user_id = request.user.id
+    usuario = (Usuarios.objects.get(usuario=user_id))
+    rol=(usuario.id_rol.id)
+    
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
@@ -65,11 +69,20 @@ def inventario(request):
         
         if subcategoria_seleccionada == "1310":
             return redirect(reverse('usuarios_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch)
-    return render(request, 'inventario.html', {
+    if rol != 1:
+        return render(request, 'inventario.html', {
+        'nav': "1",
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria')
     })
+    else:
+        return render(request, 'inventario.html', {
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+    })
+    
 def obtener_dependencias(request):
     secretaria_id = request.GET.get('secretaria')
     dependencias = Dependencias.objects.filter(id_secretaria=secretaria_id).values('id', 'nombre_dependencia')

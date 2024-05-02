@@ -772,6 +772,7 @@ class UsuariosForms(forms.ModelForm):
     class Meta:
         model = Usuarios
         fields = '__all__'
+        exclude = ['usuario']
 
         labels = {
             'id_dependencia': 'Dependencia: ',
@@ -784,6 +785,7 @@ class UsuariosForms(forms.ModelForm):
             'apellio_materno': 'Apellido Materno: ',
             'num_empleado': 'Número de Empleado: ', 
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
@@ -791,6 +793,6 @@ class UsuariosForms(forms.ModelForm):
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
   
 
-class LoginForm(forms.Form):
+'''class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
-    contrasenia = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    contrasenia = forms.CharField(label='Contraseña', widget=forms.PasswordInput)'''

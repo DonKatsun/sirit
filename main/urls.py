@@ -4,7 +4,7 @@ from .views.conmutadores_views import (
     conmutador_create, conmutador_update,
     conmutador_delete, 
 )
-from .views.login_view import (login)
+from .views.login_view import (login_view,logout_view)
 from .views.Nabvar_view import(Nabvar)
 from .views.catalogo_view import(catalogo)
 from .views.pricipal_view import (principal)
@@ -59,7 +59,8 @@ from .views.clonar_view import (clonar)
 
 urlpatterns = [
     # +++++++++++++ urls paginas principaless +++++++++++++
-    path('login', login, name='login'),
+    path('login/', login_view, name='login_view'),
+    path('logout', logout_view, name='logout'),
     path('Catalogo', catalogo, name='catalogo'),
     path('Nabvar', Nabvar, name='Nabvar'),
     path('principal', principal, name='principal'),

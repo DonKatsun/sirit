@@ -3,7 +3,8 @@ from .conmutadores_views import *
 from django.urls import reverse 
 from ..models import *
 import pandas as pd
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def carga(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
@@ -19,7 +20,8 @@ def carga(request):
             return render(request, "carga.html", {
                'secretarias': secretarias,
                'dependencias': dependencias,
-               'selected_secretaria': request.POST.get('secretaria')
+               'selected_secretaria': request.POST.get('secretaria'),
+               
             })
         try:
             df = pd.read_excel(archivo_excel)
@@ -31,7 +33,8 @@ def carga(request):
             return render(request, "carga.html", {
                'secretarias': secretarias,
                'dependencias': dependencias,
-               'selected_secretaria': request.POST.get('secretaria')
+               'selected_secretaria': request.POST.get('secretaria'),
+               
             })
         
         if selected_secretaria:
@@ -94,14 +97,16 @@ def carga(request):
             'dependencias': dependencias,
             'selected_secretaria': selected_secretaria,
             'msj':msj,
-            'exito':exito
+            'exito':exito,
+            
         })
     
 
     return render(request, "carga.html", {
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.POST.get('secretaria')
+        'selected_secretaria': request.POST.get('secretaria'),
+        
     })
 
 def carga_conmutadores(df,anio,dependencia_id):
