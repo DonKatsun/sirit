@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.RedirectOn404Middleware', 
 ]
 
 ROOT_URLCONF = 'sirit.urls'
@@ -63,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
             ],
         },
     },
@@ -79,8 +81,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sirit',
         'USER': 'postgres',
-        'PASSWORD': 'viccontra16',#viccontra16
-        'HOST': '10.16.17.95',#10.16.17.95
+        'PASSWORD': 'root',#viccontra16
+        'HOST': 'localhost',#10.16.17.95
         'PORT': '5432',
     }
 }
@@ -126,4 +128,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'main.Usuarios'

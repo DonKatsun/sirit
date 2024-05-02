@@ -15,17 +15,22 @@
     <img src="{% static 'images/Logo2.png' %}" alt="Logo" class="logo">
     <span class="title">SISTEMA DE INVENTARIO</span>
   </div>
-
+  {% if not nav%}
   <div class="buttons-container">
+    
+    
+    
     <a href="/principal" class="buttons" id="inicio">Inicio</a>
     <a href="/inventario" class="buttons" id="inventario">Inventario</a>
     <a href="/Catalogo" class="buttons" id="catalogo">Catálogo</a>
     <a href="/clonar" class="buttons" id="clonar">Clonar</a>
     <a href="/carga" class="buttons" id="nuevo">+ Nuevo</a>
-  </div>
 
+    
+  </div>
+  {% endif %}
   <div class="logout-container">
-    <button class="logout-buttons">Salir</button>
+    <a class="logout-buttons" href="{% url 'logout' %}">Salir</a>
   </div>
 
 </div>

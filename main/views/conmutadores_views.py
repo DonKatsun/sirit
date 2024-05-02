@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
-from ..models import Conmutadores, ConmutadoresMarcas,Dependencias, Secretarias
+from ..models import *
 from ..forms import ConmutadorForm, ConmutadorMarcaForm
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.contrib.auth.decorators import login_required
+def usu(request):
+    user_id = request.user.id
+    usuario = (Usuarios.objects.get(usuario=user_id))
+    rol=(usuario.id_rol.id)
+    return rol
+@login_required
 def conmutadores_list(request, *args, **kwargs):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
@@ -35,12 +41,20 @@ def conmutadores_list(request, *args, **kwargs):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         conmutadores = paginator.page(paginator.num_pages)
-    
+    rol = usu(request)
+    if rol != 1:
+         return render(request, 'conmutadores/conmutadores_list.html', {
+        'conmutadores': conmutadores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav': "1",
+    })
     return render(request, 'conmutadores/conmutadores_list.html', {
         'conmutadores': conmutadores,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
     })
 
 

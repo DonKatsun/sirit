@@ -1,23 +1,25 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from ..forms import LoginForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 
-def login(request):
+def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            contrasenia = form.cleaned_data['contrasenia']
-            # Autenticar al usuario utilizando los nombres de los campos correctos
-            usuario = authenticate(request, email=email, password=contrasenia)
-            if usuario is not None:
-                login(request, usuario)
-                # Redirige al usuario a la página de inicio o a donde quieras que vaya después del inicio de sesión
-                return redirect('conmutador')
+            email = form.cleaned_data['username']  # Django utiliza 'username' en lugar de 'email' por defecto
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/inventario')
             else:
-                # El usuario no pudo ser autenticado, mostrar un mensaje de error
-                return render(request, 'pages/login.html', {'form': form, 'error': 'Credenciales inválidas.'})
+                return render(request, 'pages/login.html', {'form': form, 'error_message': 'Credenciales inválidas'})
     else:
-        form = LoginForm()
+        form = AuthenticationForm()
     return render(request, 'pages/login.html', {'form': form})
 
+
+def logout_view(request):
+    logout(request)
+    # Redirigir a la página de inicio de sesión o a otra página después de cerrar sesión
+    return redirect('/login')

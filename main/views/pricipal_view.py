@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.db.models import Count, Case, When, Subquery, OuterRef
 from ..models import Secretarias, Dependencias
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def principal(request):
     selected_secretaria = request.GET.get('secretaria')
     selected_dependencia = request.GET.get('dependencia')

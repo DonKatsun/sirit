@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .conmutadores_views import *
 from django.urls import reverse 
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def catalogo (request):
     categoria = request.GET.get('categoria_seleccionada')
 

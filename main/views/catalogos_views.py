@@ -10,12 +10,20 @@ from ..models import ConmutadoresMarcas
 from ..forms import *
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 
 ########################
 # CRUD Operations for ConmutadoresMarcas Model
 ########################
-
+def usu(request):
+    user_id = request.user.id
+    usuario = (Usuarios.objects.get(usuario=user_id))
+    rol=(usuario.id_rol.id)
+    return rol
+@login_required
 def conmutadores_marcas_list(request):
+    rol = usu(request)
     conmutadores_marcas_list = ConmutadoresMarcas.objects.all()
     paginator = Paginator(conmutadores_marcas_list, 10)  # Muestra 10 marcas de conmutadores por página
 
@@ -29,12 +37,16 @@ def conmutadores_marcas_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         conmutadores_marcas = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'conmutadores_marcas/conmutadores_marcas_list.html', {'conmutadores_marcas': conmutadores_marcas,'nav': str(rol),})
     return render(request, 'conmutadores_marcas/conmutadores_marcas_list.html', {'conmutadores_marcas': conmutadores_marcas})
 
+@login_required
 def conmutadores_marca_detail(request, pk):
     conmutador_marca = ConmutadoresMarcas.objects.get(pk=pk)
     return render(request, 'conmutadores_marcas/conmutadores_marca_detail.html', {'conmutador_marca': conmutador_marca})
 
+@login_required
 def conmutadores_marca_create(request):
     if request.method == 'POST':
         form = ConmutadorMarcaForm(request.POST)
@@ -45,6 +57,7 @@ def conmutadores_marca_create(request):
         form = ConmutadorMarcaForm()
     return render(request, 'conmutadores_marcas/conmutadores_marca_form.html', {'form': form})
 
+@login_required
 def conmutadores_marca_update(request, pk):
     conmutador_marca = ConmutadoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -56,6 +69,7 @@ def conmutadores_marca_update(request, pk):
         form = ConmutadorMarcaForm(instance=conmutador_marca)
     return render(request, 'conmutadores_marcas/conmutadores_marca_form.html', {'form': form})
 
+@login_required
 def conmutadores_marca_delete(request, pk):
     conmutador_marca = ConmutadoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -71,7 +85,9 @@ def conmutadores_marca_delete(request, pk):
 # CRUD Operations for Conmutadores Puertos Model
 ########################
 
+@login_required
 def conmutadores_puertos_list(request):
+    rol = usu(request)
     conmutadores_puertos_list = ConmutadoresPuertos.objects.all()
     paginator = Paginator(conmutadores_puertos_list, 10)  # Muestra 10 marcas de conmutadores por página
 
@@ -85,12 +101,16 @@ def conmutadores_puertos_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         conmutadores_puertos = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'conmutadores_puertos/conmutadores_puertos_list.html', {'conmutadores_puertos': conmutadores_puertos,'rol': rol})
     return render(request, 'conmutadores_puertos/conmutadores_puertos_list.html', {'conmutadores_puertos': conmutadores_puertos})
 
+@login_required
 def conmutadores_puerto_detail(request, pk):
     conmutador_puerto = ConmutadoresPuertos.objects.get(pk=pk)
     return render(request, 'conmutadores_puertos/conmutadores_puerto_detail.html', {'conmutador_puerto': conmutador_puerto})
 
+@login_required
 def conmutadores_puerto_create(request):
     if request.method == 'POST':
         form = ConmutadorPuertoForm(request.POST)
@@ -101,6 +121,7 @@ def conmutadores_puerto_create(request):
         form = ConmutadorPuertoForm()
     return render(request, 'conmutadores_puertos/conmutadores_puerto_form.html', {'form': form})
 
+@login_required
 def conmutadores_puerto_update(request, pk):
     conmutador_puerto = ConmutadoresPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -112,6 +133,7 @@ def conmutadores_puerto_update(request, pk):
         form = ConmutadorPuertoForm(instance=conmutador_puerto)
     return render(request, 'conmutadores_puertos/conmutadores_puerto_form.html', {'form': form})
 
+@login_required
 def conmutadores_puerto_delete(request, pk):
     conmutador_puerto = ConmutadoresPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -128,7 +150,9 @@ def conmutadores_puerto_delete(request, pk):
 ########################
 
 
+@login_required
 def almacenamientos_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -160,17 +184,25 @@ def almacenamientos_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         almacenamientos = paginator.page(paginator.num_pages)
-
+    if rol != 1:
+        return render(request, 'almacenamientos/almacenamientos_list.html', {
+        'almacenamientos': almacenamientos,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav': rol})
     return render(request, 'almacenamientos/almacenamientos_list.html', {
         'almacenamientos': almacenamientos,
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria')})
     
+@login_required
 def almacenamiento_detail(request, pk):
     almacenamiento = Almacenamientos.objects.get(pk=pk)
     return render(request, 'almacenamientos/almacenamiento_detail.html', {'almacenamiento': almacenamiento})
 
+@login_required
 def almacenamiento_create(request):
     if request.method == 'POST':
         form = AlmacenamientosForm(request.POST)
@@ -181,6 +213,7 @@ def almacenamiento_create(request):
         form = AlmacenamientosForm()
     return render(request, 'almacenamientos/almacenamiento_form.html', {'form': form})
 
+@login_required
 def almacenamiento_update(request, pk):
     almacenamiento = Almacenamientos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -192,6 +225,7 @@ def almacenamiento_update(request, pk):
         form = AlmacenamientosForm(instance=almacenamiento)
     return render(request, 'almacenamientos/almacenamiento_form.html', {'form': form})
 
+@login_required
 def almacenamiento_delete(request, pk):
     almacenamiento = Almacenamientos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -208,7 +242,9 @@ def almacenamiento_delete(request, pk):
 ########################
 
 
+@login_required
 def almacenamientos_marcas_list(request):
+    rol = usu(request)
     almacenamientos_marcas_list = AlmacenamientoMarcas.objects.all()
     paginator = Paginator(almacenamientos_marcas_list, 10)  # Muestra 10 drones por página
 
@@ -224,10 +260,12 @@ def almacenamientos_marcas_list(request):
 
     return render(request, 'almacenamientos_marcas/almacenamientos_marcas_list.html', {'almacenamientos_marcas': almacenamientos_marcas})
     
+@login_required
 def almacenamiento_marca_detail(request, pk):
     almacenamiento_marca = AlmacenamientoMarcas.objects.get(pk=pk)
     return render(request, 'almacenamientos_marcas/almacenamiento_marca_detail.html', {'almacenamiento_marca': almacenamiento_marca})
 
+@login_required
 def almacenamiento_marca_create(request):
     if request.method == 'POST':
         form = AlmacenamientoMarcasForm(request.POST)
@@ -238,6 +276,7 @@ def almacenamiento_marca_create(request):
         form = AlmacenamientoMarcasForm()
     return render(request, 'almacenamientos_marcas/almacenamiento_marca_form.html', {'form': form})
 
+@login_required
 def almacenamiento_marca_update(request, pk):
     almacenamiento_marca = AlmacenamientoMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -249,6 +288,7 @@ def almacenamiento_marca_update(request, pk):
         form = AlmacenamientoMarcasForm(instance=almacenamiento_marca)
     return render(request, 'almacenamientos_marcas/almacenamiento_marca_form.html', {'form': form})
 
+@login_required
 def almacenamiento_marca_delete(request, pk):
     almacenamiento_marca = AlmacenamientoMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -263,14 +303,18 @@ def almacenamiento_marca_delete(request, pk):
 # CRUD Operations for Dependencias Model
 ########################
         
+@login_required
 def dependencias_list(request):
+    rol = usu(request)
     dependencias = Dependencias.objects.all()
     return render(request, 'dependencias/dependencias_list.html', {'dependencias': dependencias})
 
+@login_required
 def dependencia_detail(request, pk):
     dependencia = Dependencias.objects.get(pk=pk)
     return render(request, 'dependencias/dependencia_detail.html', {'dependencia': dependencia})
 
+@login_required
 def dependencia_create(request):
     if request.method == 'POST':
         form = DependenciasForms(request.POST)
@@ -281,6 +325,7 @@ def dependencia_create(request):
         form = DependenciasForms()
     return render(request, 'dependencias/dependencia_form.html', {'form': form})
 
+@login_required
 def dependencia_update(request, pk):
     dependencia = Dependencias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -292,6 +337,7 @@ def dependencia_update(request, pk):
         form = DependenciasForms(instance=dependencia)
     return render(request, 'dependencias/dependencia_form.html', {'form': form})
 
+@login_required
 def dependencia_delete(request, pk):
     dependencia = Dependencias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -307,7 +353,9 @@ def dependencia_delete(request, pk):
 # CRUD Operations for Drones Model
 ########################
 
+@login_required
 def drones_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -339,14 +387,22 @@ def drones_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         drones = paginator.page(paginator.num_pages)
+    if rol != 1:
+        return render(request, 'drones/drones_list.html', {'drones': drones,'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),'nav':rol})
+    
+    return render(request, 'drones/drones_list.html', {'drones': drones,'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),})
 
-    return render(request, 'drones/drones_list.html', {'drones': drones})
 
-
+@login_required
 def drone_detail(request, pk):
     drone = Drones.objects.get(pk=pk)
     return render(request, 'drones/drone_detail.html', {'drone': drone})
 
+@login_required
 def drone_create(request):
     if request.method == 'POST':
         form = DronesForms(request.POST)
@@ -357,6 +413,7 @@ def drone_create(request):
         form = DronesForms()
     return render(request, 'drones/drone_form.html', {'form': form})
 
+@login_required
 def drone_update(request, pk):
     drone = Drones.objects.get(pk=pk)
     if request.method == 'POST':
@@ -368,6 +425,7 @@ def drone_update(request, pk):
         form = DronesForms(instance=drone)
     return render(request, 'drones/drone_form.html', {'form': form})
 
+@login_required
 def drone_delete(request, pk):
     drone = Drones.objects.get(pk=pk)
     if request.method == 'POST':
@@ -383,7 +441,9 @@ def drone_delete(request, pk):
 # CRUD Operations for DronesCaracteristicas Model
 ########################
 
+@login_required
 def drones_caracteristicas_list(request):
+    rol = usu(request)
     drones_caracteristicas_list = DronesCaracteristicas.objects.all()
     paginator = Paginator(drones_caracteristicas_list, 10)  # Muestra 10 características de drones por página
 
@@ -399,10 +459,12 @@ def drones_caracteristicas_list(request):
 
     return render(request, 'drones_caracteristicas/drones_caracteristicas_list.html', {'drones_caracteristicas': drones_caracteristicas})
 
+@login_required
 def drones_caracteristica_detail(request, pk):
     drone_caracteristica = DronesCaracteristicas.objects.get(pk=pk)
     return render(request, 'drones_caracteristicas/drones_caracteristica_detail.html', {'drone_caracteristica': drone_caracteristica})
 
+@login_required
 def drones_caracteristica_create(request):
     if request.method == 'POST':
         form = DronesCaracteristicasForms(request.POST)
@@ -413,6 +475,7 @@ def drones_caracteristica_create(request):
         form = DronesCaracteristicasForms()
     return render(request, 'drones_caracteristicas/drones_caracteristica_form.html', {'form': form})
 
+@login_required
 def drones_caracteristica_update(request, pk):
     drone_caracteristica = DronesCaracteristicas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -424,6 +487,7 @@ def drones_caracteristica_update(request, pk):
         form = DronesCaracteristicasForms(instance=drone_caracteristica)
     return render(request, 'drones_caracteristicas/drones_caracteristica_form.html', {'form': form})
 
+@login_required
 def drones_caracteristica_delete(request, pk):
     drone_caracteristica = DronesCaracteristicas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -435,7 +499,9 @@ def drones_caracteristica_delete(request, pk):
 # End of CRUD Operations for DronesAsignacion Model
 ########################
 
+@login_required
 def drones_asignaciones_list(request):
+    rol = usu(request)
     drones_asignaciones_list = DronesAsignacionCaracteristicas.objects.all()
     paginator = Paginator(drones_asignaciones_list, 10)  # Muestra 10 drones por página
 
@@ -451,10 +517,12 @@ def drones_asignaciones_list(request):
 
     return render(request, 'drones_asignacion/drones_asignaciones_list.html', {'drones_asignaciones': drones_asignaciones})
 
+@login_required
 def drone_asignacion_detail(request, pk):
     drone_asignacion = DronesAsignacionCaracteristicas.objects.get(pk=pk)
     return render(request, 'drones_asignacion/drone_asignacion_detail.html', {'drone_asignacion': drone_asignacion})
 
+@login_required
 def drone_asignacion_create(request):
     if request.method == 'POST':
         form = DronesAsignacionCaracteristicasForms(request.POST)
@@ -465,6 +533,7 @@ def drone_asignacion_create(request):
         form = DronesAsignacionCaracteristicasForms()
     return render(request, 'drones_asignacion/drone_asignacion_form.html', {'form': form})
 
+@login_required
 def drone_asignacion_update(request, pk):
     drone_asignacion = DronesAsignacionCaracteristicas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -476,6 +545,7 @@ def drone_asignacion_update(request, pk):
         form = DronesAsignacionCaracteristicasForms(instance=drone_asignacion)
     return render(request, 'drones_asignacion/drone_asignacion_form.html', {'form': form})
 
+@login_required
 def drone_asignacion_delete(request, pk):
     drone_asignacion = DronesAsignacionCaracteristicas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -491,7 +561,9 @@ def drone_asignacion_delete(request, pk):
 # CRUD Operations for EnergiaMarcas Model
 ########################
 
+@login_required
 def energia_marcas_list(request):
+    rol = usu(request)
     energia_marcas_list = EnergiaMarcas.objects.all()
     paginator = Paginator(energia_marcas_list, 10)  # Muestra 10 marcas de energía por página
 
@@ -508,6 +580,7 @@ def energia_marcas_list(request):
     return render(request, 'energia_marcas/energia_marcas_list.html', {'energia_marcas': energia_marcas})
 
 
+@login_required
 def energia_marca_create(request):
     if request.method == 'POST':
         form = EnergiaMarcasForms(request.POST)
@@ -518,6 +591,7 @@ def energia_marca_create(request):
         form = EnergiaMarcasForms()
     return render(request, 'energia_marcas/energia_marca_form.html', {'form': form})
 
+@login_required
 def energia_marca_update(request, pk):
     energia_marca = EnergiaMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -530,6 +604,7 @@ def energia_marca_update(request, pk):
     return render(request, 'energia_marcas/energia_marca_form.html', {'form': form})
 
 
+@login_required
 def energia_marca_delete(request, pk):
     energia_marca = EnergiaMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -545,7 +620,9 @@ def energia_marca_delete(request, pk):
 # CRUD Operations for Energias Model
 ########################
 
+@login_required
 def energias_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -570,6 +647,14 @@ def energias_list(request):
     paginator = Paginator(energias_list, 10)  # 10 registros por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    if rol != 1:
+        return render(request, 'energia/energias_list.html', {
+        'page_obj': page_obj,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'energia/energias_list.html', {
         'page_obj': page_obj,
         'secretarias': secretarias,
@@ -577,6 +662,7 @@ def energias_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def energia_detail(request, pk):
     energia = Energias.objects.get(pk=pk)
     return render(request, 'energia/energia_detail.html', {
@@ -584,6 +670,7 @@ def energia_detail(request, pk):
         
         })
 
+@login_required
 def energia_create(request):
     if request.method == 'POST':
         form = EnergiasForms(request.POST)
@@ -594,6 +681,7 @@ def energia_create(request):
         form = EnergiasForms()
     return render(request, 'energia/energia_form.html', {'form': form})
 
+@login_required
 def energia_update(request, pk):
     energia = Energias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -605,6 +693,7 @@ def energia_update(request, pk):
         form = EnergiasForms(instance=energia)
     return render(request, 'energia/energia_form.html', {'form': form})
 
+@login_required
 def energia_delete(request, pk):
     energia = Energias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -620,7 +709,9 @@ def energia_delete(request, pk):
 # CRUD Operations for Enlaces Model
 ########################
 
+@login_required
 def enlaces_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -653,7 +744,14 @@ def enlaces_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         enlaces = paginator.page(paginator.num_pages)
-
+    if rol != 1:
+        return render(request, 'enlaces/enlaces_list.html', {
+        'enlaces': enlaces,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'enlaces/enlaces_list.html', {
         'enlaces': enlaces,
         'secretarias': secretarias,
@@ -662,10 +760,12 @@ def enlaces_list(request):
         })
 
 
+@login_required
 def enlace_detail(request, pk):
     enlace = Enlaces.objects.get(pk=pk)
     return render(request, 'enlaces/enlace_detail.html', {'enlace': enlace})
 
+@login_required
 def enlace_create(request):
     if request.method == 'POST':
         form = EnlacesForms(request.POST)
@@ -676,6 +776,7 @@ def enlace_create(request):
         form = EnlacesForms()
     return render(request, 'enlaces/enlace_form.html', {'form': form})
 
+@login_required
 def enlace_update(request, pk):
     enlace = Enlaces.objects.get(pk=pk)
     if request.method == 'POST':
@@ -687,6 +788,7 @@ def enlace_update(request, pk):
         form = EnlacesForms(instance=enlace)
     return render(request, 'enlaces/enlace_form.html', {'form': form})
 
+@login_required
 def enlace_delete(request, pk):
     enlace = Enlaces.objects.get(pk=pk)
     if request.method == 'POST':
@@ -702,7 +804,9 @@ def enlace_delete(request, pk):
 # CRUD Operations for EnlacesTipos Model
 ########################
 
+@login_required
 def enlaces_tipos_list(request):
+    rol = usu(request)
     enlaces_tipos_list = EnlacesTipos.objects.all()
     paginator = Paginator(enlaces_tipos_list, 10)  # Muestra 10 tipos de enlaces por página
 
@@ -718,10 +822,12 @@ def enlaces_tipos_list(request):
 
     return render(request, 'enlaces/enlaces_tipos_list.html', {'enlaces_tipos': enlaces_tipos})
 
+@login_required
 def enlace_tipo_detail(request, pk):
     enlace_tipo = EnlacesTipos.objects.get(pk=pk)
     return render(request, 'enlaces/enlace_tipo_detail.html', {'enlace_tipo': enlace_tipo})
 
+@login_required
 def enlace_tipo_create(request):
     if request.method == 'POST':
         form = EnlacesTiposForms(request.POST)
@@ -732,6 +838,7 @@ def enlace_tipo_create(request):
         form = EnlacesTiposForms()
     return render(request, 'enlaces/enlace_tipo_form.html', {'form': form})
 
+@login_required
 def enlace_tipo_update(request, pk):
     enlace_tipo = EnlacesTipos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -743,6 +850,7 @@ def enlace_tipo_update(request, pk):
         form = EnlacesTiposForms(instance=enlace_tipo)
     return render(request, 'enlaces/enlace_tipo_form.html', {'form': form})
 
+@login_required
 def enlace_tipo_delete(request, pk):
     enlace_tipo = EnlacesTipos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -758,7 +866,9 @@ def enlace_tipo_delete(request, pk):
 # CRUD Operations for EquipoTelefonico Model
 ########################
 
+@login_required
 def equipo_telefonico_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -792,6 +902,14 @@ def equipo_telefonico_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_telefonicos = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'equipos/equipo_telefonico_list.html', {
+        'equipos_telefonicos': equipos_telefonicos,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'equipos/equipo_telefonico_list.html', {
         'equipos_telefonicos': equipos_telefonicos,
         'secretarias': secretarias,
@@ -799,10 +917,12 @@ def equipo_telefonico_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def equipo_telefonico_detail(request, pk):
     equipo = EquipoTelefonico.objects.get(pk=pk)
     return render(request, 'equipos/equipo_telefonico_detail.html', {'equipo': equipo})
 
+@login_required
 def equipo_telefonico_create(request):
     if request.method == 'POST':
         form = EquipoTelefonicoForms(request.POST)
@@ -813,6 +933,7 @@ def equipo_telefonico_create(request):
         form = EquipoTelefonicoForms()
     return render(request, 'equipos/equipo_telefonico_form.html', {'form': form})
 
+@login_required
 def equipo_telefonico_update(request, pk):
     equipo = EquipoTelefonico.objects.get(pk=pk)
     if request.method == 'POST':
@@ -824,6 +945,7 @@ def equipo_telefonico_update(request, pk):
         form = EquipoTelefonicoForms(instance=equipo)
     return render(request, 'equipos/equipo_telefonico_form.html', {'form': form})
 
+@login_required
 def equipo_telefonico_delete(request, pk):
     equipo = EquipoTelefonico.objects.get(pk=pk)
     if request.method == 'POST':
@@ -839,7 +961,9 @@ def equipo_telefonico_delete(request, pk):
 # CRUD Operations for EquiposPersonales Model
 ########################
 
+@login_required
 def equipos_personales_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -873,6 +997,14 @@ def equipos_personales_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_personales = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'equiposp/equipos_personales_list.html', {
+        'equipos_personales': equipos_personales,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'equiposp/equipos_personales_list.html', {
         'equipos_personales': equipos_personales,
         'secretarias': secretarias,
@@ -880,10 +1012,12 @@ def equipos_personales_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def equipo_personal_detail(request, pk):
     equipo_personal = EquiposPersonales.objects.get(pk=pk)
     return render(request, 'equiposp/equipo_personal_detail.html', {'equipo_personal': equipo_personal})
 
+@login_required
 def equipo_personal_create(request):
     if request.method == 'POST':
         form = EquiposPersonalesForms(request.POST)
@@ -894,6 +1028,7 @@ def equipo_personal_create(request):
         form = EquiposPersonalesForms()
     return render(request, 'equiposp/equipo_personal_form.html', {'form': form})
 
+@login_required
 def equipo_personal_update(request, pk):
     equipo_personal = EquiposPersonales.objects.get(pk=pk)
     if request.method == 'POST':
@@ -905,6 +1040,7 @@ def equipo_personal_update(request, pk):
         form = EquiposPersonalesForms(instance=equipo_personal)
     return render(request, 'equiposp/equipo_personal_form.html', {'form': form})
 
+@login_required
 def equipo_personal_delete(request, pk):
     equipo_personal = EquiposPersonales.objects.get(pk=pk)
     if request.method == 'POST':
@@ -920,7 +1056,9 @@ def equipo_personal_delete(request, pk):
 # CRUD Operations for EquiposPersonalesMarcas Model
 ########################
 
+@login_required
 def equipos_personales_marcas_list(request):
+    rol = usu(request)
     equipos_personales_marcas_list = EquiposPersonalesMarcas.objects.all()
     paginator = Paginator(equipos_personales_marcas_list, 10)  # Muestra 10 equipos personales marcas por página
 
@@ -936,10 +1074,12 @@ def equipos_personales_marcas_list(request):
 
     return render(request, 'equipos_marcas/equipos_personales_marcas_list.html', {'equipos_personales_marcas': equipos_personales_marcas})
 
+@login_required
 def equipo_personal_marca_detail(request, pk):
     equipo_personal_marca = EquiposPersonalesMarcas.objects.get(pk=pk)
     return render(request, 'equipos_marcas/equipo_personal_marca_detail.html', {'equipo_personal_marca': equipo_personal_marca})
 
+@login_required
 def equipo_personal_marca_create(request):
     if request.method == 'POST':
         form = EquiposPersonalesMarcasForms(request.POST)
@@ -950,6 +1090,7 @@ def equipo_personal_marca_create(request):
         form = EquiposPersonalesMarcasForms()
     return render(request, 'equipos_marcas/equipo_personal_marca_form.html', {'form': form})
 
+@login_required
 def equipo_personal_marca_update(request, pk):
     equipo_personal_marca = EquiposPersonalesMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -961,6 +1102,7 @@ def equipo_personal_marca_update(request, pk):
         form = EquiposPersonalesMarcasForms(instance=equipo_personal_marca)
     return render(request, 'equipos_marcas/equipo_personal_marca_form.html', {'form': form})
 
+@login_required
 def equipo_personal_marca_delete(request, pk):
     equipo_personal_marca = EquiposPersonalesMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -976,7 +1118,9 @@ def equipo_personal_marca_delete(request, pk):
 # CRUD Operations for EquiposPersonalesPuertos Model
 ########################
 
+@login_required
 def equipos_personales_puertos_list(request):
+    rol = usu(request)
     equipos_personales_puertos_list = EquiposPersonalesPuertos.objects.all()
     paginator = Paginator(equipos_personales_puertos_list, 10)  # Muestra 10 equipos personales marcas por página
 
@@ -992,10 +1136,12 @@ def equipos_personales_puertos_list(request):
 
     return render(request, 'equipos_puertos/equipos_personales_puertos_list.html', {'equipos_personales_puertos': equipos_personales_puertos})
 
+@login_required
 def equipo_personal_puerto_detail(request, pk):
     equipo_personal_puerto = EquiposPersonalesPuertos.objects.get(pk=pk)
     return render(request, 'equipos_puertos/equipo_personal_puerto_detail.html', {'equipo_personal_puerto': equipo_personal_puerto})
 
+@login_required
 def equipo_personal_puerto_create(request):
     if request.method == 'POST':
         form = EquiposPersonalesPuertosForms(request.POST)
@@ -1006,6 +1152,7 @@ def equipo_personal_puerto_create(request):
         form = EquiposPersonalesPuertosForms()
     return render(request, 'equipos_puertos/equipo_personal_puerto_form.html', {'form': form})
 
+@login_required
 def equipo_personal_puerto_update(request, pk):
     equipo_personal_puerto = EquiposPersonalesPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1017,6 +1164,7 @@ def equipo_personal_puerto_update(request, pk):
         form = EquiposPersonalesPuertosForms(instance=equipo_personal_puerto)
     return render(request, 'equipos_puertos/equipo_personal_puerto_form.html', {'form': form})
 
+@login_required
 def equipo_personal_puerto_delete(request, pk):
     equipo_personal_puerto = EquiposPersonalesPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1032,7 +1180,9 @@ def equipo_personal_puerto_delete(request, pk):
 # CRUD Operations for EquiposPersonalesPuertos Model
 ########################
 
+@login_required
 def equipos_personales_tipopuertos_list(request):
+    rol = usu(request)
     equipos_personales_tipopuertos_list = EquiposPersonalesTipopuertos.objects.all()
     paginator = Paginator(equipos_personales_tipopuertos_list, 10)  # Muestra 10 equipos personales marcas por página
 
@@ -1048,10 +1198,12 @@ def equipos_personales_tipopuertos_list(request):
 
     return render(request, 'equipos_puertos/equipos_personales_tipopuertos_list.html', {'equipos_personales_tipopuertos': equipos_personales_tipopuertos})
 
+@login_required
 def equipo_personal_tipopuerto_detail(request, pk):
     equipo_personal_tipopuerto = EquiposPersonalesTipopuertos.objects.get(pk=pk)
     return render(request, 'equipos_puertos/equipo_personal_tipopuerto_detail.html', {'equipo_personal_tipopuerto': equipo_personal_tipopuerto})
 
+@login_required
 def equipo_personal_tipopuerto_create(request):
     if request.method == 'POST':
         form = EquiposPersonalesTipoForms(request.POST)
@@ -1062,6 +1214,7 @@ def equipo_personal_tipopuerto_create(request):
         form = EquiposPersonalesTipoForms()
     return render(request, 'equipos_puertos/equipo_personal_tipopuerto_form.html', {'form': form})
 
+@login_required
 def equipo_personal_tipopuerto_update(request, pk):
     equipo_personal_tipopuerto = EquiposPersonalesTipopuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1073,6 +1226,7 @@ def equipo_personal_tipopuerto_update(request, pk):
         form = EquiposPersonalesTipoForms(instance=equipo_personal_tipopuerto)
     return render(request, 'equipos_puertos/equipo_personal_tipopuerto_form.html', {'form': form})
 
+@login_required
 def equipo_personal_tipopuerto_delete(request, pk):
     equipo_personal_tipopuerto = EquiposPersonalesTipopuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1088,7 +1242,9 @@ def equipo_personal_tipopuerto_delete(request, pk):
 # CRUD Operations for EquiposServidores Model
 ########################
 
+@login_required
 def equipos_servidores_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1121,6 +1277,14 @@ def equipos_servidores_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         equipos_servidores = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'equiposs/equipos_servidores_list.html', {
+        'equipos_servidores': equipos_servidores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'equiposs/equipos_servidores_list.html', {
         'equipos_servidores': equipos_servidores,
         'secretarias': secretarias,
@@ -1129,10 +1293,12 @@ def equipos_servidores_list(request):
         })
 
 
+@login_required
 def equipo_servidor_detail(request, pk):
     equipo_servidor = EquiposServidores.objects.get(pk=pk)
     return render(request, 'equiposs/equipo_servidor_detail.html', {'equipo_servidor': equipo_servidor})
 
+@login_required
 def equipo_servidor_create(request):
     if request.method == 'POST':
         form = EquiposServidoresForms(request.POST)
@@ -1143,6 +1309,7 @@ def equipo_servidor_create(request):
         form = EquiposServidoresForms()
     return render(request, 'equiposs/equipo_servidor_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_update(request, pk):
     equipo_servidor = EquiposServidores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1154,6 +1321,7 @@ def equipo_servidor_update(request, pk):
         form = EquiposServidoresForms(instance=equipo_servidor)
     return render(request, 'equiposs/equipo_servidor_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_delete(request, pk):
     equipo_servidor = EquiposServidores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1169,7 +1337,9 @@ def equipo_servidor_delete(request, pk):
 # CRUD Operations for EquiposServidoresMarcas Model
 ########################
 
+@login_required
 def equipos_servidores_marcas_list(request):
+    rol = usu(request)
     equipos_servidores_marcas_list = EquiposServidoresMarcas.objects.all()
     paginator = Paginator(equipos_servidores_marcas_list, 10)  # Muestra 10 marcas de servidores por página
 
@@ -1186,10 +1356,12 @@ def equipos_servidores_marcas_list(request):
     return render(request, 'equiposs_marcas/equipos_servidores_marcas_list.html', {'equipos_servidores_marcas': equipos_servidores_marcas})
 
 
+@login_required
 def equipo_servidor_marca_detail(request, pk):
     equipo_servidor_marca = EquiposServidoresMarcas.objects.get(pk=pk)
     return render(request, 'equiposs_marcas/equipo_servidor_marca_detail.html', {'equipo_servidor_marca': equipo_servidor_marca})
 
+@login_required
 def equipo_servidor_marca_create(request):
     if request.method == 'POST':
         form = EquiposServidoresMarcasForms(request.POST)
@@ -1200,6 +1372,7 @@ def equipo_servidor_marca_create(request):
         form = EquiposServidoresMarcasForms()
     return render(request, 'equiposs_marcas/equipo_servidor_marca_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_marca_update(request, pk):
     equipo_servidor_marca = EquiposServidoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1211,6 +1384,7 @@ def equipo_servidor_marca_update(request, pk):
         form = EquiposServidoresMarcasForms(instance=equipo_servidor_marca)
     return render(request, 'equiposs_marcas/equipo_servidor_marca_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_marca_delete(request, pk):
     equipo_servidor_marca = EquiposServidoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1226,7 +1400,9 @@ def equipo_servidor_marca_delete(request, pk):
 # CRUD Operations for EquiposServidoresProcesadores Model
 ########################
 
+@login_required
 def equipos_servidores_procesadores_list(request):
+    rol = usu(request)
     equipos_servidores_procesadores_list = EquiposServidoresProcesadores.objects.all()
     paginator = Paginator(equipos_servidores_procesadores_list, 10)  # Muestra 10 procesadores de servidores por página
 
@@ -1242,10 +1418,12 @@ def equipos_servidores_procesadores_list(request):
 
     return render(request, 'equiposs_procesadores/equipos_servidores_procesadores_list.html', {'equipos_servidores_procesadores': equipos_servidores_procesadores})
 
+@login_required
 def equipo_servidor_procesador_detail(request, pk):
     equipo_servidor_procesador = EquiposServidoresProcesadores.objects.get(pk=pk)
     return render(request, 'equiposs_procesadores/equipo_servidor_procesador_detail.html', {'equipo_servidor_procesador': equipo_servidor_procesador})
 
+@login_required
 def equipo_servidor_procesador_create(request):
     if request.method == 'POST':
         form = EquiposServidoresProcesadoresForms(request.POST)
@@ -1256,6 +1434,7 @@ def equipo_servidor_procesador_create(request):
         form = EquiposServidoresProcesadoresForms()
     return render(request, 'equiposs_procesadores/equipo_servidor_procesador_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_procesador_update(request, pk):
     equipo_servidor_procesador = EquiposServidoresProcesadores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1267,6 +1446,7 @@ def equipo_servidor_procesador_update(request, pk):
         form = EquiposServidoresProcesadoresForms(instance=equipo_servidor_procesador)
     return render(request, 'equiposs_procesadores/equipo_servidor_procesador_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_procesador_delete(request, pk):
     equipo_servidor_procesador = EquiposServidoresProcesadores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1278,7 +1458,9 @@ def equipo_servidor_procesador_delete(request, pk):
 # End of CRUD Operations for EquiposServidoresPuerto Model
 ########################
 
+@login_required
 def equipos_servidores_puertos_list(request):
+    rol = usu(request)
     equipos_servidores_puertos_list = EquiposServidoresPuertos.objects.all()
     paginator = Paginator(equipos_servidores_puertos_list, 10)  # Muestra 10 procesadores de servidores por página
 
@@ -1294,10 +1476,12 @@ def equipos_servidores_puertos_list(request):
 
     return render(request, 'equiposs_puertos/equipos_servidores_puertos_list.html', {'equipos_servidores_puertos': equipos_servidores_puertos})
 
+@login_required
 def equipo_servidor_puerto_detail(request, pk):
     equipo_servidor_puerto = EquiposServidoresPuertos.objects.get(pk=pk)
     return render(request, 'equiposs_puertos/equipo_servidor_puerto_detail.html', {'equipo_servidor_puerto': equipo_servidor_puerto})
 
+@login_required
 def equipo_servidor_puerto_create(request):
     if request.method == 'POST':
         form = EquiposServidoresPuertosForms(request.POST)
@@ -1308,6 +1492,7 @@ def equipo_servidor_puerto_create(request):
         form = EquiposServidoresPuertosForms()
     return render(request, 'equiposs_puertos/equipo_servidor_puerto_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_puerto_update(request, pk):
     equipo_servidor_puerto = EquiposServidoresPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1319,6 +1504,7 @@ def equipo_servidor_puerto_update(request, pk):
         form = EquiposServidoresPuertosForms(instance=equipo_servidor_puerto)
     return render(request, 'equiposs_puertos/equipo_servidor_puerto_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_puerto_delete(request, pk):
     equipo_servidor_puerto = EquiposServidoresPuertos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1334,7 +1520,9 @@ def equipo_servidor_puerto_delete(request, pk):
 # CRUD Operations for EquiposServidoresTipos Model
 ########################
 
+@login_required
 def equipos_servidores_tipos_list(request):
+    rol = usu(request)
     equipos_servidores_tipos_list = EquiposServidoresTipos.objects.all()
     paginator = Paginator(equipos_servidores_tipos_list, 10)  # Muestra 10 tipos de servidores por página
 
@@ -1351,10 +1539,12 @@ def equipos_servidores_tipos_list(request):
     return render(request, 'equiposs_tipos/equipos_servidores_tipos_list.html', {'equipos_servidores_tipos': equipos_servidores_tipos})
 
 
+@login_required
 def equipo_servidor_tipo_detail(request, pk):
     equipo_servidor_tipo = EquiposServidoresTipos.objects.get(pk=pk)
     return render(request, 'equiposs_tipos/equipo_servidor_tipo_detail.html', {'equipo_servidor_tipo': equipo_servidor_tipo})
 
+@login_required
 def equipo_servidor_tipo_create(request):
     if request.method == 'POST':
         form = EquiposServidoresTiposForms(request.POST)
@@ -1365,6 +1555,7 @@ def equipo_servidor_tipo_create(request):
         form = EquiposServidoresTiposForms()
     return render(request, 'equiposs_tipos/equipo_servidor_tipo_form.html', {'form': form}) 
 
+@login_required
 def equipo_servidor_tipo_update(request, pk):
     equipo_servidor_tipo = EquiposServidoresTipos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1376,6 +1567,7 @@ def equipo_servidor_tipo_update(request, pk):
         form = EquiposServidoresTiposForms(instance=equipo_servidor_tipo)
     return render(request, 'equiposs_tipos/equipo_servidor_tipo_form.html', {'form': form})
 
+@login_required
 def equipo_servidor_tipo_delete(request, pk):
     equipo_servidor_tipo = EquiposServidoresTipos.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1391,7 +1583,9 @@ def equipo_servidor_tipo_delete(request, pk):
 # CRUD Operations for Firewalls Model
 ########################
 
+@login_required
 def firewalls_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1425,6 +1619,14 @@ def firewalls_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         firewalls = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'firewalls/firewalls_list.html', {
+        'firewalls': firewalls,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'firewalls/firewalls_list.html', {
         'firewalls': firewalls,
         'secretarias': secretarias,
@@ -1432,10 +1634,12 @@ def firewalls_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def firewall_detail(request, pk):
     firewall = Firewalls.objects.get(pk=pk)
     return render(request, 'firewalls/firewall_detail.html', {'firewall': firewall})
 
+@login_required
 def firewall_create(request):
     if request.method == 'POST':
         form = FirewallsForms(request.POST)
@@ -1446,6 +1650,7 @@ def firewall_create(request):
         form = FirewallsForms()
     return render(request, 'firewalls/firewall_form.html', {'form': form})
 
+@login_required
 def firewall_update(request, pk):
     firewall = Firewalls.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1457,6 +1662,7 @@ def firewall_update(request, pk):
         form = FirewallsForms(instance=firewall)
     return render(request, 'firewalls/firewall_form.html', {'form': form})
 
+@login_required
 def firewall_delete(request, pk):
     firewall = Firewalls.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1472,7 +1678,9 @@ def firewall_delete(request, pk):
 # CRUD Operations for FirewallsMarcas Model
 ########################
 
+@login_required
 def firewalls_marcas_list(request):
+    rol = usu(request)
     firewalls_marcas_list = FirewallsMarcas.objects.all()
     paginator = Paginator(firewalls_marcas_list, 10)  # Muestra 10 marcas de firewalls por página
 
@@ -1489,10 +1697,12 @@ def firewalls_marcas_list(request):
     return render(request, 'firewalls_marcas/firewalls_marcas_list.html', {'firewalls_marcas': firewalls_marcas})
 
 
+@login_required
 def firewall_marca_detail(request, pk):
     firewall_marca = FirewallsMarcas.objects.get(pk=pk)
     return render(request, 'firewalls_marcas/firewall_marca_detail.html', {'firewall_marca': firewall_marca})
 
+@login_required
 def firewall_marca_create(request):
     if request.method == 'POST':
         form = FirewallsMarcasForms(request.POST)
@@ -1503,6 +1713,7 @@ def firewall_marca_create(request):
         form = FirewallsMarcasForms()
     return render(request, 'firewalls_marcas/firewall_marca_form.html', {'form': form})
 
+@login_required
 def firewall_marca_update(request, pk):
     firewall_marca = FirewallsMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1514,6 +1725,7 @@ def firewall_marca_update(request, pk):
         form = FirewallsMarcasForms(instance=firewall_marca)
     return render(request, 'firewalls_marcas/firewall_marca_form.html', {'form': form})
 
+@login_required
 def firewall_marca_delete(request, pk):
     firewall_marca = FirewallsMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1529,7 +1741,9 @@ def firewall_marca_delete(request, pk):
 # CRUD Operations for HerramientaDeDesarrollo Model
 ########################
 
+@login_required
 def herramientas_desarrollo_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1563,6 +1777,14 @@ def herramientas_desarrollo_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         herramientas_desarrollo = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'herramientas/herramientas_desarrollo_list.html', {
+        'herramientas_desarrollo': herramientas_desarrollo,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'herramientas/herramientas_desarrollo_list.html', {
         'herramientas_desarrollo': herramientas_desarrollo,
         'secretarias': secretarias,
@@ -1571,10 +1793,12 @@ def herramientas_desarrollo_list(request):
         })
 
 
+@login_required
 def herramienta_desarrollo_detail(request, pk):
     herramienta_desarrollo = HerramientaDeDesarrollo.objects.get(pk=pk)
     return render(request, 'herramientas/herramienta_desarrollo_detail.html', {'herramienta_desarrollo': herramienta_desarrollo})
 
+@login_required
 def herramienta_desarrollo_create(request):
     if request.method == 'POST':
         form = HerramientaDeDesarrolloForms(request.POST)
@@ -1585,6 +1809,7 @@ def herramienta_desarrollo_create(request):
         form = HerramientaDeDesarrolloForms()
     return render(request, 'herramientas/herramienta_desarrollo_form.html', {'form': form})
 
+@login_required
 def herramienta_desarrollo_update(request, pk):
     herramienta_desarrollo = HerramientaDeDesarrollo.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1596,6 +1821,7 @@ def herramienta_desarrollo_update(request, pk):
         form = HerramientaDeDesarrolloForms(instance=herramienta_desarrollo)
     return render(request, 'herramientas/herramienta_desarrollo_form.html', {'form': form})
 
+@login_required
 def herramienta_desarrollo_delete(request, pk):
     herramienta_desarrollo = HerramientaDeDesarrollo.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1611,7 +1837,9 @@ def herramienta_desarrollo_delete(request, pk):
 # CRUD Operations for Impresoras Model
 ########################
 
+@login_required
 def impresoras_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1644,7 +1872,14 @@ def impresoras_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         impresoras = paginator.page(paginator.num_pages)
-
+    if rol != 1:
+        return render(request, 'impresoras/impresoras_list.html', {
+        'impresoras': impresoras,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'impresoras/impresoras_list.html', {
         'impresoras': impresoras,
         'secretarias': secretarias,
@@ -1652,10 +1887,12 @@ def impresoras_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def impresora_detail(request, pk):
     impresora = Impresoras.objects.get(pk=pk)
     return render(request, 'impresoras/impresora_detail.html', {'impresora': impresora})
 
+@login_required
 def impresora_create(request):
     if request.method == 'POST':
         form = ImpresorasForms(request.POST)
@@ -1666,6 +1903,7 @@ def impresora_create(request):
         form = ImpresorasForms()
     return render(request, 'impresoras/impresora_form.html', {'form': form})
 
+@login_required
 def impresora_update(request, pk):
     impresora = Impresoras.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1677,6 +1915,7 @@ def impresora_update(request, pk):
         form = ImpresorasForms(instance=impresora)
     return render(request, 'impresoras/impresora_form.html', {'form': form})
 
+@login_required
 def impresora_delete(request, pk):
     impresora = Impresoras.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1692,7 +1931,9 @@ def impresora_delete(request, pk):
 # CRUD Operations for ImpresorasMarcas Model
 ########################
 
+@login_required
 def impresoras_marcas_list(request):
+    rol = usu(request)
     impresoras_marcas_list = ImpresorasMarcas.objects.all()
     paginator = Paginator(impresoras_marcas_list, 10)  # Muestra 10 marcas de impresoras por página
 
@@ -1708,10 +1949,12 @@ def impresoras_marcas_list(request):
 
     return render(request, 'impresoras_marcas/impresoras_marcas_list.html', {'impresoras_marcas': impresoras_marcas})
 
+@login_required
 def impresora_marca_detail(request, pk):
     impresora_marca = ImpresorasMarcas.objects.get(pk=pk)
     return render(request, 'impresoras_marcas/impresora_marca_detail.html', {'impresora_marca': impresora_marca})
 
+@login_required
 def impresora_marca_create(request):
     if request.method == 'POST':
         form = ImpresorasMarcasForms(request.POST)
@@ -1722,6 +1965,7 @@ def impresora_marca_create(request):
         form = ImpresorasMarcasForms()
     return render(request, 'impresoras_marcas/impresora_marca_form.html', {'form': form})
 
+@login_required
 def impresora_marca_update(request, pk):
     impresora_marca = ImpresorasMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1733,6 +1977,7 @@ def impresora_marca_update(request, pk):
         form = ImpresorasMarcasForms(instance=impresora_marca)
     return render(request, 'impresoras_marcas/impresora_marca_form.html', {'form': form})
 
+@login_required
 def impresora_marca_delete(request, pk):
     impresora_marca = ImpresorasMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1748,7 +1993,9 @@ def impresora_marca_delete(request, pk):
 # CRUD Operations for Municipios
 ########################
 
+@login_required
 def municipios_list(request):
+    rol = usu(request)
     municipios_list = Municipios.objects.all()
     paginator = Paginator(municipios_list, 10)  # Muestra 10 tipos de enlaces por página
 
@@ -1764,10 +2011,12 @@ def municipios_list(request):
 
     return render(request, 'municipios/municipios_list.html', {'municipios': municipios})
 
+@login_required
 def municipio_detail(request, pk):
     municipio = Municipios.objects.get(pk=pk)
     return render(request, 'municipios/municipio_detail.html', {'municipio': municipio})
 
+@login_required
 def municipio__create(request):
     if request.method == 'POST':
         form = MunicipiosForms(request.POST)
@@ -1778,6 +2027,7 @@ def municipio__create(request):
         form = MunicipiosForms()
     return render(request, 'municipios/municipio_form.html', {'form': form})
 
+@login_required
 def municipio_update(request, pk):
     municipio = Municipios.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1789,6 +2039,7 @@ def municipio_update(request, pk):
         form = MunicipiosForms(instance=municipio)
     return render(request, 'municipios/municipio_form.html', {'form': form})
 
+@login_required
 def municipio_delete(request, pk):
     municipio = Municipios.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1804,7 +2055,9 @@ def municipio_delete(request, pk):
 # CRUD Operations for Proyectores Model
 ########################
 
+@login_required
 def proyectores_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1838,6 +2091,14 @@ def proyectores_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         proyectores = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'proyectores/proyectores_list.html', {
+        'proyectores': proyectores,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'proyectores/proyectores_list.html', {
         'proyectores': proyectores,
         'secretarias': secretarias,
@@ -1846,10 +2107,12 @@ def proyectores_list(request):
         })
 
 
+@login_required
 def proyector_detail(request, pk):
     proyector = Proyectores.objects.get(pk=pk)
     return render(request, 'proyectores/proyector_detail.html', {'proyector': proyector})
 
+@login_required
 def proyector_create(request):
     if request.method == 'POST':
         form = ProyectoresForms(request.POST)
@@ -1860,6 +2123,7 @@ def proyector_create(request):
         form = ProyectoresForms()
     return render(request, 'proyectores/proyector_form.html', {'form': form})
 
+@login_required
 def proyector_update(request, pk):
     proyector = Proyectores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1871,6 +2135,7 @@ def proyector_update(request, pk):
         form = ProyectoresForms(instance=proyector)
     return render(request, 'proyectores/proyector_form.html', {'form': form})
 
+@login_required
 def proyector_delete(request, pk):
     proyector = Proyectores.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1887,7 +2152,9 @@ def proyector_delete(request, pk):
 # CRUD Operations for Proyectores  Marcas Model
 ########################
 
+@login_required
 def proyectores_marcas_list(request):
+    rol = usu(request)
     proyectores_marcas_list = ProyectoresMarcas.objects.all()
     paginator = Paginator(proyectores_marcas_list, 10)  # Muestra 10 proyectores por página
 
@@ -1904,10 +2171,12 @@ def proyectores_marcas_list(request):
     return render(request, 'proyectores_marcas/proyectores_marcas_list.html', {'proyectores_marcas': proyectores_marcas})
 
 
+@login_required
 def proyector_marca_detail(request, pk):
     proyector_marca = ProyectoresMarcas.objects.get(pk=pk)
     return render(request, 'proyectores_marcas/proyector_detail.html', {'proyector_marca': proyector_marca})
 
+@login_required
 def proyector_marca_create(request):
     if request.method == 'POST':
         form = ProyectoresMarcasForms(request.POST)
@@ -1918,6 +2187,7 @@ def proyector_marca_create(request):
         form = ProyectoresMarcasForms()
     return render(request, 'proyectores_marcas/proyector_marca_form.html', {'form': form})
 
+@login_required
 def proyector_marca_update(request, pk):
     proyector_marca = ProyectoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1929,6 +2199,7 @@ def proyector_marca_update(request, pk):
         form = ProyectoresMarcasForms(instance=proyector_marca)
     return render(request, 'proyectores_marcas/proyector_marca_form.html', {'form': form})
 
+@login_required
 def proyector_marca_delete(request, pk):
     proyector_marca = ProyectoresMarcas.objects.get(pk=pk)
     if request.method == 'POST':
@@ -1945,7 +2216,9 @@ def proyector_marca_delete(request, pk):
 # CRUD Operations for Routers Model
 ########################
 
+@login_required
 def routers_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -1978,7 +2251,14 @@ def routers_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         routers = paginator.page(paginator.num_pages)
-
+    if rol != 1:
+        return render(request, 'routers/routers_list.html', {
+        'routers': routers,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'routers/routers_list.html', {
         'routers': routers,
         'secretarias': secretarias,
@@ -1986,10 +2266,12 @@ def routers_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def router_detail(request, pk):
     router = Routers.objects.get(pk=pk)
     return render(request, 'routers/routers_detail.html', {'router': router})
 
+@login_required
 def router_create(request):
     if request.method == 'POST':
         form = RoutersForms(request.POST)
@@ -2000,6 +2282,7 @@ def router_create(request):
         form = RoutersForms()
     return render(request, 'routers/routers_form.html', {'form': form})
 
+@login_required
 def router_update(request, pk):
     router = Routers.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2011,6 +2294,7 @@ def router_update(request, pk):
         form = RoutersForms(instance=router)
     return render(request, 'routers/routers_form.html', {'form': form})
 
+@login_required
 def router_delete(request, pk):
     router = Routers.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2027,7 +2311,9 @@ def router_delete(request, pk):
 # CRUD Operations for Roles Model
 ########################
 
+@login_required
 def roles_list(request):
+    rol = usu(request)
     search = request.GET.get('search')
     roles_list = Roles.objects.all()
     if search:
@@ -2046,10 +2332,12 @@ def roles_list(request):
 
     return render(request, 'roles/roles_list.html', {'roles': roles})
 
+@login_required
 def rol_detail(request, pk):
     rol = Roles.objects.get(pk=pk)
     return render(request, 'roles/rol_detail.html', {'rol': rol})
 
+@login_required
 def rol_create(request):
     if request.method == 'POST':
         form = RolesForms(request.POST)
@@ -2060,6 +2348,7 @@ def rol_create(request):
         form = RolesForms()
     return render(request, 'roles/rol_form.html', {'form': form})
 
+@login_required
 def rol_update(request, pk):
     rol = Roles.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2071,6 +2360,7 @@ def rol_update(request, pk):
         form = RolesForms(instance=rol)
     return render(request, 'roles/rol_form.html', {'form': form})
 
+@login_required
 def rol_delete(request, pk):
     rol = Roles.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2086,14 +2376,18 @@ def rol_delete(request, pk):
 # CRUD Operations for Secretarias Model
 ########################
 
+@login_required
 def secretarias_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     return render(request, 'secretarias/secretarias_list.html', {'secretarias': secretarias})
 
+@login_required
 def secretaria_detail(request, pk):
     secretaria = Secretarias.objects.get(pk=pk)
     return render(request, 'secretarias/secretaria_detail.html', {'secretaria': secretaria})
 
+@login_required
 def secretaria_create(request):
     if request.method == 'POST':
         form = SecretariasForms(request.POST)
@@ -2104,6 +2398,7 @@ def secretaria_create(request):
         form = SecretariasForms()
     return render(request, 'secretarias/secretaria_form.html', {'form': form})
 
+@login_required
 def secretaria_update(request, pk):
     secretaria = Secretarias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2115,6 +2410,7 @@ def secretaria_update(request, pk):
         form = SecretariasForms(instance=secretaria)
     return render(request, 'secretarias/secretaria_form.html', {'form': form})
 
+@login_required
 def secretaria_delete(request, pk):
     secretaria = Secretarias.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2130,7 +2426,9 @@ def secretaria_delete(request, pk):
 # CRUD Operations for SistemaDeInformacionMovil Model
 ########################
 
+@login_required
 def sistemas_informacion_movil_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -2161,7 +2459,14 @@ def sistemas_informacion_movil_list(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sistemas_informacion_movil = paginator.page(paginator.num_pages)
-
+    if rol != 1:
+        return render(request, 'sistemas_informacion_movil/sistemas_informacion_movil_list.html', {
+        'sistemas_informacion_movil': sistemas_informacion_movil,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol,
+        })
     return render(request, 'sistemas_informacion_movil/sistemas_informacion_movil_list.html', {
         'sistemas_informacion_movil': sistemas_informacion_movil,
         'secretarias': secretarias,
@@ -2169,10 +2474,12 @@ def sistemas_informacion_movil_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def sistema_informacion_movil_detail(request, pk):
     sistema_informacion_movil = SistemaDeInformacionMovil.objects.get(pk=pk)
     return render(request, 'sistemas_informacion_movil/sistema_informacion_movil_detail.html', {'sistema_informacion_movil': sistema_informacion_movil})
 
+@login_required
 def sistema_informacion_movil_create(request):
     if request.method == 'POST':
         form = SistemaDeInformacionMovilForms(request.POST)
@@ -2183,6 +2490,7 @@ def sistema_informacion_movil_create(request):
         form = SistemaDeInformacionMovilForms()
     return render(request, 'sistemas_informacion_movil/sistema_informacion_movil_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_movil_update(request, pk):
     sistema_informacion_movil = SistemaDeInformacionMovil.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2194,6 +2502,7 @@ def sistema_informacion_movil_update(request, pk):
         form = SistemaDeInformacionMovilForms(instance=sistema_informacion_movil)
     return render(request, 'sistemas_informacion_movil/sistema_informacion_movil_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_movil_delete(request, pk):
     sistema_informacion_movil = SistemaDeInformacionMovil.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2209,7 +2518,9 @@ def sistema_informacion_movil_delete(request, pk):
 # CRUD Operations for SistemaInformacionMovilNombres Model
 ########################
 
+@login_required
 def sistemas_informacion_movil_nombres_list(request):
+    rol = usu(request)
     sistemas_informacion_movil_nombres_list = SistemaInformacionMovilNombres.objects.all()
     paginator = Paginator(sistemas_informacion_movil_nombres_list, 10)  # Muestra 10 nombres de sistemas de información móvil por página
 
@@ -2226,10 +2537,12 @@ def sistemas_informacion_movil_nombres_list(request):
     return render(request, 'sistema_informacion_movil_nombres/sistemas_informacion_movil_nombres_list.html', {'sistemas_informacion_movil_nombres': sistemas_informacion_movil_nombres})
 
 
+@login_required
 def sistema_informacion_movil_nombre_detail(request, pk):
     sistema_informacion_movil_nombre = SistemaInformacionMovilNombres.objects.get(pk=pk)
     return render(request, 'sistema_informacion_movil_nombres/sistema_informacion_movil_nombre_detail.html', {'sistema_informacion_movil_nombre': sistema_informacion_movil_nombre})
 
+@login_required
 def sistema_informacion_movil_nombre_create(request):
     if request.method == 'POST':
         form = SistemaInformacionMovilNombresForms(request.POST)
@@ -2240,6 +2553,7 @@ def sistema_informacion_movil_nombre_create(request):
         form = SistemaInformacionMovilNombresForms()
     return render(request, 'sistema_informacion_movil_nombres/sistema_informacion_movil_nombre_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_movil_nombre_update(request, pk):
     sistema_informacion_movil_nombre = SistemaInformacionMovilNombres.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2251,6 +2565,7 @@ def sistema_informacion_movil_nombre_update(request, pk):
         form = SistemaInformacionMovilNombresForms(instance=sistema_informacion_movil_nombre)
     return render(request, 'sistema_informacion_movil_nombres/sistema_informacion_movil_nombre_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_movil_nombre_delete(request, pk):
     sistema_informacion_movil_nombre = SistemaInformacionMovilNombres.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2266,7 +2581,9 @@ def sistema_informacion_movil_nombre_delete(request, pk):
 # CRUD Operations for SistemasInformacion Model
 ########################
 
+@login_required
 def sistemas_informacion_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -2299,6 +2616,14 @@ def sistemas_informacion_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sistemas_informacion = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'sistemas_informacion/sistemas_informacion_list.html', {
+        'sistemas_informacion': sistemas_informacion,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol,
+        })
     return render(request, 'sistemas_informacion/sistemas_informacion_list.html', {
         'sistemas_informacion': sistemas_informacion,
         'secretarias': secretarias,
@@ -2306,10 +2631,12 @@ def sistemas_informacion_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def sistema_informacion_detail(request, pk):
     sistema_informacion = SistemasInformacion.objects.get(pk=pk)
     return render(request, 'sistemas_informacion/sistema_informacion_detail.html', {'sistema_informacion': sistema_informacion})
 
+@login_required
 def sistema_informacion_create(request):
     if request.method == 'POST':
         form = SistemasInformacionForms(request.POST)
@@ -2320,6 +2647,7 @@ def sistema_informacion_create(request):
         form = SistemasInformacionForms()
     return render(request, 'sistemas_informacion/sistema_informacion_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_update(request, pk):
     sistema_informacion = SistemasInformacion.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2331,6 +2659,7 @@ def sistema_informacion_update(request, pk):
         form = SistemasInformacionForms(instance=sistema_informacion)
     return render(request, 'sistemas_informacion/sistema_informacion_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_delete(request, pk):
     sistema_informacion = SistemasInformacion.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2346,7 +2675,9 @@ def sistema_informacion_delete(request, pk):
 # CRUD Operations for SistemasInformacionNombres Model
 ########################
 
+@login_required
 def sistemas_informacion_nombres_list(request):
+    rol = usu(request)
     sistemas_informacion_nombres_list = SistemasInformacionNombres.objects.all()
     paginator = Paginator(sistemas_informacion_nombres_list, 10)  # Muestra 10 nombres de sistemas de información por página
 
@@ -2363,10 +2694,12 @@ def sistemas_informacion_nombres_list(request):
     return render(request, 'sistemas_informacion_nombres/sistemas_informacion_nombres_list.html', {'sistemas_informacion_nombres': sistemas_informacion_nombres})
 
 
+@login_required
 def sistema_informacion_nombre_detail(request, pk):
     sistema_informacion_nombre = SistemasInformacionNombres.objects.get(pk=pk)
     return render(request, 'sistemas_informacion_nombres/sistema_informacion_nombre_detail.html', {'sistema_informacion_nombre': sistema_informacion_nombre})
 
+@login_required
 def sistema_informacion_nombre_create(request):
     if request.method == 'POST':
         form = SistemasInformacionNombresForms(request.POST)
@@ -2377,6 +2710,7 @@ def sistema_informacion_nombre_create(request):
         form = SistemasInformacionNombresForms()
     return render(request, 'sistemas_informacion_nombres/sistema_informacion_nombre_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_nombre_update(request, pk):
     sistema_informacion_nombre = SistemasInformacionNombres.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2388,6 +2722,7 @@ def sistema_informacion_nombre_update(request, pk):
         form = SistemasInformacionNombresForms(instance=sistema_informacion_nombre)
     return render(request, 'sistemas_informacion_nombres/sistema_informacion_nombre_form.html', {'form': form})
 
+@login_required
 def sistema_informacion_nombre_delete(request, pk):
     sistema_informacion_nombre = SistemasInformacionNombres.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2403,7 +2738,9 @@ def sistema_informacion_nombre_delete(request, pk):
 # CRUD Operations for Sites Model
 ########################
 
+@login_required
 def sites_list(request):
+    rol = usu(request)
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
@@ -2437,6 +2774,14 @@ def sites_list(request):
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         sites = paginator.page(paginator.num_pages)
 
+    if rol != 1:
+        return render(request, 'sites/sites_list.html', {
+        'sites': sites,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
     return render(request, 'sites/sites_list.html', {
         'sites': sites,
         'secretarias': secretarias,
@@ -2444,10 +2789,12 @@ def sites_list(request):
         'selected_secretaria': request.GET.get('secretaria')
         })
 
+@login_required
 def site_detail(request, pk):
     site = Sites.objects.get(pk=pk)
     return render(request, 'sites/site_detail.html', {'site': site})
 
+@login_required
 def site_create(request):
     if request.method == 'POST':
         form = SitesForms(request.POST)
@@ -2458,6 +2805,7 @@ def site_create(request):
         form = SitesForms()
     return render(request, 'sites/site_form.html', {'form': form})
 
+@login_required
 def site_update(request, pk):
     site = Sites.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2469,6 +2817,7 @@ def site_update(request, pk):
         form = SitesForms(instance=site)
     return render(request, 'sites/site_form.html', {'form': form})
 
+@login_required
 def site_delete(request, pk):
     site = Sites.objects.get(pk=pk)
     if request.method == 'POST':
@@ -2484,42 +2833,107 @@ def site_delete(request, pk):
 # CRUD Operations for Usuarios Model
 ########################
 
+@login_required
 def usuarios_list(request):
+    rol = usu(request)
+    secretarias = Secretarias.objects.all()
+    dependencias = Dependencias.objects.all()
+    dependencia = request.GET.get('dependencia')
+    search = request.GET.get('search')
     usuarios = Usuarios.objects.all()
-    print(usuarios)
-    return render(request, 'usuarios/usuarios_list.html', {'usuarios': usuarios})
+
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+
+    if dependencia:
+        usuarios = Usuarios.objects.filter(id_dependencia=dependencia)
+
+    else:
+        usuarios = Usuarios.objects.all()
+
+    if search:
+        usuarios = usuarios.filter(email__icontains=search)
+    paginator = Paginator(usuarios, 10)  # Muestra 10 sitios por página
+
+    page_number = request.GET.get('page')
+    try:
+        usuarios = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Si el número de página no es un entero, muestra la primera página.
+        usuarios = paginator.page(1)
+    except EmptyPage:
+        # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
+        usuarios = paginator.page(paginator.num_pages)
+
+    if rol != 1:
+        return render(request, 'usuarios/usuarios_list.html', {
+        'usuarios': usuarios,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'nav':rol
+        })
+    return render(request, 'usuarios/usuarios_list.html', {
+        'usuarios': usuarios,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria')
+        })
 
 
-
-
+@login_required
 def usuario_detail(request, pk):
     usuario = Usuarios.objects.get(pk=pk)
     return render(request, 'usuarios/usuario_detail.html', {'usuario': usuario})
 
+@login_required
 def usuario_create(request):
     if request.method == 'POST':
         form = UsuariosForms(request.POST)
         if form.is_valid():
-            form.save()
+            # Guardar el formulario de Usuarios para obtener el objeto de usuario creado
+            usuario = form.save()
+            # Crear un usuario en el modelo User y guardar su id en el campo 'usuario' de Usuarios
+            nuevo_user = User.objects.create_user(username=usuario.email, password=usuario.contrasenia)
+            # Actualizar el campo 'usuario' con el nombre de usuario del nuevo usuario
+            usuario.usuario = nuevo_user.username
+            # Obtener la contraseña cifrada del nuevo usuario
+            contrasenia_cifrada = nuevo_user.password
+            # Asignar la contraseña cifrada al campo 'contrasenia' del objeto 'usuario'
+            usuario.contrasenia = make_password(contrasenia_cifrada)
+            # Guardar los cambios en el objeto 'usuario'
+            usuario.save()
             return redirect('usuarios_list')
     else:
         form = UsuariosForms()
     return render(request, 'usuarios/usuario_form.html', {'form': form})
 
+
+@login_required
 def usuario_update(request, pk):
     usuario = Usuarios.objects.get(pk=pk)
     if request.method == 'POST':
         form = UsuariosForms(request.POST, instance=usuario)
         if form.is_valid():
             form.save()
+            # Actualizar el usuario correspondiente en el modelo User
+            user = User.objects.get(id=usuario.usuario)
+            user.set_password(usuario.contrasenia)
+            user.save()
             return redirect('usuarios_list')
     else:
         form = UsuariosForms(instance=usuario)
     return render(request, 'usuarios/usuario_form.html', {'form': form})
 
+@login_required
 def usuario_delete(request, pk):
     usuario = Usuarios.objects.get(pk=pk)
     if request.method == 'POST':
+        # Eliminar el usuario correspondiente en el modelo User
+        user = User.objects.get(id=usuario.usuario)
+        user.delete()
         usuario.delete()
         return redirect('usuarios_list')
     return render(request, 'usuarios/usuario_confirm_delete.html', {'usuario': usuario})
