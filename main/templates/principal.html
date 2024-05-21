@@ -13,43 +13,55 @@
     
 </head>
 <body>
-    {% if secretaria %}
-    <h1>Reporte por Dependencia</h1>
+    {% if selected_secretaria != 'None' and selected_secretaria%}
+    <h1>{{nombre_secretaria}} {{selected_year}}</h1>
     {% else %}
-    <h1>Reporte por Secretaría</h1>
+    <h1>Reporte por Secretaría {%if selected_year %}{{selected_year}}{% endif %}</h1>
     {% endif %}
 
     <form method="GET" action="{% url 'principal' %}">
         <div class="inline-container">
         <label for="secretaria">Selecciona una Secretaría:</label>
         <select name="secretaria" id="secretaria">
-            <option value="" {% if not selected_secretaria %} selected {% endif %}>Todas</option>
+            <option value={{selected_secretaria}} {% if not selected_secretaria %} selected {% endif %}>{{nombre_secretaria}}</option>
             {% for secretaria in secretarias %}
                 <option value="{{ secretaria.id }}" {% if secretaria.id == selected_secretaria %} selected {% endif %}>{{ secretaria.nombre_secretaria }}</option>
             {% endfor %}
         </select>
+
         <label for="year">Seleccionar Año:</label>
             <input type="text" class="form-control" id="year" name="year" autocomplete="off">
 
 
-        <input type="submit" value="Filtrar">
+        <input type="submit" value="    Filtrar     ">
+        <button type="submit" name="export_excel" value="true">Excel</button>
     </div>
     </form>
+
     <div class="tabla-reporte">
     <table border="1">
         <thead>
             <tr>
-                <th>Secretaría</th>
+                {% if selected_secretaria%}
                 <th>Dependencia</th>
+                {% else %}
+                <th>Secretaría</th>
+                {% endif %}
+                <th>Almacenamientos</th>
                 <th>Conmutadores</th>
                 <th>Energías</th>
-                <th>Asignaciones</th>
+                <th>Enlaces Dependientes</th>
+                <th>Enlaces  no Dependientes</th>
                 <th>Equipos Personales</th>
                 <th>Equipos Servidores</th>
+                <th>Equipos Télefonicos</th>
+                <th>Herramientas de Desarrollo</th>
+                <th>Sistema de información</th>
+                <th>Sistema de información móvil</th>
                 <th>Impresoras</th>
                 <th>Proyectores</th>
                 <th>Enlaces</th>
-                <th>Sitios</th>
+                <th>Site</th>
                 <th>Drones</th>
                 <th>Firewalls</th>
                 <th>Routers</th>
@@ -58,13 +70,22 @@
         <tbody>
             {% for datos in datos_por_secretaria %}
                 <tr>
+                    {% if datos.nombre_secretaria %}
                     <td>{{ datos.nombre_secretaria }}</td>
+                    {% else %}
                     <td>{{ datos.nombre_dependencia }}</td>
+                    {% endif %}
+                    <td>{{ datos.num_almacenamientos|default:"0" }}</td>
                     <td>{{ datos.num_conmutadores|default:"0" }}</td>
                     <td>{{ datos.num_energias|default:"0" }}</td>
-                    <td>{{ datos.num_asignaciones|default:"0" }}</td>
+                    <td>{{ datos.num_enlaces_dep|default:"0" }}</td>
+                    <td>{{ datos.num_enlaces_nodep|default:"0" }}</td>
                     <td>{{ datos.num_equipos_personales|default:"0" }}</td>
                     <td>{{ datos.num_equipos_servidores|default:"0" }}</td>
+                    <td>{{ datos.num_equipos_telefonico|default:"0" }}</td>
+                    <td>{{ datos.num_herramientas_desa|default:"0" }}</td>
+                    <td>{{ datos.num_sistemas_info|default:"0" }}</td>
+                    <td>{{ datos.num_sistemas_info_movil|default:"0" }}</td>
                     <td>{{ datos.num_impresoras|default:"0" }}</td>
                     <td>{{ datos.num_proyectores|default:"0" }}</td>
                     <td>{{ datos.num_enlaces|default:"0" }}</td>
