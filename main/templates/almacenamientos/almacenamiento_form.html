@@ -44,8 +44,8 @@
             margin-top: 5px; /* Espacio entre campos */
             box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
         }
-
-        button[type="submit"] {
+    
+        button {
             width: 20%;
             height: 70px;
             font-size: 2em;
@@ -59,7 +59,7 @@
             cursor: pointer;
         }
 
-        button[type="submit"]:hover {
+        button:hover {
             background-color: #e7e4e4;
             color: #000;
             border: 2px solid black;
@@ -76,7 +76,15 @@
             {{ field }}
         </div>
         {% endfor %}
+        <button type="button" onclick="goBack()">Regresar</button>
         <button type="submit">Guardar</button>
+    
     </form>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
