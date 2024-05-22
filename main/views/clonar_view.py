@@ -30,7 +30,7 @@ def clonar(request):
     else:
         return render(request, 'clonar.html')
 
-@login_required
+#@login_required
 def clonar_registros(modelo, year_origen, year_destino):
     registros_a_clonar = modelo.objects.filter(fecha__year=year_origen)
     

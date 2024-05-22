@@ -56,8 +56,11 @@ from .views.catalogos_views import(
 )
 from .views.carga_view import (carga)
 from .views.clonar_view import (clonar)
+from .views.descargar import (descargar_excel)
 
 urlpatterns = [
+    # +++++++++++++ urls descargas +++++++++++++
+    path('descargar_excel/', descargar_excel, name='descargar_excel'),
     # +++++++++++++ urls paginas principaless +++++++++++++
     path('login/', login_view, name='login_view'),
     path('logout', logout_view, name='logout'),
