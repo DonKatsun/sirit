@@ -15,7 +15,8 @@
 
     <form id="filtroForm" method="GET" action="{% url 'catalogo' %}">
         {% csrf_token %}
-        
+        <div class="d-flex flex-row">
+          <div class="p-2 inline-container">
         <label for="categoria3">Catalogo:</label>
         <select id="categoria3" onchange="actualizarCategorias3()">
             <option value="">Selecciona</option>
@@ -33,12 +34,17 @@
             <option value="p_marcas">Proyectores - Marcas</option>
             <option value="s_nombres">Sistemas de información - Nombres</option>
             <option value="sm_nombres">Sistemas de información movil- Nombres</option>
-        </select>
+       
+          </select>
+        </div>
         <!-- Campo oculto para almacenar el valor seleccionado -->
+        <div class="p-2">
         <input type="hidden" id="categoria_seleccionada" name="categoria_seleccionada" value="">
         <button id="limpiarFiltros3" type="submit">Buscar</button>
+      </div>
       </form>
-      
+  <br></br>
+  <div>
       <script>
         // Función para actualizar el campo oculto con el valor seleccionado del select
         function actualizarCategorias3() {
@@ -46,6 +52,6 @@
             document.getElementById("categoria_seleccionada").value = categoriaSeleccionada;
         }
       </script>
-      
+    </div>
 </body>
 </html>

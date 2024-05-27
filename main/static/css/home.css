@@ -1,5 +1,10 @@
+body {
+  font-family: 'Montserrat', open-sans !important;
+}
+
 /* Estilo para el input de tipo file */
 input[type="file"] {
+  font-family: 'Montserrat', sans-serif;
   /* Aquí puedes quitar o modificar los estilos según tus necesidades */
   background-color: transparent; /* Cambia el color de fondo a transparente */
   border: none; /* Quita el borde */
@@ -39,8 +44,8 @@ input[type="file"] {
   /* Estilo para los contenedores de los elementos en línea */
 .inline-container {
   display: flex; /* Utiliza el modelo de caja flexible para los elementos en línea */
-  align-items: center; /* Centra los elementos verticalmente */
-  margin: 30px;
+  align-items: left; /* Centra los elementos verticalmente */
+  margin: 5px;
  /* Espacio entre los contenedores en línea */
 }
 
@@ -48,48 +53,52 @@ input[type="file"] {
 .inline-container label,
 .inline-container select,
 .inline-container input {
-  margin-right: 20px; /* Espacio entre los elementos en línea */
+  margin-right: 5px; /* Espacio entre los elementos en línea */
 }
 
 /* Estilo para los elementos select */
 .inline-container select {
-  width: 200px; /* Ancho de los elementos select */
+  width: 120px; /* Ancho de los elementos select */
 }
 
 /* Estilo para el botón de búsqueda */
 .inline-container button {
-  padding: 10px 20px; /* Espacio interno del botón */
+  font-family:'Montserrat', open-sans!important;
+  padding: 5px 10px; /* Espacio interno del botón */
   border-radius: 5px; /* Borde redondeado */
   background-color: white; /* Color de fondo */
-  border: 1px solid #383737; /* Borde */
-  color: #383737; /* Color del texto */
+  border: 1px solid #A02142; /* Borde */
+  color: #A02142; /* Color del texto */
   cursor: pointer; /* Cursor al pasar sobre el botón */
 }
 
 /* Estilo para el botón de búsqueda al pasar el cursor sobre él */
 .inline-container button:hover {
-  background-color: #383737; /* Color de fondo al pasar el cursor */
+  background-color: #691B31; /* Color de fondo al pasar el cursor */
   color: white; /* Color del texto al pasar el cursor */
 }
 
      /* Estilo para el combo box */
      input {
+      font-family: 'Montserrat', sans-serif;
         background-color: white; /* Fondo blanco */
-        border: 1px solid #383737; /* Borde color #383737 */
-        color: #383737; /* Texto color #383737 */
+        border: 1px solid #A02142; /* Borde color #383737 */
+        color: #A02142; /* Texto color #383737 */
         border-radius: 10px; /* Borde redondeado */
         padding: 1px; /* Espaciado interno */
         font-size: 16px; /* Tamaño de fuente */
-        width: 120px; /* Ancho del combo box, ajusta según necesites */
+        width: 200px; /* Ancho del combo box, ajusta según necesites */
         height: 50px;
         margin: 30px;
     }
 
     /* Estilo para el combo box */
     select {
+      display: flex;
+      font-family:'Montserrat', open-sans!important;
         background-color: white; /* Fondo blanco */
-        border: 1px solid #383737; /* Borde color #383737 */
-        color: #383737; /* Texto color #383737 */
+        border: 1px solid #A02142; /* Borde color #383737 */
+        color: #A02142; /* Texto color #383737 */
         border-radius: 10px; /* Borde redondeado */
         padding: 8px; /* Espaciado interno */
         font-size: 16px; /* Tamaño de fuente */
@@ -100,17 +109,20 @@ input[type="file"] {
     
     /* Estilo para las opciones del combo box */
     select option {
+      font-family: 'Montserrat', sans-serif;
         background-color: #d9d9d9; /* Fondo blanco */
-        color: #383737; /* Texto color #383737 */
+        color: #A02142; /* Texto color #383737 */
         font-size: 16px; /* Tamaño de fuente */
     }
 
     .form-control.datepicker {
+      
+  font-family: 'Montserrat', sans-serif;
       background-color: white; /* Fondo blanco */
-      border: 1px solid #383737; /* Borde color #383737 */
-      color: #383737; /* Texto color #383737 */
+      border: 1px solid #A02142; /* Borde color #383737 */
+      color: #A02142; /* Texto color #383737 */
       border-radius: 10px; /* Borde redondeado */
-      padding: 8px; /* Espaciado interno */
+      padding: 4px; /* Espaciado interno */
       font-size: 16px; /* Tamaño de fuente */
       width: 120px; /* Ancho del input, ajusta según necesites */
       height: 50px; /* Altura del input */
@@ -128,13 +140,16 @@ input[type="file"] {
     #limpiarFiltros2,
     #limpiarFiltros3 {
         background-color: white;
-        color: #383737;
+        color: #A02142;
         font-size: 1.5em;
         border: none;
         border-radius: 5px;
         padding: 10px 20px;
         cursor: pointer;
         text-decoration: underline;
+        text-align: right;
+        display: flex;
+        justify-content: right;
     }
 
 
@@ -146,7 +161,9 @@ input[type="file"] {
 }
 
 .button {
-    color: #383737;
+  
+  font-family: 'Montserrat', sans-serif;
+    color: #A02142;
     padding: 10px 10px;
     font-size: 2em;
     border: none;
@@ -163,7 +180,7 @@ input[type="file"] {
 
 .button.active {
     background-color: #d9d9d9; /* Color de fondo activo */
-    color: #383737;
+    color: #691B31;
     text-decoration: none; /* Desactiva el subrayado cuando el botón está activo */
 }
   
@@ -224,30 +241,279 @@ input[type="file"] {
   }
 
   .titulo-tabla {
+    font-family: 'Montserrat', sans-serif;
     font-size: 2.5em;
     background-color: #d9d9d9;   
     text-align: center;
-    color: #383737;
+    color: #691B31;
     margin: 0 auto; /* Centra el texto horizontalmente */
 }
 .titulo-tabla2 {
+  font-family: 'Montserrat', sans-serif;
     font-size: 4em;  
     text-align: left;
-    color: #383737;
+    color: #691B31;
     font-weight: bold;
    margin-left: 30px;
 }
 
 .seleccion {
+  font-family: 'Montserrat', sans-serif;
     font-size: 4em;
     font-weight: bold;
-    color: #383737;
+    color: #691B31;
     margin-top: 10px;
     margin-left: 30px;
   }
 
   .subseleccion {
+    font-family: 'Montserrat', sans-serif;
     font-size: 4em;
-    color: #383737;
+    color: #A02142;
     margin-top: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 2em !important;
+    }
+    input {
+      font-family: 'Montserrat', sans-serif;
+        background-color: white; /* Fondo blanco */
+        border: 1px solid #A02142; /* Borde color #383737 */
+        color: #A02142; /* Texto color #383737 */
+        border-radius: 10px; /* Borde redondeado */
+        padding: 1px; /* Espaciado interno */
+        font-size: 16px; /* Tamaño de fuente */
+        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        height: 50px;
+        margin: 5px;
+    }
+    input[type="file"] {
+      font-family: 'Montserrat', sans-serif;
+      /* Aquí puedes quitar o modificar los estilos según tus necesidades */
+      background-color: transparent; /* Cambia el color de fondo a transparente */
+      border: 1px; /* Quita el borde */
+      color: inherit; /* Hereda el color del texto */
+      font-size: 8px; /* Hereda el tamaño de fuente */
+      width: 200; /* Ancho automático */
+      height: 50; /* Altura automática */
+      margin: 0; /* Quita el margen */
+      padding: 0; /* Quita el padding */
+    }
+    input[type="text"] {
+      font-family: 'Montserrat', sans-serif;
+      /* Aquí puedes quitar o modificar los estilos según tus necesidades */
+      background-color: transparent; /* Cambia el color de fondo a transparente */
+      border: 1px solid #A02142; /* Quita el borde */
+      color: inherit; /* Hereda el color del texto */
+      font-size: 8px; /* Hereda el tamaño de fuente */
+      width: 120; /* Ancho automático */
+      height: 50; /* Altura automática */
+      margin: 0; /* Quita el margen */
+      padding: 0; /* Quita el padding */
+    }
+    .inline-container label,
+    .inline-container select,
+    .inline-container input {
+      margin-right: 1px; /* Espacio entre los elementos en línea */
+    }
+    
+    /* Estilo para los elementos select */
+    .inline-container select {
+      width: 120px; /* Ancho de los elementos select */
+    }
+    
+    /* Estilo para el botón de búsqueda */
+    .inline-container button {
+      font-family:'Montserrat', open-sans!important;
+      padding: 10px 10px; /* Espacio interno del botón */
+      border-radius: 5px; /* Borde redondeado */
+      background-color: white; /* Color de fondo */
+      border: 1px solid #A02142; /* Borde */
+      color: #A02142; /* Color del texto */
+      cursor: pointer; /* Cursor al pasar sobre el botón */
+    }
+    select {
+      font-family:'Montserrat', open-sans!important;
+        background-color: white; /* Fondo blanco */
+        border: 1px solid #A02142; /* Borde color #383737 */
+        color: #A02142; /* Texto color #383737 */
+        border-radius: 10px; /* Borde redondeado */
+        padding: 16px; /* Espaciado interno */
+        font-size: 16px; /* Tamaño de fuente */
+        width: 200px; /* Ancho del combo box, ajusta según necesites */
+        height: 50px;
+        margin: 30px;
+    }
+    
+    /* Estilo para las opciones del combo box */
+    select option {
+      font-family: 'Montserrat', sans-serif;
+        background-color: #d9d9d9; /* Fondo blanco */
+        color: #A02142; /* Texto color #383737 */
+        font-size: 16px; /* Tamaño de fuente */
+    }
+
+    .form-control.datepicker {
+      
+  font-family: 'Montserrat', sans-serif;
+      background-color: white; /* Fondo blanco */
+      border: 1px solid #A02142; /* Borde color #383737 */
+      color: #A02142; /* Texto color #383737 */
+      border-radius: 10px; /* Borde redondeado */
+      padding: 8px; /* Espaciado interno */
+      font-size: 16px; /* Tamaño de fuente */
+      width: 100px; /* Ancho del input, ajusta según necesites */
+      height: 40px; /* Altura del input */
+      margin: 10px; /* Margen exterior */
+  }
+  
+  /* Opcional: Estilos para cuando el input está enfocado */
+  .form-control.datepicker:focus {
+      outline: none; /* Quita el contorno al enfocar el input */
+      border-color: #6c757d; /* Cambia el color del borde al enfocar */
+      box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); /* Agrega una sombra al enfocar */
+  }
+    
+    #limpiarFiltros,
+    #limpiarFiltros2,
+    #limpiarFiltros3 {
+        background-color: white;
+        color: #A02142;
+        font-size: 1.5em;
+        border: 1px;
+        border-color:#A02142 ;
+        border-radius: 5px;
+        padding: 10px 40px;
+        cursor: pointer;
+        text-decoration: underline;
+        display: flex;
+        justify-content: right;
+    }
+.button {
+  
+  font-family: 'Montserrat', sans-serif;
+    color: #A02142;
+    padding: 10px 10px;
+    font-size: 2em;
+    border: none;
+    width: 100px;
+    height: 50px;
+    border-radius: 20px 20px 0 0; /* Solo los bordes superiores redondeados */
+    cursor: pointer;
+    background-color: white; /* Color de fondo inactivo */
+    text-decoration: none; /* Quita el subrayado predeterminado de los enlaces */
+    display: inline-block; /* Para que los enlaces se comporten como bloques */
+    text-align: center; /* Centra el texto dentro del botón */
+    text-decoration: underline; /* Subraya el texto */
+}
+.titulo-tabla {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  background-color: #d9d9d9;   
+  text-align: center;
+  color: #691B31;
+  margin: 0 auto; /* Centra el texto horizontalmente */
+}
+.titulo-tabla2 {
+font-family: 'Montserrat', sans-serif;
+  font-size: 1em;  
+  text-align: left;
+  color: #691B31;
+  font-weight: bold;
+ margin-left: 30px;
+}
+
+.seleccion {
+font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  color: #691B31;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.subseleccion {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  color: #A02142;
+  margin-top: 10px;
+}
+.modal-content {
+  margin: 15% auto !important;
+  padding: 10px !important;
+  border: 1px solid #888;
+  width: 80% !important;
+  border-radius: 10px;
+  text-align: center;
+}
+.modal-buttons {
+  margin-top: 10px;
+  width: 40px !important;
+  height: 20px !important;
+}
+.modal-buttons button {
+  margin: 0 10px;
+  padding: 15px 20px !important;
+  font-size: 1em !important;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.modal-buttons button {
+  margin: 0 10px;
+  padding: 15px 20px !important;
+  font-size: 1em !important;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.inline-container button {
+  font-family:'Montserrat', open-sans!important;
+  padding: 5px 10px; /* Espacio interno del botón */
+  border-radius: 5px; /* Borde redondeado */
+  background-color: white; /* Color de fondo */
+  border: 1px solid #A02142; /* Borde */
+  color: #A02142; /* Color del texto */
+  cursor: pointer; /* Cursor al pasar sobre el botón */
+}
+
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1424px) {
+    /* Estilo para los contenedores de los elementos en línea */
+.inline-container {
+  display: flex; /* Utiliza el modelo de caja flexible para los elementos en línea */
+  align-items: center; /* Centra los elementos verticalmente */
+  margin: 10px;
+ /* Espacio entre los contenedores en línea */
+}
+
+/* Estilo para los elementos en línea */
+.inline-container label,
+.inline-container select,
+.inline-container input {
+  margin-right: 20px; /* Espacio entre los elementos en línea */
+}
+
+/* Estilo para los elementos select */
+.inline-container select {
+  width: 200px; /* Ancho de los elementos select */
+}
+
+  }
+
+  /* Estilo para las opciones del combo box */
+  select option {
+    font-family: 'Montserrat', sans-serif;
+      background-color: #d9d9d9; /* Fondo blanco */
+      color: #A02142; /* Texto color #383737 */
+      font-size: 15px; /* Tamaño de fuente */
+  }
+
+
+  @media screen and (min-width: 1424px) {
+  
   }

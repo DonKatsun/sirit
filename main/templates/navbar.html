@@ -2,98 +2,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{% static 'css/Nabvar.css' %}">
-
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Nabvar.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="navbar">
-  <div class="logo-container">
-    <img src="{% static 'images/Logo2.png' %}" alt="Logo" class="logo">
-    <span class="title">SISTEMA DE INVENTARIO</span>
+    <div class="logo-container">
+        <img src="{% static 'images/logotipo-02.png' %}" alt="Logo" class="logo">
+        <span class="title">SISTEMA DE INVENTARIO</span>
+    
+      <a class="logout-buttons" href="{% url 'logout' %}">Salir</a>
   </div>
-  {% if not nav%}
-  <div class="buttons-container">
-    
-    
-    
-    <a href="/principal" class="buttons" id="inicio">Inicio</a>
-    <a href="/inventario" class="buttons" id="inventario">Inventario</a>
-    <a href="/Catalogo" class="buttons" id="catalogo">Catálogo</a>
-    <a href="/clonar" class="buttons" id="clonar">Clonar</a>
-    <a href="/carga" class="buttons" id="nuevo">+ Nuevo</a>
-
-    
-  </div>
-  {% endif %}
-  <div class="logout-container">
-    <a class="logout-buttons" href="{% url 'logout' %}">Salir</a>
-  </div>
-
+    {% if not nav %}
+    <div class="buttons-container">
+        <a href="/principal" class="buttons" id="inicio">Inicio</a>
+        <a href="/inventario" class="buttons" id="inventario">Inventario</a>
+        <a href="/Catalogo" class="buttons" id="catalogo">Catálogo</a>
+        <a href="/clonar" class="buttons" id="clonar">Clonar</a>
+        <a href="/carga" class="buttons" id="nuevo">+ Nuevo</a>
+    </div>
+    {% endif %}
+  
 </div>
-
-
-
-</body>
-</html>
 
 <script>
     function toggleTab(event) {
-      var target = event.target;
-      var buttons = document.querySelectorAll('.buttons');
-      buttons.forEach(function(btn) {
-        btn.classList.remove('active');
-      });
-      target.classList.add('active');
-    
-      var tabId = target.getAttribute('data-target');
-      var tabs = document.querySelectorAll('.tab-content');
-      tabs.forEach(function(tab) {
-        if (tab.id === tabId) {
-          tab.classList.add('active');
-          tab.style.display = 'block';
-        } else {
-          tab.classList.remove('active');
-          tab.style.display = 'none';
-        }
-      });
-    
-      event.preventDefault(); // Evita que el enlace recargue la página
+        var target = event.target;
+        var buttons = document.querySelectorAll('.buttons');
+        buttons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        target.classList.add('active');
+
+        var tabId = target.getAttribute('data-target');
+        var tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(function(tab) {
+            if (tab.id === tabId) {
+                tab.classList.add('active');
+                tab.style.display = 'block';
+            } else {
+                tab.classList.remove('active');
+                tab.style.display = 'none';
+            }
+        });
+
+        event.preventDefault(); // Evita que el enlace recargue la página
     }
 
-   // Obtener todos los botones
-var buttons = document.querySelectorAll('.buttons');
+    // Obtener todos los botones
+    var buttons = document.querySelectorAll('.buttons');
 
-// Función para manejar el clic en el botón
-function handleClick(event) {
-    // Quitar la clase 'active' de todos los botones
-    buttons.forEach(function(btn) {
-        btn.classList.remove('active');
+    // Función para manejar el clic en el botón
+    function handleClick(event) {
+        // Quitar la clase 'active' de todos los botones
+        buttons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+
+        // Agregar la clase 'active' solo al botón clicado
+        event.target.classList.add('active');
+
+        // Guardar el ID del botón activo en el almacenamiento local
+        localStorage.setItem('activeButton', event.target.id);
+    }
+
+    // Agregar evento clic a cada botón
+    buttons.forEach(function(button) {
+        button.addEventListener('click', handleClick);
     });
 
-    // Agregar la clase 'active' solo al botón clicado
-    event.target.classList.add('active');
+    // Obtener el ID del botón activo del almacenamiento local
+    var activeButtonId = localStorage.getItem('activeButton');
 
-    // Guardar el ID del botón activo en el almacenamiento local
-    localStorage.setItem('activeButton', event.target.id);
-}
-
-// Agregar evento clic a cada botón
-buttons.forEach(function(button) {
-    button.addEventListener('click', handleClick);
-});
-
-// Obtener el ID del botón activo del almacenamiento local
-var activeButtonId = localStorage.getItem('activeButton');
-
-// Si hay un botón activo guardado, agregar la clase 'active' a ese botón
-if (activeButtonId) {
-    var activeButton = document.getElementById(activeButtonId);
-    if (activeButton) {
-        activeButton.classList.add('active');
+    // Si hay un botón activo guardado, agregar la clase 'active' a ese botón
+    if (activeButtonId) {
+        var activeButton = document.getElementById(activeButtonId);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
     }
-}
-    </script>
+</script>
+
+</body>
+</html>
