@@ -1,11 +1,12 @@
 
 body, html {
+  font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
 }
 
 .top-bar {
-    background-color: #CCC;
+    background-color: #A02142;
     height: 20%;
     width: 100%;
     display: flex;
@@ -22,9 +23,9 @@ body, html {
 
 .title {
     font-size: 5em;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif !important;
     font-weight: bold;
-    color: #383737;
+    color: #FFFFFF;
     margin: 20px;
     text-align: center; /* Centrado del texto */
     flex: 1; /* Para que ocupe el espacio restante */
@@ -38,7 +39,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgb(255, 255, 255);
+    background-color: #FFFFFF;
     padding: 30px;
     box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
     position: relative;
@@ -46,29 +47,27 @@ body, html {
     border: 1px solid #ccc; /* Agregando borde de color #ccc */
     border-radius: 20px; /* Agregando bordes redondeados de 10px */
 }
+.form_main::before {
+  position: absolute;
+  content: "";
+  width: 400px;
+  height: 450px;
+  background-color:#DDC9A3;
+  transform: rotate(45deg);
+  left: -200px;
+  bottom: -60px;
+  z-index: 1;
+  border-radius: 30px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.082);
+}
 
-
-  
-  .form_main::before {
-    position: absolute;
-    content: "";
-    width: 400px;
-    height: 450px;
-    background-color: rgb(204, 204, 204);
-    transform: rotate(45deg);
-    left: -200px;
-    bottom: 30px;
-    z-index: 1;
-    border-radius: 30px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.082);
-  }
-  
   .heading {
+  
     font-size: 3em;
-    font-family: 'Open Sans', sans-serif;
-    color: #2e2e2e;
+    font-family: 'Montserrat', sans-serif;
+    color: #A02142;
     font-weight: 700;
-    margin: 0px 0 50px 0;
+    margin: 20px 0 20px 0;
     z-index: 2;
   }
   
@@ -93,14 +92,14 @@ body, html {
     height: 70px;
     background-color: transparent;
     border: none;
-    border-bottom: 2px solid rgb(56, 55, 55);
+    border-bottom: 2px solid black;
     margin: 10px 10px;
     color: black;
     font-size: 1em;
     font-weight: 500;
     box-sizing: border-box;
     padding-left: 30px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
   }
   
   .inputField:focus {
@@ -109,18 +108,18 @@ body, html {
   }
   
   .inputField::placeholder {
-    color: rgb(80, 80, 80);
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 500;
     
   }
   
   #button {
+  font-family:'Montserrat', open-sans!important;
     z-index: 2;
     position: relative;
     width: 100%;
     border: none;
-    background-color: rgb(152, 152, 152);
+    background-color: #A02142;
     height: 50px;
     color: white;
     font-size: 2em;
@@ -128,14 +127,99 @@ body, html {
     letter-spacing: 1px;
     margin: 20px;
     cursor: pointer;
-    font-family: 'Open Sans', sans-serif;
     border-radius: 10px;
   }
   
-  #button:hover {
-    background-color: rgb(56, 55, 55);
-  }
+       #button:hover {
+         background-color: #691B31;
+       }
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 1.5em;
+    
+}
+.heading {
   
+  font-size: 2em;
+  font-family: 'Montserrat', sans-serif;
+  color: #A02142;
+  font-weight: 700;
+  margin: 20px 0 20px 0;
+  z-index: 2;
+}
+.form_main {
+  width: 60%;
+  height: 40% ;
+  margin: 5% auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 30px;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ccc; /* Agregando borde de color #ccc */
+  border-radius: 20px; /* Agregando bordes redondeados de 10px */
+}
+}
+
+  @media screen and (min-width: 768px) and (max-width: 1424px) {
+    /* Estilos adicionales para este rango de ancho */
+    .title {
+        font-size: 2em;
+    }
+
+  .buttons {
+    font-family: Montserrat;
+    color: #FFFFFF !important;
+    padding: 10px 20px !important;
+    font-size: 1.5em !important;
+    border: none !important;
+    width: 200px !important;
+    height: 50px !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    background-color: #A02142 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    line-height: 30px !important;
+}
+.heading {
+  
+  font-size: 2em;
+  font-family: 'Montserrat', sans-serif;
+  color: #A02142;
+  font-weight: 700;
+  margin: 20px 0 20px 0;
+  z-index: 2;
+}
+.form_main {
+  width: 30%;
+  height: 40% ;
+  margin: 5% auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 30px;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ccc; /* Agregando borde de color #ccc */
+  border-radius: 20px; /* Agregando bordes redondeados de 10px */
+}
+  }
+
+
+  @media screen and (min-width: 1424px) {
+    .title {
+        font-size: 4em;
+}
+
+  }
 
   
  

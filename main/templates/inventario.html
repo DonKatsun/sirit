@@ -23,15 +23,23 @@
 {% endif %}
 </h1>
 <body>
-
+<div class="row">
   <form id="filtroForm" method="GET" action="{% url 'inventario' %}">
     {% csrf_token %}
+    <div class="col-sm-8 ">
     <input type="hidden" id="categoria" name="categoria" value="">
+    </div>
+    <div class="col-sm-8 ">
     <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
+    </div>
+    <div class="col-sm-8 ">
     <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
     <input type="hidden" id="secretariaSelec" name="secretariaSelec" value="">
     <input type="hidden" id="descarga" name="descarga" value="0">
-    <div class="inline-container">
+    </div>
+</div>
+<div class="row">
+    <div class="col  inline-container">
     <label for="categoria3">Categoría:</label>
     <select id="categoria3" onchange="actualizarCategorias3()">
         <option value="200">Categoría</option>
@@ -40,14 +48,16 @@
         <option value="203">Telecomunicaciones</option>
         <option value="204">Usuarios</option>
     </select>
-  
+</div>
+<div class="col inline-container">
     <label for="subcategoria3">Subcategoría:</label>
     <select id="subcategoria3" onchange="cambiaSub()">
     {% if clave %}
     <option value={{clave}}>{{inventario}}</option>
     {% endif %}
     </select>
-  
+</div>
+<div class="col inline-container">
     <label for="secretaria">Secretaría:</label>
     <select id="secretaria" onchange="actualizarDependencias()">
         {% if  secretaria%}
@@ -59,7 +69,8 @@
         <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
         {% endfor %}
     </select>
-  
+</div>
+<div class="col inline-container">
     <label for="dependenciagi">Dependencia:</label>
     <select id="dependencia" onchange="cambiaDepen()">
         {% if dependencia %}
@@ -69,18 +80,25 @@
         {% endif %}
     </select>
     </div>
-    <div class="inline-container">
-    <label for="year">Año:</label>
-    <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
-    
-    <label>Busqueda: </label>
+    <div class="col inline-container">
+        <label for="year">Año:</label>
+        <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
+        </div>
+    </div>
+
+   <div class="d-flex flex-row">
+    <div class="p-2 inline-container">
+    <label>Búsqueda: </label>
     <input type="text" id="serch" name="serch">
+    </div>
+        <div class="p-2">
     <button id="limpiarFiltros3" type="submit">Buscar</button>
     <button id="limpiarFiltros3" type="submit" name="download" value="true" onclick=descarga()>Descargar</button>
+    </div>
     </div>  
   </form>
 
- 
+</div>
 
  
    <script>

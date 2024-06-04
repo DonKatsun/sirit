@@ -1,10 +1,10 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 .navbar {
-    background-color: #d9d9d9;
+    background-color: #A02142;
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 .logo {
@@ -24,43 +24,46 @@ body {
 }
 
 .title {
+    font-family: Montserrat;
     font-size: 5em;
     font-weight: bold;
     text-align: center;
-    color: #383737;
+    color: #FFFFFF;
     margin: 0 auto; /* Centra el texto horizontalmente */
 }
 
 .buttons-container {
-    display: flex !important;
-    justify-content: space-between !important; /* Distribuir los botones uniformemente */
-    width: 100% !important;
-    margin-bottom: 30px !important;
+    display: flex;
+    justify-content: space-between ; /* Distribuir los botones uniformemente */
+    width: 100% ;
+    margin-bottom: 0px;
 }
 
 .buttons {
-    color: #383737 !important;
-    padding: 10px 20px !important;
-    font-size: 2em !important;
-    border: none !important;
-    width: 250px !important;
-    height: 60px !important;
-    border-radius: 20px !important;
-    cursor: pointer !important;
-    background-color: #d9d9d9 !important;
-    text-decoration: none !important;
-    text-align: center !important;
-    line-height: 60px !important;
+    font-family: Montserrat;
+    color: #FFFFFF ;
+    padding: 10px 20px ;
+    font-size: 2em ;
+    border: none ;
+    width: 250px ;
+    height: 60px ;
+    border-radius: 20px ;
+    cursor: pointer ;
+    background-color: #A02142 ;
+    text-decoration: none ;
+    text-align: center ;
+    line-height: 30px ;
 }
 
 .buttons.active {
-    background-color: #383737 !important;
+    background-color: #BC955B !important;
     color: white !important;
 }
 
 .buttons:hover {
-    background-color: #989898 !important;
+    background-color: #691B31 !important;
     color: white !important; /* Cambia el color del texto al hacer hover */
+    text-decoration: none !important;
 }
 
   
@@ -72,14 +75,18 @@ body {
 }
 
 .logout-buttons {
-    background-color: #d9d9d9 !important;
-    color: #383737 !important;
+    font-family:'Montserrat', open-sans;
+    background-color: #A02142 !important;
+    color: #ffffff !important;
     font-size: 1.5em !important;
     border: none !important;
     border-radius: 5px !important;
     padding: 10px 20px !important;
     cursor: pointer !important;
     text-decoration: underline !important; /* Subraya el texto */
+}
+.logout-buttons:hover {
+ color:#691B31 !important;
 }
 
 
@@ -93,5 +100,59 @@ body {
     /* margin: 0 auto; Centra el texto horizontalmente */
 }
 
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 1em;    
+}
+.logout-buttons {
+    font-family:'Montserrat', open-sans;
+    background-color: #A02142 !important;
+    color: #ffffff !important;
+    font-size: 1em !important;
+}
+.logout-container {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+}
+.buttons {
+    padding: 10px 20px !important;
+    font-size: .7em !important ;
+    width: 100px !important ;
+    height: 40px !important ;
+    border-radius: 15px ;
+    text-align: center !important ;
+    line-height: 20px !important;
+    text-decoration: none ;
+}
+.buttons-container{
+    display: flex;
+    justify-content: space-between ; /* Distribuir los botones uniformemente */
+    width: 100% ;
+}
+  }
 
-  
+  @media screen and (min-width: 768px) and (max-width: 1424px) {
+    /* Estilos adicionales para este rango de ancho */
+    .title {
+        font-size: 2em;
+}
+  }
+  .buttons {
+
+    padding: 5px 10px ;
+    font-size: 1.5em ;
+    width: 200px ;
+    height: 50px ;
+    text-align: center ;
+    line-height: 40px ;
+    text-decoration: none ;
+}
+
+
+  @media screen and (min-width: 1424px) {
+    .title {
+        font-size: 4em;
+}
+
+  }
