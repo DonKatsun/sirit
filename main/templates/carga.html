@@ -9,10 +9,10 @@
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.css">
 </head>
 <body>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.all.min.js"></script>
   <form id="filtroForm" method="POST" action="{% url 'carga' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" id="categoria" name="categoria" value="">
@@ -71,6 +71,18 @@
 </script>
 
    <script>
+    function showError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+        });
+    }
+
+    // Check for error message in the context
+    {% if error_message %}
+    showError("{{ error_message }}");
+    {% endif %}
      // Función para actualizar las subcategorías
      function actualizarCategorias3() {
          var categoriaSeleccionada = document.getElementById("categoria3").value;

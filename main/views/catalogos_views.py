@@ -13,6 +13,36 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 
+from django.apps import apps
+import openpyxl
+from django.http import HttpResponse
+
+def generate_excel(model_name, queryset):
+    model = apps.get_model(app_label='main', model_name=model_name)
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    headers = [field.name for field in model._meta.fields]
+    ws.append(headers)
+
+    for obj in queryset:
+        row = []
+        for field in headers:
+            value = getattr(obj, field)
+            if isinstance(value, models.Model):
+                # Obtén el campo en la posición 2
+                related_model_fields = [f.name for f in value._meta.fields]
+                if len(related_model_fields) >= 2:
+                    value = getattr(value, related_model_fields[1])
+                else:
+                    value = str(value)  # En caso de que no haya suficientes campos, usa la representación por defecto
+            row.append(value)
+        ws.append(row)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename={model_name}.xlsx'
+    wb.save(response)
+    return response
 ########################
 # CRUD Operations for ConmutadoresMarcas Model
 ########################
@@ -156,23 +186,31 @@ def almacenamientos_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #almacenamientos_list = Almacenamientos.objects.all()
-
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        if secretaria:
+            almacenamientos_list = Almacenamientos.objects.filter(id_dependencia__id_secretaria=secretaria,fecha__year=year)
+        
         if dependencia:
             almacenamientos_list = Almacenamientos.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
             almacenamientos_list = Almacenamientos.objects.filter(fecha__year=year)
     else:
         almacenamientos_list = Almacenamientos.objects.all()
+    if secretaria:
+        almacenamientos_list = almacenamientos_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         almacenamientos_list = almacenamientos_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('almacenamientos', almacenamientos_list)
     paginator = Paginator(almacenamientos_list, 10)  # Muestra 10 drones por página
 
     page_number = request.GET.get('page')
@@ -190,12 +228,23 @@ def almacenamientos_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Almacenamiento',
+        'clave': '1020',
         'nav': rol})
     return render(request, 'almacenamientos/almacenamientos_list.html', {
         'almacenamientos': almacenamientos,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')})
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Almacenamiento',
+        'clave': '1020',
+        })
     
 @login_required
 def almacenamiento_detail(request, pk):
@@ -359,6 +408,7 @@ def drones_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #drones_list = Drones.objects.all()
@@ -367,14 +417,21 @@ def drones_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             drones_list = Drones.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
             drones_list = Drones.objects.filter(fecha__year=year)
     else:
         drones_list = Drones.objects.all()
+    if secretaria:
+        drones_list = drones_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         drones_list = drones_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('drones', drones_list)
 
     paginator = Paginator(drones_list, 10)  # Muestra 10 drones por página
 
@@ -390,11 +447,22 @@ def drones_list(request):
     if rol != 1:
         return render(request, 'drones/drones_list.html', {'drones': drones,'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria'),'nav':rol})
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Dron',
+        'clave': '1080','nav':rol})
     
     return render(request, 'drones/drones_list.html', {'drones': drones,'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria'),})
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Dron',
+        'clave': '1080',
+        })
 
 
 @login_required
@@ -626,6 +694,7 @@ def energias_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     energias_list = Energias.objects.all()
@@ -635,6 +704,8 @@ def energias_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             energias_list = Energias.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -642,8 +713,13 @@ def energias_list(request):
     else:
         energias_list = Energias.objects.all()
     
+    if secretaria:
+        energias_list = energias_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         energias_list = energias_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('energias', energias_list)
     paginator = Paginator(energias_list, 10)  # 10 registros por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -653,13 +729,23 @@ def energias_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Energia',
+        'clave': '1010',
         'nav':rol
         })
     return render(request, 'energia/energias_list.html', {
         'page_obj': page_obj,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Energia',
+        'clave': '1010',
         })
 
 @login_required
@@ -715,6 +801,7 @@ def enlaces_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     enlaces_list = Enlaces.objects.all()
@@ -724,6 +811,8 @@ def enlaces_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             enlaces_list = Enlaces.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -731,8 +820,13 @@ def enlaces_list(request):
     else:
         enlaces_list = Enlaces.objects.all()
     
+    if secretaria:
+        enlaces_list = enlaces_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         enlaces_list = enlaces_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('enlaces', enlaces_list)
     paginator = Paginator(enlaces_list, 10)  # Muestra 10 enlaces por página
 
     page_number = request.GET.get('page')
@@ -750,13 +844,22 @@ def enlaces_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Enlaces',
+        'clave': '1210',
         'nav':rol
         })
     return render(request, 'enlaces/enlaces_list.html', {
         'enlaces': enlaces,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Enlaces',
         })
 
 
@@ -872,6 +975,7 @@ def equipo_telefonico_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #equipo_telefonico_list = EquipoTelefonico.objects.all()
@@ -881,6 +985,8 @@ def equipo_telefonico_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             equipo_telefonico_list = EquipoTelefonico.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -888,8 +994,13 @@ def equipo_telefonico_list(request):
     else:
         equipo_telefonico_list = EquipoTelefonico.objects.all()
 
+    if secretaria:
+        equipo_telefonico_list = equipo_telefonico_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         equipo_telefonico_list = equipo_telefonico_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('equipotelefonico', equipo_telefonico_list)
     paginator = Paginator(equipo_telefonico_list, 10)  # Muestra 10 equipos telefónicos por página
 
     page_number = request.GET.get('page')
@@ -908,13 +1019,23 @@ def equipo_telefonico_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipo Telefonico',
+        'clave': '1070',
         'nav':rol
         })
     return render(request, 'equipos/equipo_telefonico_list.html', {
         'equipos_telefonicos': equipos_telefonicos,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipo Telefonico',
+        'clave': '1070',
         })
 
 @login_required
@@ -967,6 +1088,7 @@ def equipos_personales_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #equipos_personales_list = EquiposPersonales.objects.all()
@@ -976,6 +1098,8 @@ def equipos_personales_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             equipos_personales_list = EquiposPersonales.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -983,8 +1107,13 @@ def equipos_personales_list(request):
     else:
         equipos_personales_list = EquiposPersonales.objects.all()
 
+    if secretaria:
+        equipos_personales_list = equipos_personales_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         equipos_personales_list = equipos_personales_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('EquiposPersonales', equipos_personales_list)
     paginator = Paginator(equipos_personales_list, 10)  # Muestra 10 equipos personales por página
 
     page_number = request.GET.get('page')
@@ -1003,13 +1132,23 @@ def equipos_personales_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipos personales',
+        'clave': '1030',
         'nav':rol
         })
     return render(request, 'equiposp/equipos_personales_list.html', {
         'equipos_personales': equipos_personales,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipos personales',
+        'clave': '1030',
         })
 
 @login_required
@@ -1248,6 +1387,7 @@ def equipos_servidores_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #equipos_servidores_list = EquiposServidores.objects.all()
@@ -1257,14 +1397,21 @@ def equipos_servidores_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             equipos_servidores_list = EquiposServidores.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
             equipos_servidores_list = EquiposServidores.objects.filter(fecha__year=year)
     else:
         equipos_servidores_list = EquiposServidores.objects.all()
+    if secretaria:
+        equipos_servidores_list = equipos_servidores_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         equipos_servidores_list = equipos_servidores_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('EquiposServidores', equipos_servidores_list)
     paginator = Paginator(equipos_servidores_list, 10)  # Muestra 10 equipos servidores por página
 
     page_number = request.GET.get('page')
@@ -1283,13 +1430,24 @@ def equipos_servidores_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipo de computo servidor',
+        'clave': '1040',
         'nav':rol
         })
     return render(request, 'equiposs/equipos_servidores_list.html', {
         'equipos_servidores': equipos_servidores,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Equipo de computo servidor',
+        'clave': '1040',
+        'nav':rol
         })
 
 
@@ -1589,6 +1747,7 @@ def firewalls_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #firewalls_list = Firewalls.objects.all()
@@ -1598,15 +1757,22 @@ def firewalls_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             firewalls_list = Firewalls.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
             firewalls_list = Firewalls.objects.filter(fecha__year=year)
     else:
-        conmufirewalls_listtadores = Firewalls.objects.all()
+        firewalls_list = Firewalls.objects.all()
 
+    if secretaria:
+        firewalls_list = firewalls_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         firewalls_list = firewalls_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Firewalls', firewalls_list)
     paginator = Paginator(firewalls_list, 10)  # Muestra 10 firewalls por página
 
     page_number = request.GET.get('page')
@@ -1625,13 +1791,23 @@ def firewalls_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Firewalls',
+        'clave': '1090',
         'nav':rol
         })
     return render(request, 'firewalls/firewalls_list.html', {
         'firewalls': firewalls,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Firewalls',
+        'clave': '1090',
         })
 
 @login_required
@@ -1747,6 +1923,7 @@ def herramientas_desarrollo_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
@@ -1756,6 +1933,8 @@ def herramientas_desarrollo_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -1763,8 +1942,13 @@ def herramientas_desarrollo_list(request):
     else:
         herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
 
+    if secretaria:
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         herramientas_desarrollo_list = herramientas_desarrollo_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('HerramientaDeDesarrollo', herramientas_desarrollo_list)
     paginator = Paginator(herramientas_desarrollo_list, 10)  # Muestra 10 herramientas de desarrollo por página
 
     page_number = request.GET.get('page')
@@ -1783,13 +1967,23 @@ def herramientas_desarrollo_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Herramientas de desarrollo',
+        'clave': '1110',
         'nav':rol
         })
     return render(request, 'herramientas/herramientas_desarrollo_list.html', {
         'herramientas_desarrollo': herramientas_desarrollo,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Herramientas de desarrollo',
+        'clave': '1110',
         })
 
 
@@ -1843,6 +2037,7 @@ def impresoras_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     #impresoras_list = Impresoras.objects.all()
@@ -1852,6 +2047,8 @@ def impresoras_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             impresoras_list = Impresoras.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -1859,8 +2056,13 @@ def impresoras_list(request):
     else:
         impresoras_list = Impresoras.objects.all()
 
+    if secretaria:
+        impresoras_list = impresoras_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         impresoras_list = impresoras_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Impresoras', impresoras_list)
     paginator = Paginator(impresoras_list, 10)  # Muestra 10 impresoras por página
 
     page_number = request.GET.get('page')
@@ -1878,13 +2080,23 @@ def impresoras_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Impresoras',
+        'clave': '1050',
         'nav':rol
         })
     return render(request, 'impresoras/impresoras_list.html', {
         'impresoras': impresoras,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Impresoras',
+        'clave': '1050',
         })
 
 @login_required
@@ -2061,6 +2273,7 @@ def proyectores_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     proyectores_list = Proyectores.objects.all()
@@ -2070,6 +2283,8 @@ def proyectores_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             proyectores_list = Proyectores.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -2077,8 +2292,13 @@ def proyectores_list(request):
     else:
         proyectores_list = Proyectores.objects.all()
 
+    if secretaria:
+        proyectores_list = proyectores_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         proyectores_list = proyectores_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Proyectores', proyectores_list)
     paginator = Paginator(proyectores_list, 10)  # Muestra 10 proyectores por página
 
     page_number = request.GET.get('page')
@@ -2097,13 +2317,23 @@ def proyectores_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Proyectores',
+        'clave': '1060',
         'nav':rol
         })
     return render(request, 'proyectores/proyectores_list.html', {
         'proyectores': proyectores,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Proyectores',
+        'clave': '1060',
         })
 
 
@@ -2222,6 +2452,7 @@ def routers_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     routers_list = Routers.objects.all()
@@ -2231,6 +2462,8 @@ def routers_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             routers_list = Routers.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -2238,8 +2471,13 @@ def routers_list(request):
     else:
         routers_list = Routers.objects.all()
 
+    if secretaria:
+        routers_list = routers_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         routers_list = routers_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Routers', routers_list)
     paginator = Paginator(routers_list, 10)  # Muestra 10 routers por página
 
     page_number = request.GET.get('page')
@@ -2257,13 +2495,23 @@ def routers_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Routers',
+        'clave': '1091',
         'nav':rol
         })
     return render(request, 'routers/routers_list.html', {
         'routers': routers,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Routers',
+        'clave': '1091',
         })
 
 @login_required
@@ -2316,8 +2564,11 @@ def roles_list(request):
     rol = usu(request)
     search = request.GET.get('search')
     roles_list = Roles.objects.all()
+
     if search:
         roles_list = roles_list.filter(no_inventario__icontains=search)
+    
+
     paginator = Paginator(roles_list, 10)  # Muestra 10 routers por página
 
     page_number = request.GET.get('page')
@@ -2432,6 +2683,7 @@ def sistemas_informacion_movil_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     if 'secretaria' in request.GET:
@@ -2439,6 +2691,8 @@ def sistemas_informacion_movil_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -2446,8 +2700,13 @@ def sistemas_informacion_movil_list(request):
     else:
         sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.all()
     
+    if secretaria:
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('SistemaDeInformacionMovil', sistemas_informacion_movil_list)
     paginator = Paginator(sistemas_informacion_movil_list, 10)  # Muestra 10 sistemas de información móvil por página
 
     page_number = request.GET.get('page')
@@ -2465,13 +2724,23 @@ def sistemas_informacion_movil_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sistema De Informacion Movil',
+        'clave': '1130',
         'nav':rol,
         })
     return render(request, 'sistemas_informacion_movil/sistemas_informacion_movil_list.html', {
         'sistemas_informacion_movil': sistemas_informacion_movil,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sistema De Informacion Movil',
+        'clave': '1130',
         })
 
 @login_required
@@ -2587,6 +2856,7 @@ def sistemas_informacion_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
 
@@ -2595,6 +2865,8 @@ def sistemas_informacion_list(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
+        
+        
         if dependencia:
             sistemas_informacion_list = SistemasInformacion.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -2602,8 +2874,13 @@ def sistemas_informacion_list(request):
     else:
         sistemas_informacion_list = SistemasInformacion.objects.all()
 
+    if secretaria:
+        sistemas_informacion_list = sistemas_informacion_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         sistemas_informacion_list = sistemas_informacion_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('SistemasInformacion', sistemas_informacion_list)
     paginator = Paginator(sistemas_informacion_list, 10)  # Muestra 10 sistemas de información por página
 
     page_number = request.GET.get('page')
@@ -2622,13 +2899,23 @@ def sistemas_informacion_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sistemas de Informacion',
+        'clave': '1120',
         'nav':rol,
         })
     return render(request, 'sistemas_informacion/sistemas_informacion_list.html', {
         'sistemas_informacion': sistemas_informacion,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sistemas de Informacion',
+        'clave': '1120',
         })
 
 @login_required
@@ -2744,6 +3031,7 @@ def sites_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
     sites_list = Sites.objects.all()
@@ -2752,7 +3040,8 @@ def sites_list(request):
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
-    if year:
+    if year:       
+        
         if dependencia:
             sites_list = Sites.objects.filter(id_dependencia=dependencia,fecha__year=year)
         else:
@@ -2760,8 +3049,13 @@ def sites_list(request):
     else:
         sites_list = Sites.objects.all()
 
+    if secretaria:
+        sites_list = sites_list.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         sites_list = sites_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Sites', sites_list)
     paginator = Paginator(sites_list, 10)  # Muestra 10 sitios por página
 
     page_number = request.GET.get('page')
@@ -2780,13 +3074,23 @@ def sites_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sites',
+        'clave': '1230',
         'nav':rol
         })
     return render(request, 'sites/sites_list.html', {
         'sites': sites,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Sites',
+        'clave': '1230',
         })
 
 @login_required
@@ -2839,6 +3143,7 @@ def usuarios_list(request):
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     dependencia = request.GET.get('dependencia')
+    secretaria = request.GET.get('secretariaSelec')
     search = request.GET.get('search')
     usuarios = Usuarios.objects.all()
 
@@ -2853,8 +3158,12 @@ def usuarios_list(request):
     else:
         usuarios = Usuarios.objects.all()
 
+    if secretaria:
+        usuarios = usuarios.filter(id_dependencia__id_secretaria=secretaria)
     if search:
         usuarios = usuarios.filter(email__icontains=search)
+    if request.GET.get('descarga') == '1':
+        return generate_excel('Usuarios', usuarios)
     paginator = Paginator(usuarios, 10)  # Muestra 10 sitios por página
 
     page_number = request.GET.get('page')
@@ -2873,13 +3182,21 @@ def usuarios_list(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.GET.get('secretaria'),
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Usuarios',
+        'clave': '1310',
         'nav':rol
         })
     return render(request, 'usuarios/usuarios_list.html', {
         'usuarios': usuarios,
         'secretarias': secretarias,
         'dependencias': dependencias,
-        'selected_secretaria': request.GET.get('secretaria')
+        'selected_secretaria': request.GET.get('secretaria'),
+        'selected_secretaria': request.GET.get('secretaria'),
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'inventario': 'Usuarios',
         })
 
 

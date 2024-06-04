@@ -11,6 +11,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
 </head>
+<h1>
+{% if secretaria %}
+{{secretaria.nombre_secretaria}} 
+{% endif %}
+{% if dependencia %}
+{{dependencia.nombre_dependencia}} 
+{% endif %}
+{% if anio %}
+{{anio}} 
+{% endif %}
+</h1>
 <body>
 
   <form id="filtroForm" method="GET" action="{% url 'inventario' %}">
@@ -18,6 +29,8 @@
     <input type="hidden" id="categoria" name="categoria" value="">
     <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
     <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
+    <input type="hidden" id="secretariaSelec" name="secretariaSelec" value="">
+    <input type="hidden" id="descarga" name="descarga" value="0">
     <div class="inline-container">
     <label for="categoria3">Categoría:</label>
     <select id="categoria3" onchange="actualizarCategorias3()">
@@ -30,11 +43,18 @@
   
     <label for="subcategoria3">Subcategoría:</label>
     <select id="subcategoria3" onchange="cambiaSub()">
+    {% if clave %}
+    <option value={{clave}}>{{inventario}}</option>
+    {% endif %}
     </select>
   
     <label for="secretaria">Secretaría:</label>
     <select id="secretaria" onchange="actualizarDependencias()">
+        {% if  secretaria%}
+        <option value={{secretaria.id}}>{{secretaria.nombre_secretaria}}</option>
+        {% else %}
         <option value="">Seleccionar secretaría</option>
+        {% endif %}
         {% for secretaria in secretarias %}
         <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
         {% endfor %}
@@ -42,7 +62,11 @@
   
     <label for="dependenciagi">Dependencia:</label>
     <select id="dependencia" onchange="cambiaDepen()">
+        {% if dependencia %}
+        <option value={{dependencia.id}}>{{dependencia.nombre_dependencia}}</option>
+        {% else %}
         <option value="">Seleccionar dependencia</option>
+        {% endif %}
     </select>
     </div>
     <div class="inline-container">
@@ -52,6 +76,7 @@
     <label>Busqueda: </label>
     <input type="text" id="serch" name="serch">
     <button id="limpiarFiltros3" type="submit">Buscar</button>
+    <button id="limpiarFiltros3" type="submit" name="download" value="true" onclick=descarga()>Descargar</button>
     </div>  
   </form>
 
@@ -59,6 +84,16 @@
 
  
    <script>
+    window.onload = function() {
+        cambiaDep();
+        cambiaDepen();
+        cambiaSub()
+        cargarDependencias();
+    };
+
+    function descarga(){
+        document.getElementById("descarga").value = 1;
+    }
      // Función para actualizar las subcategorías
      function actualizarCategorias3() {
          var categoriaSeleccionada = document.getElementById("categoria3").value;
@@ -121,6 +156,10 @@
          // Actualiza la subcategoría seleccionada
          mostrarContenido();
      }
+     function cambiaDep(){
+        var secretaria = document.getElementById("secretaria").value;
+        document.getElementById("secretariaSelec").value = secretaria;
+       }
      function cambiaSub(){
       var subcategoria = document.getElementById("subcategoria3").value;
       document.getElementById("subcategoriaSelec").value = subcategoria;
@@ -164,9 +203,11 @@
                   var dependencias = JSON.parse(xhr.responseText);
 
                   // Agregar las opciones de dependencia al combobox
-                  dependenciaSelect.innerHTML += "<option value=''>" + "Selecciona" + "</option>"
-                  dependencias.forEach(function(dependencia) {
-                      dependenciaSelect.innerHTML += "<option value='" + dependencia.id + "'>" + dependencia.nombre_dependencia + "</option>";
+
+                dependenciaSelect.innerHTML += "<option value=''>" + "Selecciona" + "</option>"
+                  //dependenciaSelect.innerHTML += "<option value=''>" + "Selecciona" + "</option>"
+                  dependencias.forEach(function(depen) {
+                      dependenciaSelect.innerHTML += "<option value='" + depen.id + "'>" + depen.nombre_dependencia + "</option>";
                   });
               } else {
                   console.error("Error al cargar las dependencias");
@@ -178,6 +219,7 @@
 
   // Evento para cargar las dependencias cuando se selecciona una secretaria
     function actualizarDependencias() {
+        cambiaDep();
         cargarDependencias();
     }
 

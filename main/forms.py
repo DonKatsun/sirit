@@ -1,31 +1,57 @@
 from django import forms
 from .models import *
+from datetime import date
+from collections import OrderedDict
 
 class ConmutadorForm(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
+
     class Meta:
         model = Conmutadores
         fields = '__all__'
         labels = {
             'id_dependencia': 'Dependencia: ',
             'id_marca': 'Marca: ',
-            'no_inventario' : 'Inventario:',
-            'fecha' : 'Fecha:',
+            'no_inventario': 'Inventario:',
+            'fecha': 'Fecha:',
             'activo': 'Activo:',
             'tipo': 'Tipo:',
-            'tecnologia':'Tecnología:',
-            'protocolo':'Protocólo:',
-            'modelo':'Modelo:',
-            'ext_soportadas':'Ext Soportadas:',
-            
+            'tecnologia': 'Tecnología:',
+            'protocolo': 'Protocólo:',
+            'modelo': 'Modelo:',
+            'ext_soportadas': 'Ext Soportadas:',
+            'secretaria': 'Secretaría:',
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_conmutador) for obj in ConmutadoresMarcas.objects.all()])
+        # Convertir self.fields a OrderedDict
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
+
 
 class ConmutadorMarcaForm(forms.ModelForm):
     class Meta:
@@ -68,6 +94,11 @@ class AlmacenamientoMarcasForm(forms.ModelForm):
        
 
 class AlmacenamientosForm(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Almacenamientos
         fields = '__all__'
@@ -76,18 +107,35 @@ class AlmacenamientosForm(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'capacidad':'Capacidad:',
             'tipo': 'Tipo:',
             'id_marca': 'Marca: ',
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_almacenamiento) for obj in AlmacenamientoMarcas.objects.all()])
 
         
@@ -103,6 +151,11 @@ class DependenciasForms(forms.ModelForm):
         fields = '__all__'
 
 class DronesForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Drones
         fields = '__all__'
@@ -111,6 +164,7 @@ class DronesForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'marca': 'Marca: ',
             'tipo':'Tipo:',
             'tipo_uso':'Tipo de Uso:',
@@ -121,12 +175,28 @@ class DronesForms(forms.ModelForm):
             'bateria':'Bateria:',         
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
 
 
 
@@ -157,6 +227,11 @@ class DronesAsignacionCaracteristicasForms(forms.ModelForm):
 
 
 class EnergiasForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Energias
         fields = '__all__'
@@ -165,6 +240,7 @@ class EnergiasForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'capacidad':'Capacidad:',
             'tipo': 'Tipo:',
             'modelo':'Modelo:',
@@ -172,12 +248,28 @@ class EnergiasForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_energia) for obj in EnergiaMarcas.objects.all()])
 
 
@@ -194,6 +286,11 @@ class EnergiaMarcasForms(forms.ModelForm):
         # Seleccionar un campo específico de los objetos relacionados
        
 class EnlacesForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Enlaces
         fields = '__all__'
@@ -202,6 +299,7 @@ class EnlacesForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'ancho_banda':'Ancho de Banda:',
             'domicilio': 'Domicilio:',
             'id_municipio':'Municipio:',
@@ -209,12 +307,28 @@ class EnlacesForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_tipo'].widget = forms.Select(choices=[(obj.pk, obj.tipo_enlace) for obj in EnlacesTipos.objects.all()])
         self.fields['domicilio'].widget = forms.TextInput()
 
@@ -232,6 +346,11 @@ class EnlacesTiposForms(forms.ModelForm):
 
 
 class EquipoTelefonicoForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = EquipoTelefonico
         fields = '__all__'
@@ -240,6 +359,7 @@ class EquipoTelefonicoForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'tipo_tel': 'Tipo de Telefono: ',
             'tipo_linea':'Tipo de Linea:',
             'tipo_ext':'Tipo de Ext:',
@@ -247,15 +367,36 @@ class EquipoTelefonicoForms(forms.ModelForm):
                 
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
 
 
 class EquiposPersonalesForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = EquiposPersonales
         fields = '__all__'
@@ -264,6 +405,7 @@ class EquiposPersonalesForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'marca': 'Marca: ',
             'tipo':'Tipo:',
             'modelo':'Modelo:',
@@ -286,14 +428,30 @@ class EquiposPersonalesForms(forms.ModelForm):
                 
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
 
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_equipopersonal) for obj in EquiposPersonalesMarcas.objects.all()])
 
 
@@ -340,6 +498,11 @@ class EquiposPersonalesTipoForms(forms.ModelForm):
         # Seleccionar un campo específico de los objetos relacionados
        
 class EquiposServidoresForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = EquiposServidores
         fields = '__all__'
@@ -348,6 +511,7 @@ class EquiposServidoresForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'tipo':'Tipo:',
             'criticidad':'Criticidad:',
             'proposito': 'Proposito:',
@@ -369,14 +533,30 @@ class EquiposServidoresForms(forms.ModelForm):
        
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
 
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_equipopersonal) for obj in EquiposServidoresMarcas.objects.all()])
         self.fields['id_tipo'].widget = forms.Select(choices=[(obj.pk, obj.tipo_equipopersonal) for obj in EquiposServidoresTipos.objects.all()])
 
@@ -429,6 +609,11 @@ class EquiposServidoresTiposForms(forms.ModelForm):
       
 
 class FirewallsForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Firewalls
         fields = '__all__'
@@ -437,6 +622,7 @@ class FirewallsForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'tipo': 'Tipo:',
             'cant_puertos': 'Cantidad de Puertos:',
             'tipo_almacenamiento':'Tipo de Almacenamiento:',
@@ -449,12 +635,28 @@ class FirewallsForms(forms.ModelForm):
             'id_marca': 'Marca: ',  
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_firewall) for obj in FirewallsMarcas.objects.all()])
 
 class FirewallsMarcasForms(forms.ModelForm):
@@ -472,6 +674,11 @@ class FirewallsMarcasForms(forms.ModelForm):
       
 
 class HerramientaDeDesarrolloForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = HerramientaDeDesarrollo
         fields = '__all__'
@@ -480,6 +687,7 @@ class HerramientaDeDesarrolloForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'nombre': 'Nombre:',
             'cantidad_licencias': 'Cantidad de Licencias:',
             'tipo_licencias':'Tipo de Licencias:',
@@ -490,15 +698,36 @@ class HerramientaDeDesarrolloForms(forms.ModelForm):
           
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['descripcion'].widget = forms.TextInput() 
 
 class ImpresorasForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Impresoras
         fields = '__all__'
@@ -507,6 +736,7 @@ class ImpresorasForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'imprime_color': 'Imprime Color:',
             'conexion': 'Conexión :',
             'tipo_impresion':'Tipo de Impresión:',
@@ -515,12 +745,28 @@ class ImpresorasForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_impresora) for obj in ImpresorasMarcas.objects.all()])
       
 
@@ -549,6 +795,11 @@ class MunicipiosForms(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
 class ProyectoresForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Proyectores
         fields = '__all__'
@@ -557,6 +808,7 @@ class ProyectoresForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'forma_conexion_internet': 'Forma de Conexion a Internet:',
             'conexion_pc': 'Conexión PC:',
             'descripcion':'Descripción:',
@@ -566,12 +818,28 @@ class ProyectoresForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['marca'].widget = forms.Select(choices=[(obj.pk, obj.marca_proyector) for obj in ProyectoresMarcas.objects.all()])
         self.fields['descripcion'].widget = forms.TextInput()  
 class ProyectoresMarcasForms(forms.ModelForm):
@@ -588,6 +856,11 @@ class ProyectoresMarcasForms(forms.ModelForm):
       
 
 class RoutersForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Routers
         fields = '__all__'
@@ -596,6 +869,7 @@ class RoutersForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'marca': 'Marca: ',
             'modelo': 'Modelo:',
             'no_serie':'Serie:',
@@ -603,12 +877,28 @@ class RoutersForms(forms.ModelForm):
             'num_tarjetas':'Número Tarjetas:',          
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
 
 class RolesForms(forms.ModelForm):
     class Meta:
@@ -638,6 +928,11 @@ class SecretariasForms(forms.ModelForm):
 
 
 class SistemaDeInformacionMovilForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = SistemaDeInformacionMovil
         fields = '__all__'
@@ -646,6 +941,7 @@ class SistemaDeInformacionMovilForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'plataforma': 'Plataforma:',
             'tipo_desarrollo': 'Tipo de desarrollo:',
             'framework':'Framework:',
@@ -666,12 +962,28 @@ class SistemaDeInformacionMovilForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_nombre'].widget = forms.Select(choices=[(obj.pk, obj.nombre_sistemainfo) for obj in SistemaInformacionMovilNombres.objects.all()])
         self.fields['descripcion'].widget = forms.TextInput()
 
@@ -690,6 +1002,11 @@ class SistemaInformacionMovilNombresForms(forms.ModelForm):
        
 
 class SistemasInformacionForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = SistemasInformacion
         fields = '__all__'
@@ -698,6 +1015,7 @@ class SistemasInformacionForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'esquema': 'Esquema:',
             'lenguaje': 'Lenguaje:',
             'bd':'BD:',
@@ -716,12 +1034,28 @@ class SistemasInformacionForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_nombre'].widget = forms.Select(choices=[(obj.pk, obj.nombre_sistemainfo) for obj in SistemasInformacionNombres.objects.all()])
         self.fields['descripcion'].widget = forms.TextInput()
 
@@ -739,6 +1073,11 @@ class SistemasInformacionNombresForms(forms.ModelForm):
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
       
 class SitesForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Sites
         fields = '__all__'
@@ -747,6 +1086,7 @@ class SitesForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'metros': 'Metros:',
             'opc': 'OPC:',
             'capacidad_aire':'Capacidad de Aire:',
@@ -759,16 +1099,37 @@ class SitesForms(forms.ModelForm):
             
         }
         widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'})
+            'fecha': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'}),
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_municipio'].widget = forms.Select(choices=[(obj.pk, obj.municipio) for obj in Municipios.objects.all()])
         self.fields['domicilio'].widget = forms.TextInput()
 
 class UsuariosForms(forms.ModelForm):
+    secretaria = forms.ModelChoiceField(
+        queryset=Secretarias.objects.all(),
+        required=False,
+        label="Secretaría",
+    )
     class Meta:
         model = Usuarios
         fields = '__all__'
@@ -776,6 +1137,7 @@ class UsuariosForms(forms.ModelForm):
 
         labels = {
             'id_dependencia': 'Dependencia: ',
+'secretaria': 'Secretaría:',
             'email': 'Email:',
             'contrasenia': 'Contraseña:',
             'nombre':'Nombre:',
@@ -789,7 +1151,23 @@ class UsuariosForms(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
-        self.fields['id_dependencia'].widget = forms.Select(choices=[(obj.pk, obj.nombre_dependencia) for obj in Dependencias.objects.all()])
+        self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('id_dependencia', False)
+        self.fields.move_to_end('secretaria', False)
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['id_dependencia'].widget = forms.Select()
+        
+
+        # Verificar si es una instancia existente o una nueva
+        if self.instance and self.instance.pk:
+            # Es una instancia existente, mostrar la fecha guardada
+            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
+        else:
+            # Es una nueva instancia, poner la fecha actual
+            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
+
+        # Hacer que el campo de fecha sea solo de lectura
+        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
   
 

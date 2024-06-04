@@ -101,6 +101,13 @@ def carga(request):
             
         })
     
+    elif request.method == 'POST':
+       return render(request, "carga.html", {
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.POST.get('secretaria'),
+        'error_message': 'Ningún archivo seleccionado'
+    }) 
 
     return render(request, "carga.html", {
         'secretarias': secretarias,
