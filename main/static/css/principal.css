@@ -24,6 +24,10 @@ tr:last-child td {
 .tabla-desactivada {
     display: none  ;
 }
+label {
+    font-family: 'Montserrat', open-sans !important;
+  font-weight: bold;
+  }
 
 .inline-container {
     display: flex  ;
@@ -180,6 +184,9 @@ select option {
 input[type="submit" i]:hover{
 color: white  ;
 background-color: #691B31;
+}
+.selectyear {
+    display: flex !important;
 }
 @media screen and (max-width: 768px) {
     h1{
