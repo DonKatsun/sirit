@@ -1,0 +1,21 @@
+<!-- templates/pages/store_user_info.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciando</title>
+</head>
+<body>
+    <script>
+        (function() {
+            var user = {
+                username: "{{ user_data.username }}",
+                email: "{{ user_data.email }}",
+                // Añadir otros atributos del usuario que necesites
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+            window.location.href = '/inventario';
+        })();
+    </script>
+</body>
+</html>

@@ -1156,19 +1156,10 @@ class UsuariosForms(forms.ModelForm):
         self.fields.move_to_end('secretaria', False)
         self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
         self.fields['id_dependencia'].widget = forms.Select()
-        
-
-        # Verificar si es una instancia existente o una nueva
-        if self.instance and self.instance.pk:
-            # Es una instancia existente, mostrar la fecha guardada
-            self.fields['fecha'].initial = self.instance.fecha.strftime('%Y-%m-%d')
-        else:
-            # Es una nueva instancia, poner la fecha actual
-            self.fields['fecha'].initial = date.today().strftime('%Y-%m-%d')
-
-        # Hacer que el campo de fecha sea solo de lectura
-        self.fields['fecha'].widget.attrs['readonly'] = True
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
+
+
+        
   
 
 '''class LoginForm(forms.Form):

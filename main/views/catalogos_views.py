@@ -3215,7 +3215,7 @@ def usuario_create(request):
             # Crear un usuario en el modelo User y guardar su id en el campo 'usuario' de Usuarios
             nuevo_user = User.objects.create_user(username=usuario.email, password=usuario.contrasenia)
             # Actualizar el campo 'usuario' con el nombre de usuario del nuevo usuario
-            usuario.usuario = nuevo_user.username
+            usuario.usuario = nuevo_user.id
             # Obtener la contraseña cifrada del nuevo usuario
             contrasenia_cifrada = nuevo_user.password
             # Asignar la contraseña cifrada al campo 'contrasenia' del objeto 'usuario'
@@ -3236,7 +3236,7 @@ def usuario_update(request, pk):
         if form.is_valid():
             form.save()
             # Actualizar el usuario correspondiente en el modelo User
-            user = User.objects.get(username=usuario.usuario)
+            user = User.objects.get(username=usuario.id)
             user.set_password(usuario.contrasenia)
             user.save()
             return redirect('usuarios_list')
@@ -3249,7 +3249,7 @@ def usuario_delete(request, pk):
     usuario = Usuarios.objects.get(pk=pk)
     if request.method == 'POST':
         # Eliminar el usuario correspondiente en el modelo User
-        user = User.objects.get(username=usuario.usuario)
+        user = User.objects.get(username=usuario.id)
         user.delete()
         usuario.delete()
         return redirect('usuarios_list')
