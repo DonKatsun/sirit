@@ -154,25 +154,34 @@
             background-color: #e7e4e4;
             color: #000;
         }
+        .pagination {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 10px !important;
+            width: 100%; /* Asegura que el contenedor ocupa todo el ancho disponible */
+            clear: both !important; /* Limpiar flotantes */
+        }
 
         .step-links {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start; /* Alinea el contenido a la izquierda */
             align-items: center;
             font-size: 0.8em;
-            margin-right: 20px;
+            margin-left: 20px; /* Cambia de margin-right a margin-left para la alineación izquierda */
         }
-        
+
         .step-links a {
             text-decoration: none;
             color: black;
             margin-left: 10px;
         }
-        
+
         .current {
             font-size: 1em;
         }
-        
+
+
         #searchInput {
             background-color: white;
             border: 1px solid #383737;
@@ -222,23 +231,24 @@
             {% endfor %}
         </tbody>
     </table>
-
     <div class="pagination">
         <span class="step-links">
             <span class="current">
                 Página {{ drones_caracteristicas.number }} de {{ drones_caracteristicas.paginator.num_pages }}.
             </span>
-
+    
             {% if drones_caracteristicas.has_previous %}
             <a href="?page=1">&laquo; Primera</a>
             <a href="?page={{ drones_caracteristicas.previous_page_number }}">Anterior</a>
-        {% endif %}
-
-        {% if drones_caracteristicas.has_next %}
+            {% endif %}
+    
+            {% if drones_caracteristicas.has_next %}
             <a href="?page={{ drones_caracteristicas.next_page_number }}">Siguiente</a>
             <a href="?page={{ drones_caracteristicas.paginator.num_pages }}">Última &raquo;</a>
-        {% endif %}
+            {% endif %}
         </span>
+    </div>
+    
 
     <!-- Ventana emergente de confirmación -->
     <div id="myModal" class="modal">

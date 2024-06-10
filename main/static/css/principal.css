@@ -1,160 +1,357 @@
 .tabla-reporte {
-    overflow-x: auto !important;
-    width: 96% !important;
-    background-color: #d9d9d9 !important;
+    overflow-x: auto  ;
+    width: 96%  ;
+    background-color: none  ;
     margin-left: 2%;
 }
-
+h1{
+    text-align: center;
+    margin-top: 50px;
+}
 table {
-    border-collapse: collapse !important;
-    width: 100% !important;
+    border-collapse: collapse  ;
+    width: 100%  ;
 }
 th, td {
-    border-bottom: none !important;
-    padding: 8px !important;
-    text-align: left !important;
+    border-bottom: none  ;
+    padding: 8px  ;
+    text-align: left  ;
 }
 tr:last-child td {
-    border-bottom: none !important;
+    border-bottom: none  ;
 }
 
 .tabla-desactivada {
-    display: none !important;
+    display: none  ;
 }
+label {
+    font-family: 'Montserrat', open-sans !important;
+  font-weight: bold;
+  }
 
 .inline-container {
-    display: flex !important;
-    align-items: center !important;
-    margin: 30px !important;
-    margin-right: 1100px !important;
+    display: flex  ;
+    align-items: center  ;
+    margin: 30px  ;
+    margin-right: 1100px  ;
 }
 
 .inline-container label,
 .inline-container select,
 .inline-container input {
-    margin-right: 30px !important;
+    margin-right: 30px  ;
 }
 
 .inline-container select {
-    width: 200px !important;
+    width: 200px  ;
 }
 
 .inline-container button {
-    padding: 10px 20px !important;
-    border-radius: 5px !important;
-    background-color: white !important;
-    border: 1px solid #383737 !important;
-    color: #383737 !important;
-    cursor: pointer !important;
+    
+  font-family:'Montserrat', open-sans ;
+    padding: 10px 20px  ;
+    border-radius: 10px  ;
+    background-color: white  ;
+    border: 1px solid #06790e  ;
+    color: #06790e  ;
+    cursor: pointer  ;
+    width: 120px  ;
+    height: 50px  ;
 }
 
 .inline-container button:hover {
-    background-color: #383737 !important;
-    color: white !important;
+    background-color: #06790e  ;
+    color: white  ;
 }
 
 input {
-    background-color: white !important;
-    border: 1px solid #383737 !important;
-    color: #383737 !important;
-    border-radius: 10px !important;
-    padding: 1px !important;
-    font-size: 16px !important;
-    width: 120px !important;
-    height: 50px !important;
-    margin: 30px !important;
+    font-family:'Montserrat', open-sans ;
+    background-color: white  ;
+    border: 1px solid #A02142  ;
+    color: #A02142  ;
+    border-radius: 10px  ;
+    padding: 1px  ;
+    font-size: 16px  ;
+    width: 100px  !important;
+    height: 50px  ;
+    margin: 30px  ;
 }
-
+input[type="submit" i]:hover {
+    border: #691B31  ;
+    background-color: #691B31   ;
+    color: #ffffff;
+}
 select {
-    background-color: white !important;
-    border: 1px solid #383737 !important;
-    color: #383737 !important;
-    border-radius: 10px !important;
-    padding: 8px !important;
-    font-size: 16px !important;
-    width: 120px !important;
-    height: 50px !important;
-    margin: 30px !important;
+    font-family:'Montserrat', open-sans ;
+    background-color: white  ;
+    border: 1px solid #691B31  ;
+    color: #691B31  ;
+    border-radius: 10px  ;
+    padding: 8px  ;
+    font-size: 16px  ;
+    width: 120px  ;
+    height: 50px  ;
+    margin: 30px  ;
 }
 
 select option {
-    background-color: #d9d9d9 !important;
-    color: #383737 !important;
-    font-size: 16px !important;
+    font-family:'Montserrat', open-sans ;
+    background-color: #d9d9d9  ;
+    color: #691B31  ;
+    font-size: 16px  ;
 }
 
 .form-control.datepicker {
-    background-color: white !important;
-    border: 1px solid #383737 !important;
-    color: #383737 !important;
-    border-radius: 10px !important;
-    padding: 8px !important;
-    font-size: 16px !important;
-    width: 120px !important;
-    height: 50px !important;
-    margin: 10px !important;
+    font-family:'Montserrat', open-sans ;
+    background-color: white  ;
+    border: 1px solid #691B31  ;
+    color: #691B31  ;
+    border-radius: 10px  ;
+    padding: 8px  ;
+    font-size: 16px  ;
+    width: 120px  ;
+    height: 50px  ;
+    margin: 10px  ;
 }
 
 .form-control.datepicker:focus {
-    outline: none !important;
-    border-color: #6c757d !important;
-    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25) !important;
+    outline: none  ;
+    border-color: #691B31  ;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25)  ;
 }
 
 #limpiarFiltros,
 #limpiarFiltros2,
 #limpiarFiltros3 {
-    background-color: white !important;
-    color: #383737 !important;
-    font-size: 1.5em !important;
-    border: none !important;
-    border-radius: 5px !important;
-    padding: 10px 20px !important;
-    cursor: pointer !important;
-    text-decoration: underline !important;
+    font-family:'Montserrat', open-sans ;
+    background-color: white  ;
+    color: #691B31  ;
+    font-size: 1.5em  ;
+    border: none  ;
+    border-radius: 5px  ;
+    padding: 10px 20px  ;
+    cursor: pointer  ;
+    text-decoration: underline  ;
 }
 
 .buttons-container2 {
-    width: 100% !important;
-    margin-bottom: 0px !important;
+    width: 100%  ;
+    margin-bottom: 0px  ;
 }
 
 .button {
-    color: #383737 !important;
-    padding: 10px 10px !important;
-    font-size: 2em !important;
-    border: none !important;
-    width: 200px !important;
-    height: 30px !important;
-    border-radius: 20px 20px 0 0 !important;
-    cursor: pointer !important;
-    background-color: white !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    text-align: center !important;
-    text-decoration: underline !important;
+    font-family:'Montserrat', open-sans;
+    color: #A02142  ;
+    padding: 10px 10px ;
+    font-size: 2em ;
+    border: none ;
+    width: 200px ;
+    height: 30px ;
+    border-radius: 20px 20px 0 0 ;
+    cursor: pointer ;
+    background-color: white ;
+    text-decoration: none ;
+    display: inline-block ;
+    text-align: center ;
+    text-decoration: underline ;
 }
 
 .button.active {
-    background-color: #d9d9d9 !important;
-    color: #383737 !important;
-    text-decoration: none !important;
+    background-color: #d9d9d9  ;
+    color: #691B31  ;
+    text-decoration: none  ;
 }
 
 .button:hover {
-    background-color: #989898 !important;
+    background-color: #BC955B  ;
 }
 
 .seleccion {
-    font-size: 4em !important;
-    font-weight: bold !important;
-    color: #383737 !important;
-    margin-top: 10px !important;
-    margin-left: 30px !important;
+    font-family:'Montserrat', open-sans ;
+    font-size: 4em  ;
+    font-weight: bold  ;
+    color: #691B31  ;
+    margin-top: 10px  ;
+    margin-left: 30px  ;
 }
 
 .subseleccion {
-    font-size: 4em !important;
-    color: #383737 !important;
-    margin-top: 10px !important;
+    font-family:'Montserrat', open-sans ;
+    font-size: 4em  ;
+    color: #691B31  ;
+    margin-top: 10px  ;
+}
+input[type="submit" i]:hover{
+color: white  ;
+background-color: #691B31;
+}
+.selectyear {
+    display: flex !important;
+}
+@media screen and (max-width: 768px) {
+    h1{
+        text-align: center;
+        margin-top: 50px;
+        font-size: 2em !important ;
+    }
+    .inline-container {
+        display: flex  ;
+        align-items: center  ;
+        margin: 10px  ;
+        margin-right: 1100px  ;
+    }
+    
+    .inline-container label,
+    .inline-container select,
+    .inline-container input {
+        margin-right: 10px  ;
+    }
+    
+    .inline-container select {
+        width: 100px  ;
+    }
+    
+    .inline-container button {
+        font-size: 15px;
+      font-family:'Montserrat', open-sans ;
+        padding: 10px 20px  ;
+        border-radius: 10px  ;
+        background-color: white  ;
+        border: 1px solid #06790e  ;
+        color: #06790e  ;
+        cursor: pointer  ;
+        width: 120px  ;
+        height: 40px  ;
+    }
+    
+    .inline-container button:hover {
+        background-color: #06790e  ;
+        color: white  ;
+    }
+    
+    input {
+        font-size: 15px;
+        font-family:'Montserrat', open-sans ;
+        background-color: white  ;
+        border: 1px solid #A02142  ;
+        color: #A02142  ;
+        border-radius: 10px  ;
+        padding: 1px  ;
+        font-size: 8px  ;
+        width: 80px  ;
+        height: 40px  ;
+        margin: 30px  ;
+    }
+    input[type="submit" i]:hover {
+        border: #691B31  ;
+        background-color: #691B31   ;
+        color: #ffffff;
+    }
+    select {
+        font-family:'Montserrat', open-sans ;
+        background-color: white  ;
+        border: 1px solid #691B31  ;
+        color: #691B31  ;
+        border-radius: 10px  ;
+        padding: 8px  ;
+        font-size: 8px  ;
+        width: 80px  ;
+        height: 40px  ;
+        margin: 10px  ;
+    }
+    
+    select option {
+        font-family:'Montserrat', open-sans ;
+        background-color: #d9d9d9  ;
+        color: #691B31  ;
+        font-size: 16px  ;
+    }
+    
+    .form-control.datepicker {
+        font-family:'Montserrat', open-sans ;
+        background-color: white  ;
+        border: 1px solid #691B31  ;
+        color: #691B31  ;
+        border-radius: 10px  ;
+        padding: 8px  ;
+        font-size: 16px  ;
+        width: 80px  ;
+        height: 50px  ;
+        margin: 10px  ;
+    }
+    
+    .form-control.datepicker:focus {
+        outline: none  ;
+        border-color: #691B31  ;
+        box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25)  ;
+    }
+    
+    #limpiarFiltros,
+    #limpiarFiltros2,
+    #limpiarFiltros3 {
+        font-family:'Montserrat', open-sans ;
+        background-color: white  ;
+        color: #691B31  ;
+        font-size: 1.5em  ;
+        border: none  ;
+        border-radius: 5px  ;
+        padding: 10px 20px  ;
+        cursor: pointer  ;
+        text-decoration: underline  ;
+    }
+    
+    .buttons-container2 {
+        width: 100%  ;
+        margin-bottom: 0px  ;
+    }
+    
+    .button {
+        font-family:'Montserrat', open-sans ;
+        color: #A02142  ;
+        padding: 10px 10px  ;
+        font-size: 2em  ;
+        border: none  ;
+        width: 100px  ;
+        height: 40px  ;
+        border-radius: 20px 20px 0 0  ;
+        cursor: pointer  ;
+        background-color: white  ;
+        text-decoration: none  ;
+        display: inline-block  ;
+        text-align: center  ;
+        text-decoration: underline  ;
+    }
+    
+    .button.active {
+        background-color: #d9d9d9  ;
+        color: #691B31  ;
+        text-decoration: none  ;
+    }
+    
+    .button:hover {
+        background-color: #BC955B  ;
+    }
+    
+    .seleccion {
+        font-family:'Montserrat', open-sans ;
+        font-size: 15px  ;
+        font-weight: bold  ;
+        color: #691B31  ;
+        margin-top: 10px  ;
+        margin-left: 30px  ;
+    }
+    
+    .subseleccion {
+        font-family:'Montserrat', open-sans ;
+        font-size: 15px  ;
+        color: #691B31  ;
+        margin-top: 10px  ;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1424px) {
+}
+
+@media screen and (min-width: 1424px) {
+
 }

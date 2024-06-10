@@ -5,40 +5,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalogo</title>
+<title>Catálogo</title>
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
-
 <body>
-
-    <form id="filtroForm" method="GET" action="{% url 'catalogo' %}">
-        {% csrf_token %}
-        
-        <label for="categoria3">Catalogo:</label>
-        <select id="categoria3" onchange="actualizarCategorias3()">
+  <form id="filtroForm" method="GET" action="{% url 'catalogo' %}">
+    {% csrf_token %}
+    <div class="row">
+      <div class="p-4 inline-container">
+        <div class="form-group">
+          <label for="categoria3">Catálogo:</label>
+          <select id="categoria3" onchange="actualizarCategorias3()">
             <option value="">Selecciona</option>
-            <option value="sec">Secretarias</option>
+            <option value="sec">Secretarías</option>
             <option value="marcas_almacenamiento">Almacenamiento - Marcas</option>
             <option value="marcas_conmutadores">Conmutadores - Marcas</option>
             <option value="drones_caracteristicas">Drones - Característícas</option>
             <option value="energia_marcas">Energía - Marcas</option>
             <option value="ep_marcas">Equipos personales - Marcas</option>
             <option value="es_marcas">Equipos servidores - Marcas</option>
-           {# <option value="es_procesadores">Equipos servidores - Procesadores</option>#}
+            <!-- <option value="es_procesadores">Equipos servidores - Procesadores</option> -->
             <option value="es_tipos">Equipos servidores - Tipos</option>
             <option value="f_marcas">Firewalls - Marcas</option>
             <option value="i_marcas">Impresoras - Marcas</option>
             <option value="p_marcas">Proyectores - Marcas</option>
             <option value="s_nombres">Sistemas de información - Nombres</option>
             <option value="sm_nombres">Sistemas de información movil- Nombres</option>
-        </select>
-        <!-- Campo oculto para almacenar el valor seleccionado -->
-        <input type="hidden" id="categoria_seleccionada" name="categoria_seleccionada" value="">
-        <button id="limpiarFiltros3" type="submit">Buscar</button>
-      </form>
-      
+          </select>
+          <!-- Campo oculto para almacenar el valor seleccionado -->
+          <input type="hidden" id="categoria_seleccionada" name="categoria_seleccionada" value="">
+          <button id="limpiarFiltros3" type="submit">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div>
       <script>
         // Función para actualizar el campo oculto con el valor seleccionado del select
         function actualizarCategorias3() {
@@ -46,6 +50,6 @@
             document.getElementById("categoria_seleccionada").value = categoriaSeleccionada;
         }
       </script>
-      
+    </div>
 </body>
 </html>

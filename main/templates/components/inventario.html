@@ -4,11 +4,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <title>Inventario</title>
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
+  <div class="row">
   <!-- CODIGO PARA COMBO BOX-->
+  <div class="col-sm-2">
     <label for="secretarias2"></label>
     <select id="secretarias2" onchange="actualizarDependencias()">
       <option value="0">Secretaría</option>
@@ -17,15 +23,19 @@
       <option value="3">Secretaría de Contraloría</option>
       <!-- Agrega las 16 secretarías -->
     </select>
-    
+  </div>
+  <div class="col-sm-2">
     <label for="dependencias2"></label>
     <select id="dependencias2">
       <!-- Las opciones se actualizarán dinámicamente mediante JavaScript -->
     </select>
+  </div>
 
+  <div class="col-sm-2">
 <input type="date" id="selector_anio" name="selector_anio" pattern="\d{4}" min="1900-01-01" max="2100-12-31" step="1" value="">
+  </div>
 
-
+  <div class="col-sm-2">
 <!-- CODIGO PARA COMBO BOX-->
 <label for="categoria2"></label>
    <select id="categoria2" onchange="actualizarCategorias2()">
@@ -35,21 +45,27 @@
      <option value="203">Telecomunicaciones</option>
      <option value="204">Usuarios</option>
    </select>
+  </div>
    
+  <div class="col-sm-2">
    <label for="subcategoria2"></label>
    <select id="subcategoria2" onchange="mostrarContenido2()">
    </select>
-
+  </div>
 
 <!-- Agregamos el botón de limpieza -->
+<div class="col-sm-2">
 <button id="limpiarFiltros2">Limpiar Filtros</button>
+</div>
 
+<div class="col-sm-2">
  <!-- Aquí se colocan los elementos div para mostrar el texto de la categoría y la subcategoría -->
  <div id="categoriaSubcategoria2">
   <div id="seleccion2" class="seleccion" style="display: inline-block;"></div>
   <div id="subseleccion2" class="subseleccion" style="display: inline-block; margin-left: 20px;"></div>
+ </div>
 </div>
-
+</div>
 
 
 
