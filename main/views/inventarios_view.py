@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def inventario(request):
     subcategoria = request.GET.get('subcategoriaSelec')
-    year = request.GET.get('year')
-    dependencia = request.GET.get('dependenciaSelec')
-    serch = request.GET.get('serch')
-    descarga = request.GET.get('descarga')
-    secretaria = request.GET.get('secretariaSelec')
+    year = request.GET.get('year')or ''
+    dependencia = request.GET.get('dependenciaSelec')or ''
+    serch = request.GET.get('serch')or ''
+    descarga = request.GET.get('descarga')or ''
+    secretaria = request.GET.get('secretariaSelec')or ''
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     user_id = request.user.id

@@ -2674,6 +2674,67 @@ def secretaria_delete(request, pk):
 ########################
 
 ########################
+# CRUD Operations for Dependencias Model
+########################
+
+@login_required
+def dependencias_list(request):
+    rol = usu(request)
+    secretarias = Dependencias.objects.all()
+    paginator = Paginator(secretarias, 10)  # Muestra 10 routers por página
+
+    page_number = request.GET.get('page')
+    try:
+        secretarias = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Si el número de página no es un entero, muestra la primera página.
+        secretarias = paginator.page(1)
+    except EmptyPage:
+        # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
+        secretarias = paginator.page(paginator.num_pages)
+    return render(request, 'dependencias/dependencias_list.html', {'secretarias': secretarias})
+
+@login_required
+def dependencia_detail(request, pk):
+    secretaria = Dependencias.objects.get(pk=pk)
+    return render(request, 'dependencias/dependencias_detail.html', {'secretaria': secretaria})
+
+@login_required
+def dependencia_create(request):
+    if request.method == 'POST':
+        form = DependenciasForms(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dependencias_list')
+    else:
+        form = DependenciasForms()
+    return render(request, 'dependencias/dependencias_form.html', {'form': form})
+
+@login_required
+def dependencia_update(request, pk):
+    secretaria = Dependencias.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = DependenciasForms(request.POST, instance=secretaria)
+        if form.is_valid():
+            form.save()
+            return redirect('dependencias_list')
+    else:
+        form = DependenciasForms(instance=secretaria)
+    return render(request, 'dependencias/dependencias_form.html', {'form': form})
+
+@login_required
+def dependencia_delete(request, pk):
+    secretaria = Dependencias.objects.get(pk=pk)
+    if request.method == 'POST':
+        secretaria.delete()
+        return redirect('dependencias_list')
+    return render(request, 'dependencias/secretaria_confirm_delete.html', {'secretaria': secretaria})
+
+########################
+# End of CRUD Operations for Dependencias Model
+########################
+
+########################
 # CRUD Operations for SistemaDeInformacionMovil Model
 ########################
 

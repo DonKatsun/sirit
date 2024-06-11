@@ -34,6 +34,7 @@
     </div>
     <div class="col-sm-8 ">
     <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
+    <input type="hidden" id="secretariaSelec" name="secretariaSelec" value="">
     </div>
 </div>
 <div class="row">
@@ -77,7 +78,7 @@
 <div class="col inline-container">
     <label for="dependenciagi">Dependencia:</label>
     {% if  request.COOKIES.tipo  == '3' %}
-    <select id="dependencia">
+    <select id="dependencia" onchange="cambiaDepen()">
         <option value={{request.COOKIES.dependencia_usuario_id}}>{{request.COOKIES.dependencia_usuario}}</option>
     </select>
     {% else %}
@@ -116,7 +117,7 @@
         cambiaDep();
         cambiaDepen();
         cambiaSub()
-        cargarDependencias();
+        //cargarDependencias();
     };
 
     function descarga(){
@@ -186,6 +187,7 @@
      }
      function cambiaDep(){
         var secretaria = document.getElementById("secretaria").value;
+        console.log(secretaria)
         document.getElementById("secretariaSelec").value = secretaria;
        }
      function cambiaSub(){
@@ -247,8 +249,10 @@
 
   // Evento para cargar las dependencias cuando se selecciona una secretaria
     function actualizarDependencias() {
-        cambiaDep();
+        console.log("Entrando actualizarDependencias")
         cargarDependencias();
+        cambiaDep();
+        
     }
 
     // Cargar las dependencias al cargar la página (si hay una secretaria seleccionada)

@@ -17,12 +17,13 @@ def login_view(request):
                 print(user.username)
                 usruario = Usuarios.objects.filter(usuario=user.id).first()
                 print(usruario)
+                response.set_cookie('tipo', usruario.id_rol.id, max_age=1800, secure=True, httponly=True)
                 if usruario.id_rol.id != 1:
                     response.set_cookie('dependencia_usuario_id', usruario.id_dependencia.id, max_age=1800, secure=True, httponly=True)
                     response.set_cookie('dependencia_usuario', usruario.id_dependencia.nombre_dependencia, max_age=1800, secure=True, httponly=True)
                     response.set_cookie('secretaria_usuario_id', usruario.id_dependencia.id_secretaria.id, max_age=1800, secure=True, httponly=True)
                     response.set_cookie('secretaria_usuario', usruario.id_dependencia.id_secretaria.nombre_secretaria, max_age=1800, secure=True, httponly=True)
-                    response.set_cookie('tipo', usruario.id_rol.id, max_age=1800, secure=True, httponly=True)
+                    
                 return response
             else:
                 return render(request, 'pages/login.html', {'form': form, 'error_message': 'Credenciales inválidas'})

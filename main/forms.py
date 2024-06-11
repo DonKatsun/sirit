@@ -926,6 +926,20 @@ class SecretariasForms(forms.ModelForm):
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
         self.fields['nombre_secretaria'].widget = forms.TextInput()  
 
+class DependenciasForms(forms.ModelForm):
+    class Meta:
+        model = Dependencias
+        fields = '__all__'
+        labels = {
+            'nombre_dependencia': 'Dependencia: ',
+            'id_secretaria': 'Secretaría: ',       
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
+        self.fields['id_secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['nombre_dependencia'].widget = forms.TextInput() 
 
 class SistemaDeInformacionMovilForms(forms.ModelForm):
     secretaria = forms.ModelChoiceField(

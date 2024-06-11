@@ -107,3 +107,34 @@
     </form>
 </body>
 </html>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    function actualizarDependencias() {
+        var secretariaId = document.getElementById("id_secretaria").value;
+        var dependenciaSelect = document.getElementById("id_id_dependencia");
+
+        if (secretariaId) {
+            fetch(`/obtener_dependencias/?secretaria=${secretariaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    dependenciaSelect.innerHTML = '<option value="">Seleccionar dependencia</option>';
+                    data.forEach(depen => {
+                        dependenciaSelect.innerHTML += `<option value="${depen.id}">${depen.nombre_dependencia}</option>`;
+                    });
+                })
+                .catch(error => console.error('Error al cargar las dependencias:', error));
+        } else {
+            dependenciaSelect.innerHTML = '<option value="">Seleccionar dependencia</option>';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        var secretariaSelect = document.getElementById("id_secretaria");
+        secretariaSelect.addEventListener('change', actualizarDependencias);
+        if (secretariaSelect.value) {
+            actualizarDependencias(); // Inicializar dependencias si hay una secretaría seleccionada
+        }
+    });
+</script>
