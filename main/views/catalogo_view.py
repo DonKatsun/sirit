@@ -10,7 +10,7 @@ def catalogo (request):
         return redirect(reverse('secretarias_list'))
     
     if categoria == 'dep':
-        return redirect(reverse('secretarias_list'))
+        return redirect(reverse('dependencias_list'))
     
     if categoria == 'marcas_almacenamiento':
         return redirect(reverse('almacenamientos_marcas_list'))
