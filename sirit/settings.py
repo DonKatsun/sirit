@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@*@%_i6#jf&v)b%rwr09d5-v#^76=4hfj((#bbx58ql=_=6&*7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.16.17.95']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -81,8 +81,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sirit',
         'USER': 'postgres',
-        'PASSWORD': 'viccontra16',#viccontra16
-        'HOST': '10.16.17.95',#10.16.17.95
+        'PASSWORD': 'root',#viccontra16
+        'HOST': 'localhost',#10.16.17.95
         'PORT': '5432',
     }
 }
@@ -128,3 +128,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_COOKIE_AGE = 1800

@@ -34,7 +34,6 @@
         }
 
         input[type="text"],
-        input[type="number"],
         select {
             width: 100%; /* Ajustar el ancho para que coincida con los inputs */
             padding: 15px; /* Aumento de la altura del input */
@@ -67,7 +66,7 @@
     </style>
 </head>
 <body>
-    <h1>Usuario</h1>
+    <h1>Crear/Editar Dependencia</h1>
     <form method="post">
         {% csrf_token %}
         {% for field in form %}
@@ -80,31 +79,6 @@
     </form>
 </body>
 </html>
-<script>
-    function actualizarDependencias() {
-        var secretariaId = document.getElementById("id_secretaria").value;
-        var dependenciaSelect = document.getElementById("id_id_dependencia");
 
-        if (secretariaId) {
-            fetch(`/obtener_dependencias/?secretaria=${secretariaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    dependenciaSelect.innerHTML = '<option value="">Seleccionar dependencia</option>';
-                    data.forEach(depen => {
-                        dependenciaSelect.innerHTML += `<option value="${depen.id}">${depen.nombre_dependencia}</option>`;
-                    });
-                })
-                .catch(error => console.error('Error al cargar las dependencias:', error));
-        } else {
-            dependenciaSelect.innerHTML = '<option value="">Seleccionar dependencia</option>';
-        }
-    }
 
-    document.addEventListener('DOMContentLoaded', (event) => {
-        var secretariaSelect = document.getElementById("id_secretaria");
-        secretariaSelect.addEventListener('change', actualizarDependencias);
-        if (secretariaSelect.value) {
-            actualizarDependencias(); // Inicializar dependencias si hay una secretaría seleccionada
-        }
-    });
-</script>
+

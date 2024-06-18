@@ -86,6 +86,9 @@ body {
     cursor: pointer !important;
     text-decoration: underline !important; /* Subraya el texto */
 }
+.logout-buttons:hover {
+ color:#691B31 !important;
+}
 
 .logout-buttons:hover {
  color:#691B31 !important;

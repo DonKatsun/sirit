@@ -52,6 +52,8 @@ from .views.catalogos_views import(
     secretarias_list, secretaria_create, secretaria_update, secretaria_delete,
     sistemas_informacion_movil_nombres_list, sistema_informacion_movil_nombre_create, sistema_informacion_movil_nombre_update, sistema_informacion_movil_nombre_delete,
     sistemas_informacion_nombres_list, sistema_informacion_nombre_create, sistema_informacion_nombre_update, sistema_informacion_nombre_delete,
+
+    dependencias_list,dependencia_detail,dependencia_create,dependencia_update,dependencia_delete
     
 )
 from .views.carga_view import (carga)
@@ -71,6 +73,13 @@ urlpatterns = [
     path('obtener_dependencias/', obtener_dependencias, name='obtener_dependencias'),
     path('carga', carga, name='carga'),
     path('clonar', clonar, name='clonar'),
+    
+    # +++++++++++++ urls dependencias +++++++++++++++
+    path('dependencias', dependencias_list, name='dependencias_list'),
+    path('dependencias/<int:pk>/', dependencia_detail, name='dependencia_detail'),
+    path('dependencias/new/', dependencia_create, name='dependencia_create'),
+    path('dependencias/<int:pk>/edit/', dependencia_update, name='dependencia_update'),
+    path('dependencias/<int:pk>/delete/', dependencia_delete, name='dependencia_delete'),
     
     # +++++++++++++ urls conmutadores +++++++++++++++
     path('conmutador', conmutadores_list, name='conmutadores_list'),

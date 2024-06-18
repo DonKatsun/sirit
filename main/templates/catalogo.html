@@ -20,6 +20,7 @@
           <select id="categoria3" onchange="actualizarCategorias3()">
             <option value="">Selecciona</option>
             <option value="sec">Secretarías</option>
+            <option value="dep">Dependencias</option>
             <option value="marcas_almacenamiento">Almacenamiento - Marcas</option>
             <option value="marcas_conmutadores">Conmutadores - Marcas</option>
             <option value="drones_caracteristicas">Drones - Característícas</option>
@@ -36,7 +37,7 @@
           </select>
           <!-- Campo oculto para almacenar el valor seleccionado -->
           <input type="hidden" id="categoria_seleccionada" name="categoria_seleccionada" value="">
-          <button id="limpiarFiltros3" type="submit">Buscar</button>
+
         </div>
       </div>
     </div>
@@ -48,6 +49,7 @@
         function actualizarCategorias3() {
             var categoriaSeleccionada = document.getElementById("categoria3").value;
             document.getElementById("categoria_seleccionada").value = categoriaSeleccionada;
+            document.getElementById("filtroForm").submit();
         }
       </script>
     </div>
