@@ -45,7 +45,7 @@
         }
 
         button {
-            width: 20%;
+            width: 50%;
             height: 50px;
             font-size: 1.5em;
             font-weight: bold;
@@ -90,8 +90,7 @@
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
         </div>
-        {% endfor %}
-        <div class="container px-4">
+        {% endfor %}       <div class="container px-4">
             <div class="row gx-5">
                 <div class="col-12">
                     <div class="p-3 border bg-light button-container">
@@ -103,6 +102,15 @@
             </div>
         </div>
     </form>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+        function actualizarDependencias() {
+            var secretariaId = document.getElementById("id_secretaria").value;
+            var dependenciaSelect = document.getElementById("id_id_dependencia");
+        }
+  </script>   
 </body>
 </html>
 

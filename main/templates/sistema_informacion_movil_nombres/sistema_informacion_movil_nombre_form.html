@@ -45,24 +45,40 @@
             box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
         }
 
-        button[type="submit"] {
-            width: 20%;
-            height: 70px;
-            font-size: 2em;
+        button {
+            width: 50%;
+            height: 50px;
+            font-size: 1.5em;
             font-weight: bold;
-            margin-left: 65%;
-            padding: 10px 20px;
-            background-color: #989898;
             color: #fff;
             border: none;
             border-radius: 20px;
             cursor: pointer;
+            max-width: 70%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        button[type="submit"]:hover {
-            background-color: #e7e4e4;
+    
+        button:hover {
+            background-color: #DDC9A3;
             color: #000;
             border: 2px solid black;
+        }
+    
+        .buttonsubmit {
+            background-color: #691B31;
+        }
+    
+        .buttonregresar {
+            background-color: #BC955B !important;
+        }
+    
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
@@ -76,8 +92,27 @@
             {{ field }}
         </div>
         {% endfor %}
-        <button type="submit">Guardar</button>
+        <div class="container px-4">
+            <div class="row gx-5">
+                <div class="col-12">
+                    <div class="p-3 border bg-light button-container">
+                        <button type="button" class="buttonregresar" onclick="goBack()">Regresar</button>
+                        <div style="width: 20%;"></div> <!-- Espacio entre los botones -->
+                        <button type="submit" class="buttonsubmit">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+        function actualizarDependencias() {
+            var secretariaId = document.getElementById("id_secretaria").value;
+            var dependenciaSelect = document.getElementById("id_id_dependencia");
+        }
+  </script>  
 </body>
 </html>
 

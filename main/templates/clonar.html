@@ -15,14 +15,18 @@
 
 <form id="filtroForm" method="GET" action="{% url 'clonar' %}">
     {% csrf_token %}
-    <div class="inline-container">
+    <div class="flex-row">
+    <div class="p-2 inline-container">
     <label for="year">Año a clonar:</label>
     <input type="text" class="form-control datepicker" id="year" name="year" autocomplete="off">
-    
+    </div>
+    <div class="p-2 inline-container">
     <label>Año de destino: </label>
     <input type="text" class="form-control datepicker" id="year2" name="year2" autocomplete="off">
+    </div>
+
     <button id="limpiarFiltros3" type="button" onclick="confirmarClonacion()">Clonar</button>
-    </div>  
+</div>  
 </form>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
