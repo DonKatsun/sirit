@@ -15,52 +15,54 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.all.min.js"></script>
   <form id="filtroForm" method="POST" action="{% url 'carga' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="d-flex flex-row">
-    <input type="hidden" id="categoria" name="categoria" value="">
-    <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
-    <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
-    <div class="p-2 inline-container">
-    <label for="categoria3">Categoría:</label>
-    <select id="categoria3" onchange="actualizarCategorias3()">
-        <option value="200">Categoría</option>
-        <option value="201">Hardware</option>
-        <option value="202">Software</option>
-        <option value="203">Telecomunicaciones</option>
-    </select>
-</div>
-    <div class="p-2 inline-container">
-    <label for="subcategoria3">Subcategoría:</label>
-    <select id="subcategoria3" onchange="cambiaSub()">
-    </select>
-</div>
-    <div class="p-2 inline-container">
-    <label for="secretaria">Secretaría:</label>
-    <select id="secretaria" onchange="actualizarDependencias()">
-        <option value="">Seleccionar secretaría</option>
-        {% for secretaria in secretarias %}
-        <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
-        {% endfor %}
-    </select>
-</div>
-
-    <div class="p-2 inline-container">
-    <label for="dependenciagi">Dependencia:</label>
-    <select id="dependencia" onchange="cambiaDepen()">
-        <option value="">Seleccionar dependencia</option>
-    </select>
-    </div>
-    <div class="p-2 inline-container">
-    <label for="year">Año:</label>
-    <input type="date" class="form-control datepicker" id="year" name="year" autocomplet e="off">
-    </div>
-</div>
-    <div class="row inline-container">
+        <div class="flex-row">
+          <input type="hidden" id="categoria" name="categoria" value="">
+          <input type="hidden" id="subcategoriaSelec" name="subcategoriaSelec" value="">
+          <input type="hidden" id="dependenciaSelec" name="dependenciaSelec" value="">
+    
+          <div class="p-2 inline-container">
+            <label for="categoria3">Categoría:</label>
+            <select id="categoria3" onchange="actualizarCategorias3()">
+              <option value="200">Categoría</option>
+              <option value="201">Hardware</option>
+              <option value="202">Software</option>
+              <option value="203">Telecomunicaciones</option>
+            </select>
+          </div>
+    
+          <div class="p-2 inline-container">
+            <label for="subcategoria3">Subcategoría:</label>
+            <select id="subcategoria3" onchange="cambiaSub()">
+            </select>
+          </div>
+    
+          <div class="p-2 inline-container">
+            <label for="secretaria">Secretaría:</label>
+            <select id="secretaria" onchange="actualizarDependencias()">
+              <option value="">Seleccionar secretaría</option>
+              <!-- Aquí irán tus opciones generadas dinámicamente -->
+            </select>
+          </div>
+    
+          <div class="p-2 inline-container">
+            <label for="dependencia">Dependencia:</label>
+            <select id="dependencia" onchange="cambiaDepen()">
+              <option value="">Seleccionar dependencia</option>
+            </select>
+          </div>
+    
+          <div class="p-2 inline-container">
+            <label for="year">Año:</label>
+            <input type="date" class="form-control datepicker" id="year" name="year" autocomplete="off">
+          </div>
+    
+          <div class="p-2 inline-container">
             <label for="ex">Archivo:</label>
-    <input type="file" id="ex" name="ex">
-    <button id="limpiarFiltros3" type="submit">Subir</button>
-    </div>  
-
-  </form>
+            <input type="file" id="ex" name="ex">
+            <button id="limpiarFiltros3" type="submit">Subir</button>
+          </div>
+        </div>
+      </form>
 
   {% if datos %}
     {{msj}}

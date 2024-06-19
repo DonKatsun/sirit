@@ -123,15 +123,16 @@ select option {
 #limpiarFiltros,
 #limpiarFiltros2,
 #limpiarFiltros3 {
-    font-family:'Montserrat', open-sans ;
-    background-color: white  ;
-    color: #691B31  ;
-    font-size: 1.5em  ;
-    border: none  ;
-    border-radius: 5px  ;
-    padding: 10px 20px  ;
-    cursor: pointer  ;
-    text-decoration: underline  ;
+  background-color: white;
+  color: #A02142;
+  font-size: 1.5em;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: right;
+  display: inline-block;
 }
 
 .buttons-container2 {
