@@ -282,20 +282,24 @@ button:hover {
             <p class="detail-data">{{ conmutador.id_marca.marca_conmutador }}</p>
         </div>
         
-
-    <div class="container px-8">
-        <div class="row gx-5">
-            <div class="col-12">
-                <div class="p-3 border bg-light button-container">
-        <button type="button" class="buttonregresar" onclick="goBack()">Regresar</button>
-        <a class="edit-button" href="{% url 'conmutador_update' conmutador.pk %}">Editar</a>
-        <form action="{% url 'conmutador_delete' conmutador.pk %}" method="post" onsubmit="return false;">
-            {% csrf_token %}
-            <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
-        </form>
-    </div>
-    </div>
+<div class="detail">
+    <button type="button" class="buttonregresar" onclick="goBack()">Regresar</button>
 </div>
+<div class="detail">
+    <div class="buttonscol-container">
+        <div class="buttonscol">
+            <a class="edit-button btn btn-primary" href="{% url 'conmutador_update' conmutador.pk %}">Editar</a>
+        </div>
+        <div class="buttonscol">
+            <form action="{% url 'conmutador_delete' conmutador.pk %}" method="post" class="d-inline" onsubmit="return false;">
+                {% csrf_token %}
+                <input type="submit" class="delete-button btn btn-danger" value="Eliminar" onclick="openModal(this.form);">
+            </form>
+        </div>
+    </div>
+    
+</div>  
+
      <!-- Ventana emergente de confirmación -->
      <div id="myModal" class="modal">
         <div class="modal-content">
