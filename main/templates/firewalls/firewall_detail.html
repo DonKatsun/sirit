@@ -49,38 +49,140 @@
             color: #989898; /* Color de texto negro */
         }
 
-        .edit-button,
-        .delete-button {
-            margin-top: 10px; /* Añadimos un margen superior */
-            padding: 10px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
         .edit-button {
-            background-color: #fff;
-            color: #989898;
-            height: 23px;
-            border: 2px solid #989898;
-            margin-right: 10px; /* Añadimos un margen derecho entre los botones */
-        }
+  background-color: #6F7271;
+  padding: 10px 20px;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  color: #fff;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+  align-items: center;
 
-        .delete-button {
-            background-color: #fff;
-            color: red;
-            height: 48px;
-            border: 2px solid red;
-        }
+}
 
-        .button:hover {
-            background-color: #e7e4e4;
-            color: #000;
-        }
+.delete-button {
+  background-color: #691B31;
+  padding: 10px 20px;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  color: #fff;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+
+}
+
+button:hover {
+  background-color: #DDC9A3;
+  color: #000;
+  border: 2px solid black;
+}
+.delete-button:hover {
+  color: #000;
+  border: 2px solid black;
+}
+.edit-button:hover {
+  color: #000;
+  border: 2px solid black;
+}
+
+.buttonsubmit {
+  background-color: #691B31;
+  padding: 10px 20px;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  color: #fff;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+
+}
+
+.buttonregresar {
+    padding: 10px 20px;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  color: #fff;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #BC955B !important;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+}
+
+.button-container button,
+.button-container a,
+.button-container form {
+  flex: 1;
+  text-align: center;
+  margin: 0 5px;
+}
+
+.button-container button,
+.button-container a,
+.button-container input[type="submit"] {
+  padding: 10px 20px;
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  color: #fff;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.buttonscol-container {
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonscol {
+    margin-bottom: 20px;
+}
 
         /* Estilos para la ventana emergente de confirmación */
         .modal {
@@ -196,15 +298,23 @@
             <p class="detail-data">{{ firewall.id_marca.marca_firewall }}</p>
         </div>
        
-        <div class="details-container">
-            <a class="edit-button" href="{% url 'firewall_update' firewall.pk %}">Editar</a>
-            <!-- Formulario de eliminación con estilo de .delete-button -->
-            <form action="{% url 'firewall_delete' firewall.pk %}" method="post" onsubmit="return false;">
+<div class="detail">
+    <button type="button" class="buttonregresar" onclick="goBack()">Regresar</button>
+</div>
+<div class="detail">
+    <div class="buttonscol-container">
+        <div class="buttonscol">
+            <a class="edit-button btn btn-primary" href="{% url 'firewall_update' firewall.pk %}">Editar</a>
+        </div>
+        <div class="buttonscol">
+            <form action="{% url 'firewall_delete' firewall.pk %}" method="post" class="d-inline" onsubmit="return false;">
                 {% csrf_token %}
-                <input type="submit" class="delete-button" value="Eliminar" onclick="openModal(this.form);">
+                <input type="submit" class="delete-button btn btn-danger" value="Eliminar" onclick="openModal(this.form);">
             </form>
         </div>
     </div>
+    
+</div>
 
      <!-- Ventana emergente de confirmación -->
      <div id="myModal" class="modal">
@@ -221,7 +331,13 @@
 
     <script>
         let currentForm; // Variable para almacenar el formulario actual
-
+        function goBack() {
+            window.history.back();
+        }
+        function actualizarDependencias() {
+            var secretariaId = document.getElementById("id_secretaria").value;
+            var dependenciaSelect = document.getElementById("id_id_dependencia");
+        }
         function openModal(form) {
             currentForm = form; // Almacena el formulario actual
             document.getElementById("myModal").style.display = "block"; // Muestra la ventana emergente
