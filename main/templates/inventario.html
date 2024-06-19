@@ -50,7 +50,7 @@
 </div>
 <div class="col inline-container">
     <label for="subcategoria3">Subcategoría:</label>
-    <select id="subcategoria3" onchange="cambiaSub()">
+    <select id="subcategoria3" onchange="cambiaSub()" onclick="actualizarCategorias3()">
     {% if clave %}
     <option value={{clave}}>{{inventario}}</option>
     {% endif %}
@@ -113,10 +113,25 @@
 
  
    <script>
+    function select_categoria() {
+        var categoriaSeleccionada = "{{ categoria_seleccionada }}";  // Valor pasado desde la vista de Django
+        var selectCategoria = document.getElementById('categoria3');
+        
+        for (var i = 0; i < selectCategoria.options.length; i++) {
+            if (selectCategoria.options[i].value == categoriaSeleccionada) {
+                selectCategoria.options[i].selected = true;  // Marca la opción como seleccionada
+                break;  // Sale del bucle una vez encontrada la opción
+            }
+        }
+    }
+
+    
     window.onload = function() {
         cambiaDep();
         cambiaDepen();
-        cambiaSub()
+        cambiaSub();
+        select_categoria();
+        //actualizarCategorias3();
         //cargarDependencias();
     };
 
@@ -171,8 +186,9 @@
                  seleccion.innerHTML = "Telecomunicaciones";
                  break;
              case "204":
+                document.getElementById("subcategoriaSelec").value = "1310";
                  agregarOpciones(subcategoriaSelect, [
-                     { value: "1300", text: "Subcategoria" },
+                     //{ value: "1300", text: "Subcategoria" },
                      { value: "1310", text: "Usuarios" }
                  ]);
                  seleccion.innerHTML = "Usuarios";

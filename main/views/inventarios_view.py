@@ -11,6 +11,7 @@ def inventario(request):
     serch = request.GET.get('serch')or ''
     descarga = request.GET.get('descarga')or ''
     secretaria = request.GET.get('secretariaSelec')or ''
+    categoria = request.GET.get('categoria')or ''
     secretarias = Secretarias.objects.all()
     dependencias = Dependencias.objects.all()
     user_id = request.user.id
@@ -27,55 +28,55 @@ def inventario(request):
     subcategoria_seleccionada = request.GET.get('subcategoriaSelec')
     if subcategoria_seleccionada:
         if subcategoria_seleccionada == "1092":
-            return redirect(reverse('conmutadores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('conmutadores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1010":
-            return redirect(reverse('energias_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('energias_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1020":
-            return redirect(reverse('almacenamientos_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('almacenamientos_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1030":
-            return redirect(reverse('equipos_personales_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('equipos_personales_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1040":
-            return redirect(reverse('equipos_servidores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('equipos_servidores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1050":
-            return redirect(reverse('impresoras_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('impresoras_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1060":
-            return redirect(reverse('proyectores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('proyectores_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1080":
-            return redirect(reverse('drones_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('drones_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1090":
-            return redirect(reverse('firewalls_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('firewalls_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1091":
-            return redirect(reverse('routers_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('routers_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1110":
-            return redirect(reverse('herramientas_desarrollo_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('herramientas_desarrollo_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1120":
-            return redirect(reverse('sistemas_informacion_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('sistemas_informacion_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1130":
-            return redirect(reverse('sistemas_informacion_movil_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('sistemas_informacion_movil_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1210":
-            return redirect(reverse('enlaces_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('enlaces_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1230":
-            return redirect(reverse('sites_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('sites_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1310":
-            return redirect(reverse('usuarios_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('usuarios_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
         if subcategoria_seleccionada == "1070":
-            return redirect(reverse('equipo_telefonico_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria)
+            return redirect(reverse('equipo_telefonico_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
     if rol != 1:
         return render(request, 'inventario.html', {
         'nav': "1",

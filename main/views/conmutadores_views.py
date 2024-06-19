@@ -50,6 +50,8 @@ def conmutadores_list(request, *args, **kwargs):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
+    print("Categoria: "+categoria)
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
@@ -95,6 +97,7 @@ def conmutadores_list(request, *args, **kwargs):
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
         'inventario': 'Conmutador',
         'clave': '1092',
+        'categoria_seleccionada':categoria if categoria else '',
     })
     return render(request, 'conmutadores/conmutadores_list.html', {
         'conmutadores': conmutadores,
@@ -106,6 +109,7 @@ def conmutadores_list(request, *args, **kwargs):
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
         'inventario': 'Conmutador',
         'clave': '1092',
+        'categoria_seleccionada':categoria if categoria else '',
     })
 
 

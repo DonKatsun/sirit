@@ -189,6 +189,7 @@ def almacenamientos_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #almacenamientos_list = Almacenamientos.objects.all()
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
@@ -231,6 +232,7 @@ def almacenamientos_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Almacenamiento',
         'clave': '1020',
         'nav': rol})
@@ -242,6 +244,7 @@ def almacenamientos_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Almacenamiento',
         'clave': '1020',
         })
@@ -411,6 +414,7 @@ def drones_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #drones_list = Drones.objects.all()
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
@@ -451,6 +455,7 @@ def drones_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Dron',
         'clave': '1080','nav':rol})
     
@@ -460,6 +465,7 @@ def drones_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Dron',
         'clave': '1080',
         })
@@ -697,6 +703,7 @@ def energias_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     energias_list = Energias.objects.all()
 
     if 'secretaria' in request.GET:
@@ -732,6 +739,7 @@ def energias_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Energia',
         'clave': '1010',
         'nav':rol
@@ -744,6 +752,7 @@ def energias_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Energia',
         'clave': '1010',
         })
@@ -804,6 +813,7 @@ def enlaces_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     enlaces_list = Enlaces.objects.all()
 
     if 'secretaria' in request.GET:
@@ -847,6 +857,7 @@ def enlaces_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Enlaces',
         'clave': '1210',
         'nav':rol
@@ -859,6 +870,7 @@ def enlaces_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Enlaces',
         })
 
@@ -978,6 +990,7 @@ def equipo_telefonico_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #equipo_telefonico_list = EquipoTelefonico.objects.all()
 
     if 'secretaria' in request.GET:
@@ -1022,6 +1035,7 @@ def equipo_telefonico_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipo Telefonico',
         'clave': '1070',
         'nav':rol
@@ -1034,6 +1048,7 @@ def equipo_telefonico_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipo Telefonico',
         'clave': '1070',
         })
@@ -1091,6 +1106,7 @@ def equipos_personales_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #equipos_personales_list = EquiposPersonales.objects.all()
 
     if 'secretaria' in request.GET:
@@ -1135,6 +1151,7 @@ def equipos_personales_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipos personales',
         'clave': '1030',
         'nav':rol
@@ -1147,6 +1164,7 @@ def equipos_personales_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipos personales',
         'clave': '1030',
         })
@@ -1390,6 +1408,7 @@ def equipos_servidores_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #equipos_servidores_list = EquiposServidores.objects.all()
 
     if 'secretaria' in request.GET:
@@ -1433,6 +1452,7 @@ def equipos_servidores_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipo de computo servidor',
         'clave': '1040',
         'nav':rol
@@ -1445,6 +1465,7 @@ def equipos_servidores_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Equipo de computo servidor',
         'clave': '1040',
         'nav':rol
@@ -1750,6 +1771,7 @@ def firewalls_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #firewalls_list = Firewalls.objects.all()
 
     if 'secretaria' in request.GET:
@@ -1794,6 +1816,7 @@ def firewalls_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Firewalls',
         'clave': '1090',
         'nav':rol
@@ -1806,6 +1829,7 @@ def firewalls_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Firewalls',
         'clave': '1090',
         })
@@ -1926,6 +1950,7 @@ def herramientas_desarrollo_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
 
     if 'secretaria' in request.GET:
@@ -1970,6 +1995,7 @@ def herramientas_desarrollo_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Herramientas de desarrollo',
         'clave': '1110',
         'nav':rol
@@ -1982,6 +2008,7 @@ def herramientas_desarrollo_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Herramientas de desarrollo',
         'clave': '1110',
         })
@@ -2040,6 +2067,7 @@ def impresoras_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     #impresoras_list = Impresoras.objects.all()
 
     if 'secretaria' in request.GET:
@@ -2083,6 +2111,7 @@ def impresoras_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Impresoras',
         'clave': '1050',
         'nav':rol
@@ -2095,6 +2124,7 @@ def impresoras_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Impresoras',
         'clave': '1050',
         })
@@ -2276,6 +2306,7 @@ def proyectores_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     proyectores_list = Proyectores.objects.all()
 
     if 'secretaria' in request.GET:
@@ -2320,6 +2351,7 @@ def proyectores_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Proyectores',
         'clave': '1060',
         'nav':rol
@@ -2332,6 +2364,7 @@ def proyectores_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Proyectores',
         'clave': '1060',
         })
@@ -2455,6 +2488,7 @@ def routers_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     routers_list = Routers.objects.all()
 
     if 'secretaria' in request.GET:
@@ -2498,6 +2532,7 @@ def routers_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Routers',
         'clave': '1091',
         'nav':rol
@@ -2510,6 +2545,7 @@ def routers_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Routers',
         'clave': '1091',
         })
@@ -2563,6 +2599,7 @@ def router_delete(request, pk):
 def roles_list(request):
     rol = usu(request)
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     roles_list = Roles.objects.all()
 
     if search:
@@ -2747,6 +2784,7 @@ def sistemas_informacion_movil_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
         if selected_secretaria:
@@ -2788,6 +2826,7 @@ def sistemas_informacion_movil_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sistema De Informacion Movil',
         'clave': '1130',
         'nav':rol,
@@ -2800,6 +2839,7 @@ def sistemas_informacion_movil_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sistema De Informacion Movil',
         'clave': '1130',
         })
@@ -2920,6 +2960,7 @@ def sistemas_informacion_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
 
     if 'secretaria' in request.GET:
         selected_secretaria = request.GET['secretaria']
@@ -2963,6 +3004,7 @@ def sistemas_informacion_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sistemas de Informacion',
         'clave': '1120',
         'nav':rol,
@@ -2975,6 +3017,7 @@ def sistemas_informacion_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sistemas de Informacion',
         'clave': '1120',
         })
@@ -3095,6 +3138,7 @@ def sites_list(request):
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     sites_list = Sites.objects.all()
 
     if 'secretaria' in request.GET:
@@ -3138,6 +3182,7 @@ def sites_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sites',
         'clave': '1230',
         'nav':rol
@@ -3150,6 +3195,7 @@ def sites_list(request):
         'anio':year,
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Sites',
         'clave': '1230',
         })
@@ -3206,6 +3252,7 @@ def usuarios_list(request):
     dependencia = request.GET.get('dependencia')
     secretaria = request.GET.get('secretariaSelec')
     search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
     usuarios = Usuarios.objects.all()
 
     if 'secretaria' in request.GET:
@@ -3245,6 +3292,7 @@ def usuarios_list(request):
         'selected_secretaria': request.GET.get('secretaria'),
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Usuarios',
         'clave': '1310',
         'nav':rol
@@ -3257,6 +3305,7 @@ def usuarios_list(request):
         'selected_secretaria': request.GET.get('secretaria'),
         'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Usuarios',
         })
 
