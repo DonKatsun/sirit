@@ -98,7 +98,7 @@ def carga(request):
             'selected_secretaria': selected_secretaria,
             'msj':msj,
             'exito':exito,
-            
+            'error_message':None
         })
     
     elif request.method == 'POST':
@@ -113,7 +113,7 @@ def carga(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.POST.get('secretaria'),
-        
+        'error_message':None
     })
 
 def carga_conmutadores(df,anio,dependencia_id):
