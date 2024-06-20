@@ -106,14 +106,16 @@ def carga(request):
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.POST.get('secretaria'),
-        'error_message': 'Ningún archivo seleccionado'
+        'error_message': 'Ningún archivo seleccionado',
+        'datos': None,
     }) 
 
     return render(request, "carga.html", {
         'secretarias': secretarias,
         'dependencias': dependencias,
         'selected_secretaria': request.POST.get('secretaria'),
-        'error_message':None
+        'error_message':None,
+        'datos': None,
     })
 
 def carga_conmutadores(df,anio,dependencia_id):
