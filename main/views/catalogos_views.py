@@ -3346,7 +3346,7 @@ def usuario_update(request, pk):
         if form.is_valid():
             form.save()
             # Actualizar el usuario correspondiente en el modelo User
-            user = User.objects.get(username=usuario.id)
+            user = User.objects.get(id=usuario.usuario)
             user.set_password(usuario.contrasenia)
             user.save()
             return redirect('usuarios_list')
@@ -3359,7 +3359,7 @@ def usuario_delete(request, pk):
     usuario = Usuarios.objects.get(pk=pk)
     if request.method == 'POST':
         # Eliminar el usuario correspondiente en el modelo User
-        user = User.objects.get(username=usuario.id)
+        user = User.objects.get(id=usuario.usuario)
         user.delete()
         usuario.delete()
         return redirect('usuarios_list')
