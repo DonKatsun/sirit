@@ -50,7 +50,7 @@
 </div>
 <div class="col inline-container">
     <label for="subcategoria3">Subcategoría:</label>
-    <select id="subcategoria3" onchange="cambiaSub()" onclick="actualizarCategorias3()">
+    <select id="subcategoria3" onchange="cambiaSub()" onfocus="actualizarCategorias3()">
     {% if clave %}
     <option value={{clave}}>{{inventario}}</option>
     {% endif %}
@@ -115,6 +115,17 @@
    <script>
     function select_categoria() {
         var categoriaSeleccionada = "{{ categoria_seleccionada }}";  // Valor pasado desde la vista de Django
+        var selectCategoria = document.getElementById('categoria3');
+        
+        for (var i = 0; i < selectCategoria.options.length; i++) {
+            if (selectCategoria.options[i].value == categoriaSeleccionada) {
+                selectCategoria.options[i].selected = true;  // Marca la opción como seleccionada
+                break;  // Sale del bucle una vez encontrada la opción
+            }
+        }
+    }
+    function select_bonito(option) {
+        var categoriaSeleccionada = option;  // Valor pasado desde la vista de Django
         var selectCategoria = document.getElementById('categoria3');
         
         for (var i = 0; i < selectCategoria.options.length; i++) {

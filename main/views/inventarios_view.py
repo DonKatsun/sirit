@@ -69,6 +69,9 @@ def inventario(request):
         if subcategoria_seleccionada == "1210":
             return redirect(reverse('enlaces_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         
+        if subcategoria_seleccionada == "1220":
+            return redirect(reverse('enlaces_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
+        
         if subcategoria_seleccionada == "1230":
             return redirect(reverse('sites_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
         

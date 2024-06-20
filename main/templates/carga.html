@@ -40,7 +40,9 @@
             <label for="secretaria">Secretaría:</label>
             <select id="secretaria" onchange="actualizarDependencias()">
               <option value="">Seleccionar secretaría</option>
-              <!-- Aquí irán tus opciones generadas dinámicamente -->
+              {% for secretaria in secretarias %}
+                <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
+            {% endfor %}
             </select>
           </div>
     
