@@ -5,7 +5,7 @@
     <title>Detalle de Conmutador</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: #fff;
             margin: 0;
             padding: 0;
@@ -43,97 +43,57 @@
             margin-top: 5px; /* Espacio entre campos */
             box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
         }
-
-        .edit-button {
-  background-color: #6F7271;
+button, .delete-button, .buttonsubmit, .buttonregresar {
   padding: 10px 20px;
   font-family: 'Montserrat', 'Open Sans', sans-serif;
   font-weight: bold;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  color: white;
-  font-size: 1.5em;
   color: #fff;
+  font-size: 1.5em;
   border-radius: 20px;
   max-width: 100%;
   margin: 0 auto;
   justify-content: center;
   box-sizing: border-box;
   align-items: center;
-
 }
-
-.delete-button {
-  background-color: #691B31;
+.edit-button {
   padding: 10px 20px;
   font-family: 'Montserrat', 'Open Sans', sans-serif;
   font-weight: bold;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  color: white;
-  font-size: 1.5em;
   color: #fff;
+  font-size: 1.5em;
   border-radius: 20px;
   max-width: 100%;
-  margin: 0 auto;
+  margin-top: 10% !important;
   justify-content: center;
   box-sizing: border-box;
-
+  align-items: center;
 }
 
-button:hover {
+.edit-button, .delete-button, .buttonsubmit {
+  background-color: #691B31;
+}
+
+.edit-button {
+  background-color: #6F7271;
+}
+
+.buttonregresar {
+  background-color: #BC955B !important;
+}
+
+button:hover, .edit-button:hover, .delete-button:hover {
   background-color: #DDC9A3;
   color: #000;
   border: 2px solid black;
 }
-.delete-button:hover {
-  color: #000;
-  border: 2px solid black;
-}
-.edit-button:hover {
-  color: #000;
-  border: 2px solid black;
-}
 
-
-.buttonsubmit {
-  background-color: #691B31;
-  padding: 10px 20px;
-  font-family: 'Montserrat', 'Open Sans', sans-serif;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
-  font-size: 1.5em;
-  color: #fff;
-  border-radius: 20px;
-  max-width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-  box-sizing: border-box;
-
-}
-
-.buttonregresar {
-    padding: 10px 20px;
-  font-family: 'Montserrat', 'Open Sans', sans-serif;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
-  font-size: 1.5em;
-  color: #fff;
-  border-radius: 20px;
-  max-width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: #BC955B !important;
-}
 .button-container {
   display: flex;
   justify-content: space-between;
@@ -142,44 +102,37 @@ button:hover {
   width: 100%;
 }
 
-.button-container button,
-.button-container a,
-.button-container form {
+.button-container button, .button-container a, .button-container form,
+.button-container input[type="submit"] {
   flex: 1;
   text-align: center;
   margin: 0 5px;
-}
-
-.button-container button,
-.button-container a,
-.button-container input[type="submit"] {
   padding: 10px 20px;
   font-family: 'Montserrat', 'Open Sans', sans-serif;
   font-weight: bold;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  color: white;
-  font-size: 1.5em;
   color: #fff;
+  font-size: 1.5em;
   border-radius: 20px;
   max-width: 100%;
-  margin: 0 auto;
   justify-content: center;
   box-sizing: border-box;
 }
 
 .buttonscol-container {
-    max-width: 100%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .buttonscol {
-    margin-bottom: 20px;
+      text-align: center;
+  margin-bottom: 20px;
 }
-
 
         /* Estilos para la ventana emergente de confirmación */
         .modal {
@@ -275,7 +228,7 @@ button:hover {
         <div class="detail">
             <div class="buttonscol-container">
                 <div class="buttonscol">
-                    <a class="edit-button btn btn-primary" href="{% url 'almacenamiento_update' almacenamiento.pk %}">Editar</a>
+                    <a class="edit-button btn btn-primary" href="{% url 'almacenamiento_update' almacenamiento.pk %}" >Editar</a>
                 </div>
                 <div class="buttonscol">
                     <form action="{% url 'almacenamiento_delete' almacenamiento.pk %}" method="post" class="d-inline" onsubmit="return false;">
