@@ -294,13 +294,15 @@ button:hover {
             <p class="detail-data">{{ site.id_municipio.municipio }}</p>
         </div>
 
+    <div class="detail">
+    </div>
 <div class="detail">
     <button type="button" class="buttonregresar" onclick="goBack()">Regresar</button>
 </div>
 <div class="detail">
     <div class="buttonscol-container">
         <div class="buttonscol">
-            <a class="edit-button btn btn-primary" href="{% url 'site_update' site.pk %}">Editar</a>
+            <a class="edit-button btn btn-primary" href="{% url 'site_update' site.pk %}" >Editar</a>
         </div>
         <div class="buttonscol">
             <form action="{% url 'site_delete' site.pk %}" method="post" class="d-inline" onsubmit="return false;">
@@ -310,8 +312,7 @@ button:hover {
         </div>
     </div>
     
-</div>
-
+</div>  
     <!-- Ventana emergente de confirmación -->
     <div id="myModal" class="modal">
         <div class="modal-content">
