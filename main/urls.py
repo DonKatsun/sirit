@@ -53,7 +53,7 @@ from .views.catalogos_views import(
     sistemas_informacion_movil_nombres_list, sistema_informacion_movil_nombre_create, sistema_informacion_movil_nombre_update, sistema_informacion_movil_nombre_delete,
     sistemas_informacion_nombres_list, sistema_informacion_nombre_create, sistema_informacion_nombre_update, sistema_informacion_nombre_delete,
 
-    dependencias_list,dependencia_detail,dependencia_create,dependencia_update,dependencia_delete
+    dependencias_list,dependencia_detail,dependencia_create,dependencia_update,dependencia_delete,todo
     
 )
 from .views.carga_view import (carga)
@@ -73,6 +73,7 @@ urlpatterns = [
     path('obtener_dependencias/', obtener_dependencias, name='obtener_dependencias'),
     path('carga', carga, name='carga'),
     path('clonar', clonar, name='clonar'),
+    path('todo', todo, name='todo'),
     
     # +++++++++++++ urls dependencias +++++++++++++++
     path('dependencias', dependencias_list, name='dependencias_list'),

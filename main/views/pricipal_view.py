@@ -18,7 +18,7 @@ def principal(request):
         nombre_secretaria = Secretarias.objects.filter(id=selected_secretaria).values_list('nombre_secretaria', flat=True).first()
 
     #print(selected_secretaria+" "+nombre_secretaria)
-    secretarias = Secretarias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
     datos_por_secretaria = None
 
     if selected_secretaria and selected_secretaria != "None":
@@ -145,6 +145,12 @@ def principal(request):
                         routers__isnull=False
                     ).values('id').annotate(count=Count('routers')).values('count')[:1]
                 ),
+                num_usuarios=Subquery(
+                    Usuarios.objects.filter(
+                        id=OuterRef('id'),
+                        usuarios__isnull=False
+                    ).values('id').annotate(count=Count('usuarios')).values('count')[:1]
+                ),
             )
         
         else:
@@ -254,6 +260,12 @@ def principal(request):
                     routers__isnull=False
                 ).values('id').annotate(count=Count('routers')).values('count')[:1]
             ),
+            num_usuarios=Subquery(
+                    Usuarios.objects.filter(
+                        id=OuterRef('id'),
+                        usuarios__isnull=False
+                    ).values('id').annotate(count=Count('usuarios')).values('count')[:1]
+                ),
         )
     elif selected_year:
             datos_por_secretaria = Secretarias.objects.annotate(
@@ -378,6 +390,12 @@ def principal(request):
                         routers__isnull=False
                     ).values('id').annotate(count=Count('routers')).values('count')[:1]
                 ),
+                num_usuarios=Subquery(
+                    Usuarios.objects.filter(
+                        id=OuterRef('id'),
+                        usuarios__isnull=False
+                    ).values('id').annotate(count=Count('usuarios')).values('count')[:1]
+                ),
             )
     else:
         datos_por_secretaria = []  # Inicializa datos_por_secretaria como una lista vacía
@@ -437,6 +455,9 @@ def principal(request):
 
         datos_routers = Secretarias.objects.values('nombre_secretaria').annotate(num_routers=Count('dependencias__routers', distinct=True),)
         for i, dato in enumerate(datos_routers):   datos_por_secretaria[i]['num_routers'] = dato['num_routers']
+
+        datos_usuarios = Secretarias.objects.values('nombre_secretaria').annotate(num_usuarios=Count('dependencias__usuarios', distinct=True),)
+        for i, dato in enumerate(datos_usuarios):   datos_por_secretaria[i]['num_usuarios'] = dato['num_usuarios']
 
     lista_diccionarios = []
 

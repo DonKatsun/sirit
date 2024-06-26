@@ -67,7 +67,7 @@
         {% if  secretaria%}
         <option value={{secretaria.id}}>{{secretaria.nombre_secretaria}}</option>
         {% else %}
-        <option value="">Seleccionar secretaría</option>
+        <option value="">Todas</option>
         {% endif %}
         {% for secretaria in secretarias %}
         <option value="{{ secretaria.id }}">{{ secretaria.nombre_secretaria }}</option>
@@ -86,7 +86,7 @@
         {% if dependencia %}
         <option value={{dependencia.id}}>{{dependencia.nombre_dependencia}}</option>
         {% else %}
-        <option value="">Seleccionar dependencia</option>
+        <option value="">Todas</option>
         {% endif %}
     </select>
     {% endif %}
