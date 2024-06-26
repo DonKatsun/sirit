@@ -277,6 +277,12 @@
   // Evento para cargar las dependencias cuando se selecciona una secretaria
     function actualizarDependencias() {
         console.log("Entrando actualizarDependencias")
+        var dependenciaSelect = document.getElementById("dependencia");
+    dependenciaSelect.innerHTML = "<option value=''>Selecciona</option>"; // Opción por defecto
+    
+    // Actualizar el valor del campo oculto de dependencia
+    document.getElementById("dependenciaSelec").value = "";
+
         cargarDependencias();
         cambiaDep();
         

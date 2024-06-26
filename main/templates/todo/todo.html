@@ -189,7 +189,6 @@
 <body>
     <h1>Lista General</h1>
     <div class="header">
-        <a href="{% url 'almacenamiento_create' %}">+ Agregar Almacenamiento</a>
         
     </div>
     <table>
@@ -240,14 +239,14 @@
             </span>
 
             {% if combined_list.has_previous %}
-            <a href="?page=1">&laquo; Primera</a>
-            <a href="?page={{ combined_list.previous_page_number }}">Anterior</a>
-        {% endif %}
+                <a href="?{{ query_string }}&page=1">&laquo; Primera</a>
+                <a href="?{{ query_string }}&page={{ combined_list.previous_page_number }}">Anterior</a>
+            {% endif %}
 
-        {% if combined_list.has_next %}
-            <a href="?page={{ combined_list.next_page_number }}">Siguiente</a>
-            <a href="?page={{ combined_list.paginator.num_pages }}">Última &raquo;</a>
-        {% endif %}
+            {% if combined_list.has_next %}
+                <a href="?{{ query_string }}&page={{ combined_list.next_page_number }}">Siguiente</a>
+                <a href="?{{ query_string }}&page={{ combined_list.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
         </span>
     </div>
 

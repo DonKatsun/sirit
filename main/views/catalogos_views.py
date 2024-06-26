@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from ..models import ConmutadoresMarcas
 from ..forms import *
-
+from django.http import QueryDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -69,39 +69,21 @@ def todo(request):
         if selected_secretaria:
             dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
     if year:
-        
-        if dependencia:
-            conmutadores = Conmutadores.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            almacenamientos_list = Almacenamientos.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            drones_list = Drones.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            energias_list = Energias.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            enlaces_list = Enlaces.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            equipo_telefonico_list = EquipoTelefonico.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            equipos_personales_list = EquiposPersonales.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            equipos_servidores_list = EquiposServidores.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            firewalls_list = Firewalls.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            impresoras_list = Impresoras.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            proyectores_list = Proyectores.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            routers_list = Routers.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(id_dependencia=dependencia,fecha__year=year)
-            sites_list = Sites.objects.filter(id_dependencia=dependencia,fecha__year=year)
-        else:
-            conmutadores = Conmutadores.objects.filter(fecha__year=year)
-            almacenamientos_list = Almacenamientos.objects.filter(fecha__year=year)
-            drones_list = Drones.objects.filter(fecha__year=year)
-            energias_list = Energias.objects.filter(fecha__year=year)
-            enlaces_list = Enlaces.objects.filter(fecha__year=year)
-            equipo_telefonico_list = EquipoTelefonico.objects.filter(fecha__year=year)
-            equipos_personales_list = EquiposPersonales.objects.filter(fecha__year=year)
-            equipos_servidores_list = EquiposServidores.objects.filter(fecha__year=year)
-            firewalls_list = Firewalls.objects.filter(fecha__year=year)
-            herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(fecha__year=year)
-            impresoras_list = Impresoras.objects.filter(fecha__year=year)
-            proyectores_list = Proyectores.objects.filter(fecha__year=year)
-            routers_list = Routers.objects.filter(fecha__year=year)
-            sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(fecha__year=year)
-            sites_list = Sites.objects.filter(fecha__year=year)
+        conmutadores = Conmutadores.objects.filter(fecha__year=year)
+        almacenamientos_list = Almacenamientos.objects.filter(fecha__year=year)
+        drones_list = Drones.objects.filter(fecha__year=year)
+        energias_list = Energias.objects.filter(fecha__year=year)
+        enlaces_list = Enlaces.objects.filter(fecha__year=year)
+        equipo_telefonico_list = EquipoTelefonico.objects.filter(fecha__year=year)
+        equipos_personales_list = EquiposPersonales.objects.filter(fecha__year=year)
+        equipos_servidores_list = EquiposServidores.objects.filter(fecha__year=year)
+        firewalls_list = Firewalls.objects.filter(fecha__year=year)
+        herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(fecha__year=year)
+        impresoras_list = Impresoras.objects.filter(fecha__year=year)
+        proyectores_list = Proyectores.objects.filter(fecha__year=year)
+        routers_list = Routers.objects.filter(fecha__year=year)
+        sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(fecha__year=year)
+        sites_list = Sites.objects.filter(fecha__year=year)
     else:
         almacenamientos_list = Almacenamientos.objects.all()
         conmutadores = Conmutadores.objects.all()
@@ -135,6 +117,22 @@ def todo(request):
         routers_list = routers_list.filter(id_dependencia__id_secretaria=secretaria)
         sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(id_dependencia__id_secretaria=secretaria)
         sites_list = sites_list.filter(id_dependencia__id_secretaria=secretaria)
+    if dependencia:
+        conmutadores = conmutadores.filter(id_dependencia=dependencia)
+        almacenamientos_list = almacenamientos_list.filter(id_dependencia=dependencia)
+        drones_list = drones_list.filter(id_dependencia=dependencia)
+        energias_list = energias_list.filter(id_dependencia=dependencia)
+        enlaces_list = enlaces_list.filter(id_dependencia=dependencia)
+        equipo_telefonico_list = equipo_telefonico_list.filter(id_dependencia=dependencia)
+        equipos_personales_list = equipos_personales_list.filter(id_dependencia=dependencia)
+        equipos_servidores_list = equipos_servidores_list.filter(id_dependencia=dependencia)
+        firewalls_list = firewalls_list.filter(id_dependencia=dependencia)
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(id_dependencia=dependencia)
+        impresoras_list = impresoras_list.filter(id_dependencia=dependencia)
+        proyectores_list = proyectores_list.filter(id_dependencia=dependencia)
+        routers_list = routers_list.filter(id_dependencia=dependencia)
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(id_dependencia=dependencia)
+        sites_list = sites_list.filter(id_dependencia=dependencia)
     if search:
         conmutadores = conmutadores.filter(no_inventario__icontains=search)
         almacenamientos_list = almacenamientos_list.filter(no_inventario__icontains=search)
@@ -181,6 +179,11 @@ def todo(request):
     except EmptyPage:
         # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
         combined_list = paginator.page(paginator.num_pages)
+    
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        del query_params['page']
+    query_string = query_params.urlencode()
     if rol != 1:
         return render(request, 'todo/todo.html', {
         'combined_list': combined_list,
@@ -192,7 +195,8 @@ def todo(request):
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
         'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Todos',
-        'clave': '1020',
+        'clave': '1000',
+        'query_string': query_string,
         'nav': rol})
     return render(request, 'todo/todo.html', {
         'combined_list': combined_list,
@@ -204,7 +208,8 @@ def todo(request):
         'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
         'categoria_seleccionada':categoria if categoria else '',
         'inventario': 'Todos',
-        'clave': '1020',
+        'clave': '1000',
+        'query_string': query_string,
         })
 ########################
 # Todos

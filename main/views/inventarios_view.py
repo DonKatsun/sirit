@@ -80,6 +80,12 @@ def inventario(request):
         
         if subcategoria_seleccionada == "1070":
             return redirect(reverse('equipo_telefonico_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
+        
+        if subcategoria_seleccionada == "1000" or subcategoria_seleccionada == "1100" or subcategoria_seleccionada == "1200" or subcategoria_seleccionada == "" or categoria=="200":
+            return redirect(reverse('todo') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
+        
+    elif subcategoria_seleccionada == "1000" or subcategoria_seleccionada == "1100" or subcategoria_seleccionada == "1200" or subcategoria_seleccionada == "" or categoria=="200":
+        return redirect(reverse('todo') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
     if rol != 1:
         return render(request, 'inventario.html', {
         'nav': "1",
