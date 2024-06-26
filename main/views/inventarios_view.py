@@ -12,8 +12,8 @@ def inventario(request):
     descarga = request.GET.get('descarga')or ''
     secretaria = request.GET.get('secretariaSelec')or ''
     categoria = request.GET.get('categoria')or ''
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     user_id = request.user.id
     usuario = (Usuarios.objects.get(usuario=user_id))
     rol=(usuario.id_rol.id)
@@ -80,6 +80,12 @@ def inventario(request):
         
         if subcategoria_seleccionada == "1070":
             return redirect(reverse('equipo_telefonico_list') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
+        
+        if subcategoria_seleccionada == "1000" or subcategoria_seleccionada == "1100" or subcategoria_seleccionada == "1200" or subcategoria_seleccionada == "" or categoria=="200":
+            return redirect(reverse('todo') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
+        
+    elif subcategoria_seleccionada == "1000" or subcategoria_seleccionada == "1100" or subcategoria_seleccionada == "1200" or subcategoria_seleccionada == "" or categoria=="200":
+        return redirect(reverse('todo') + '?dependencia='+dependencia+'&anio='+year+'&search='+serch+'&descarga='+descarga+'&secretariaSelec='+secretaria+'&categoria='+categoria)
     if rol != 1:
         return render(request, 'inventario.html', {
         'nav': "1",
@@ -98,5 +104,7 @@ def obtener_dependencias(request):
     secretaria_id = request.GET.get('secretaria')
     if not secretaria_id:
         return JsonResponse([], safe=False)
-    dependencias = Dependencias.objects.filter(id_secretaria=secretaria_id).values('id', 'nombre_dependencia')
+    # Filtrar dependencias por id_secretaria y ordenarlas alfabéticamente por nombre_dependencia
+    dependencias = Dependencias.objects.filter(id_secretaria=secretaria_id).values('id', 'nombre_dependencia').order_by('nombre_dependencia')
+    
     return JsonResponse(list(dependencias), safe=False)

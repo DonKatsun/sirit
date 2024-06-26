@@ -126,6 +126,11 @@
                     data.forEach(depen => {
                         dependenciaSelect.innerHTML += `<option value="${depen.id}">${depen.nombre_dependencia}</option>`;
                     });
+                    // Set selected value if it exists
+                    var selectedDependencia = dependenciaSelect.getAttribute('data-selected');
+                    if (selectedDependencia) {
+                        dependenciaSelect.value = selectedDependencia;
+                    }
                 })
                 .catch(error => console.error('Error al cargar las dependencias:', error));
         } else {
@@ -135,7 +140,13 @@
 
     document.addEventListener('DOMContentLoaded', (event) => {
         var secretariaSelect = document.getElementById("id_secretaria");
+        var dependenciaSelect = document.getElementById("id_id_dependencia");
         secretariaSelect.addEventListener('change', actualizarDependencias);
+        {% if form.instance.id_dependencia %}
+            dependenciaSelect.setAttribute('data-selected', '{{ form.instance.id_dependencia.id }}');
+        {% else %}
+            dependenciaSelect.setAttribute('data-selected', '');
+        {% endif %}
         if (secretariaSelect.value) {
             actualizarDependencias(); // Inicializar dependencias si hay una secretaría seleccionada
         }

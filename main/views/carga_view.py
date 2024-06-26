@@ -6,8 +6,8 @@ import pandas as pd
 from django.contrib.auth.decorators import login_required
 @login_required
 def carga(request):
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     #<QueryDict: {'categoria': ['201'], 'subcategoriaSelec': ['1050'], 'dependenciaSelec': ['517'], 'year': ['']}>
     if request.method == 'POST'  and 'ex' in request.FILES:
         selected_secretaria = request.POST.get('secretaria')

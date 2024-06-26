@@ -44,8 +44,8 @@ def generate_excel(model_name, queryset):
 
 @login_required
 def conmutadores_list(request, *args, **kwargs):
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')

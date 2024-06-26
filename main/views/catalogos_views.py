@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from ..models import ConmutadoresMarcas
 from ..forms import *
-
+from django.http import QueryDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -17,6 +17,9 @@ from django.apps import apps
 import openpyxl
 from django.http import HttpResponse
 
+########################
+# EXCEL
+########################
 def generate_excel(model_name, queryset):
     model = apps.get_model(app_label='main', model_name=model_name)
     wb = openpyxl.Workbook()
@@ -29,7 +32,7 @@ def generate_excel(model_name, queryset):
         row = []
         for field in headers:
             value = getattr(obj, field)
-            if isinstance(value, models.Model):
+            if isinstance(value, models.Model): 
                 # Obtén el campo en la posición 2
                 related_model_fields = [f.name for f in value._meta.fields]
                 if len(related_model_fields) >= 2:
@@ -43,6 +46,176 @@ def generate_excel(model_name, queryset):
     response['Content-Disposition'] = f'attachment; filename={model_name}.xlsx'
     wb.save(response)
     return response
+########################
+# EXCEL
+########################
+
+########################
+# Todos
+########################
+@login_required
+def todo(request):
+    rol = usu(request)
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
+    year = request.GET.get('anio')
+    secretaria = request.GET.get('secretariaSelec')
+    dependencia = request.GET.get('dependencia')
+    search = request.GET.get('search')
+    categoria = request.GET.get('categoria')
+    #almacenamientos_list = Almacenamientos.objects.all()
+    if 'secretaria' in request.GET:
+        selected_secretaria = request.GET['secretaria']
+        if selected_secretaria:
+            dependencias = Dependencias.objects.filter(id_secretaria=selected_secretaria)
+    if year:
+        conmutadores = Conmutadores.objects.filter(fecha__year=year)
+        almacenamientos_list = Almacenamientos.objects.filter(fecha__year=year)
+        drones_list = Drones.objects.filter(fecha__year=year)
+        energias_list = Energias.objects.filter(fecha__year=year)
+        enlaces_list = Enlaces.objects.filter(fecha__year=year)
+        equipo_telefonico_list = EquipoTelefonico.objects.filter(fecha__year=year)
+        equipos_personales_list = EquiposPersonales.objects.filter(fecha__year=year)
+        equipos_servidores_list = EquiposServidores.objects.filter(fecha__year=year)
+        firewalls_list = Firewalls.objects.filter(fecha__year=year)
+        herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.filter(fecha__year=year)
+        impresoras_list = Impresoras.objects.filter(fecha__year=year)
+        proyectores_list = Proyectores.objects.filter(fecha__year=year)
+        routers_list = Routers.objects.filter(fecha__year=year)
+        sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.filter(fecha__year=year)
+        sites_list = Sites.objects.filter(fecha__year=year)
+    else:
+        almacenamientos_list = Almacenamientos.objects.all()
+        conmutadores = Conmutadores.objects.all()
+        drones_list = Drones.objects.all()
+        energias_list = Energias.objects.all()
+        enlaces_list = Enlaces.objects.all()
+        equipo_telefonico_list = EquipoTelefonico.objects.all()
+        equipos_personales_list = EquiposPersonales.objects.all()
+        equipos_servidores_list = EquiposServidores.objects.all()
+        firewalls_list = Firewalls.objects.all()
+        herramientas_desarrollo_list = HerramientaDeDesarrollo.objects.all()
+        impresoras_list = Impresoras.objects.all()
+        proyectores_list = Proyectores.objects.all()
+        routers_list = Routers.objects.all()
+        sistemas_informacion_movil_list = SistemaDeInformacionMovil.objects.all()
+        sites_list = Sites.objects.all()
+
+    if secretaria:
+        conmutadores = conmutadores.filter(id_dependencia__id_secretaria=secretaria)
+        almacenamientos_list = almacenamientos_list.filter(id_dependencia__id_secretaria=secretaria)
+        drones_list = drones_list.filter(id_dependencia__id_secretaria=secretaria)
+        energias_list = energias_list.filter(id_dependencia__id_secretaria=secretaria)
+        enlaces_list = enlaces_list.filter(id_dependencia__id_secretaria=secretaria)
+        equipo_telefonico_list = equipo_telefonico_list.filter(id_dependencia__id_secretaria=secretaria)
+        equipos_personales_list = equipos_personales_list.filter(id_dependencia__id_secretaria=secretaria)
+        equipos_servidores_list = equipos_servidores_list.filter(id_dependencia__id_secretaria=secretaria)
+        firewalls_list = firewalls_list.filter(id_dependencia__id_secretaria=secretaria)
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(id_dependencia__id_secretaria=secretaria)
+        impresoras_list = impresoras_list.filter(id_dependencia__id_secretaria=secretaria)
+        proyectores_list = proyectores_list.filter(id_dependencia__id_secretaria=secretaria)
+        routers_list = routers_list.filter(id_dependencia__id_secretaria=secretaria)
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(id_dependencia__id_secretaria=secretaria)
+        sites_list = sites_list.filter(id_dependencia__id_secretaria=secretaria)
+    if dependencia:
+        conmutadores = conmutadores.filter(id_dependencia=dependencia)
+        almacenamientos_list = almacenamientos_list.filter(id_dependencia=dependencia)
+        drones_list = drones_list.filter(id_dependencia=dependencia)
+        energias_list = energias_list.filter(id_dependencia=dependencia)
+        enlaces_list = enlaces_list.filter(id_dependencia=dependencia)
+        equipo_telefonico_list = equipo_telefonico_list.filter(id_dependencia=dependencia)
+        equipos_personales_list = equipos_personales_list.filter(id_dependencia=dependencia)
+        equipos_servidores_list = equipos_servidores_list.filter(id_dependencia=dependencia)
+        firewalls_list = firewalls_list.filter(id_dependencia=dependencia)
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(id_dependencia=dependencia)
+        impresoras_list = impresoras_list.filter(id_dependencia=dependencia)
+        proyectores_list = proyectores_list.filter(id_dependencia=dependencia)
+        routers_list = routers_list.filter(id_dependencia=dependencia)
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(id_dependencia=dependencia)
+        sites_list = sites_list.filter(id_dependencia=dependencia)
+    if search:
+        conmutadores = conmutadores.filter(no_inventario__icontains=search)
+        almacenamientos_list = almacenamientos_list.filter(no_inventario__icontains=search)
+        drones_list = drones_list.filter(no_inventario__icontains=search)
+        energias_list = energias_list.filter(no_inventario__icontains=search)
+        enlaces_list = enlaces_list.filter(no_inventario__icontains=search)
+        equipo_telefonico_list = equipo_telefonico_list.filter(no_inventario__icontains=search)
+        equipos_personales_list = equipos_personales_list.filter(no_inventario__icontains=search)
+        equipos_servidores_list = equipos_servidores_list.filter(no_inventario__icontains=search)
+        firewalls_list = firewalls_list.filter(no_inventario__icontains=search)
+        herramientas_desarrollo_list = herramientas_desarrollo_list.filter(no_inventario__icontains=search)
+        impresoras_list = impresoras_list.filter(no_inventario__icontains=search)
+        proyectores_list = proyectores_list.filter(no_inventario__icontains=search)
+        routers_list = routers_list.filter(no_inventario__icontains=search)
+        sistemas_informacion_movil_list = sistemas_informacion_movil_list.filter(no_inventario__icontains=search)
+        sites_list = sites_list.filter(no_inventario__icontains=search)
+    
+    if request.GET.get('descarga') == '1':
+        return generate_excel('almacenamientos', almacenamientos_list)
+        
+    combined_list = [{'obj': obj, 'subcategoria': 'Conmutador'} for obj in conmutadores]+ \
+    [{'obj': obj, 'subcategoria': 'Almacenamiento'} for obj in almacenamientos_list] + \
+    [{'obj': obj, 'subcategoria': 'Dron'} for obj in drones_list] + \
+    [{'obj': obj, 'subcategoria': 'Energía'} for obj in energias_list] + \
+    [{'obj': obj, 'subcategoria': 'Equipo Telefónico'} for obj in equipo_telefonico_list] + \
+    [{'obj': obj, 'subcategoria': 'Equipo Personal'} for obj in equipos_personales_list] + \
+    [{'obj': obj, 'subcategoria': 'Equipo Servidor'} for obj in equipos_servidores_list] + \
+    [{'obj': obj, 'subcategoria': 'Firewall'} for obj in firewalls_list] + \
+    [{'obj': obj, 'subcategoria': 'Herramienta de desarrollo'} for obj in herramientas_desarrollo_list] + \
+    [{'obj': obj, 'subcategoria': 'Impresora'} for obj in impresoras_list] + \
+    [{'obj': obj, 'subcategoria': 'Proyector'} for obj in proyectores_list] + \
+    [{'obj': obj, 'subcategoria': 'Router'} for obj in routers_list] + \
+    [{'obj': obj, 'subcategoria': 'Sistema de Información Móvil'} for obj in sistemas_informacion_movil_list] + \
+    [{'obj': obj, 'subcategoria': 'Site'} for obj in sites_list] + \
+    [{'obj': obj, 'subcategoria': 'Enlace'} for obj in enlaces_list] 
+    paginator = Paginator(combined_list, 10)  # Muestra 10 drones por página
+
+    page_number = request.GET.get('page')
+    try:
+        combined_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Si el número de página no es un entero, muestra la primera página.
+        combined_list = paginator.page(1)
+    except EmptyPage:
+        # Si el número de página está fuera de rango (por encima del número total de páginas), muestra la última página.
+        combined_list = paginator.page(paginator.num_pages)
+    
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        del query_params['page']
+    query_string = query_params.urlencode()
+    if rol != 1:
+        return render(request, 'todo/todo.html', {
+        'combined_list': combined_list,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
+        'inventario': 'Todos',
+        'clave': '1000',
+        'query_string': query_string,
+        'nav': rol})
+    return render(request, 'todo/todo.html', {
+        'combined_list': combined_list,
+        'secretarias': secretarias,
+        'dependencias': dependencias,
+        'selected_secretaria': request.GET.get('secretaria'),
+        'anio':year,
+        'secretaria': None if not secretaria else Secretarias.objects.filter(id=secretaria).first(),
+        'dependencia': None if not dependencia else Dependencias.objects.filter(id=dependencia).first(),
+        'categoria_seleccionada':categoria if categoria else '',
+        'inventario': 'Todos',
+        'clave': '1000',
+        'query_string': query_string,
+        })
+########################
+# Todos
+########################
+
+
 ########################
 # CRUD Operations for ConmutadoresMarcas Model
 ########################
@@ -183,8 +356,8 @@ def conmutadores_puerto_delete(request, pk):
 @login_required
 def almacenamientos_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -408,8 +581,8 @@ def dependencia_delete(request, pk):
 @login_required
 def drones_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -697,8 +870,8 @@ def energia_marca_delete(request, pk):
 @login_required
 def energias_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -807,8 +980,8 @@ def energia_delete(request, pk):
 @login_required
 def enlaces_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -984,8 +1157,8 @@ def enlace_tipo_delete(request, pk):
 @login_required
 def equipo_telefonico_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -1100,8 +1273,8 @@ def equipo_telefonico_delete(request, pk):
 @login_required
 def equipos_personales_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -1402,8 +1575,8 @@ def equipo_personal_tipopuerto_delete(request, pk):
 @login_required
 def equipos_servidores_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -1765,8 +1938,8 @@ def equipo_servidor_tipo_delete(request, pk):
 @login_required
 def firewalls_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -1944,8 +2117,8 @@ def firewall_marca_delete(request, pk):
 @login_required
 def herramientas_desarrollo_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -2061,8 +2234,8 @@ def herramienta_desarrollo_delete(request, pk):
 @login_required
 def impresoras_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -2300,8 +2473,8 @@ def municipio_delete(request, pk):
 @login_required
 def proyectores_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -2482,8 +2655,8 @@ def proyector_marca_delete(request, pk):
 @login_required
 def routers_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -2778,8 +2951,8 @@ def dependencia_delete(request, pk):
 @login_required
 def sistemas_informacion_movil_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -2954,8 +3127,8 @@ def sistema_informacion_movil_nombre_delete(request, pk):
 @login_required
 def sistemas_informacion_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -3132,8 +3305,8 @@ def sistema_informacion_nombre_delete(request, pk):
 @login_required
 def sites_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     year = request.GET.get('anio')
     secretaria = request.GET.get('secretariaSelec')
     dependencia = request.GET.get('dependencia')
@@ -3247,8 +3420,8 @@ def site_delete(request, pk):
 @login_required
 def usuarios_list(request):
     rol = usu(request)
-    secretarias = Secretarias.objects.all()
-    dependencias = Dependencias.objects.all()
+    secretarias = Secretarias.objects.all().order_by('nombre_secretaria')
+    dependencias = Dependencias.objects.all().order_by('nombre_dependencia')
     dependencia = request.GET.get('dependencia')
     secretaria = request.GET.get('secretariaSelec')
     search = request.GET.get('search')

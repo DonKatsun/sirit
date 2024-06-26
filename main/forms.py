@@ -955,7 +955,7 @@ class SistemaDeInformacionMovilForms(forms.ModelForm):
             'no_inventario' : 'Inventario:',
             'activo': 'Activo:',
             'id_dependencia': 'Dependencia: ',
-'secretaria': 'Secretaría:',
+            'secretaria': 'Secretaría:',
             'plataforma': 'Plataforma:',
             'tipo_desarrollo': 'Tipo de desarrollo:',
             'framework':'Framework:',
@@ -1151,7 +1151,7 @@ class UsuariosForms(forms.ModelForm):
 
         labels = {
             'id_dependencia': 'Dependencia: ',
-'secretaria': 'Secretaría:',
+            'secretaria': 'Secretaría:',
             'email': 'Email:',
             'contrasenia': 'Contraseña:',
             'nombre':'Nombre:',
@@ -1164,11 +1164,21 @@ class UsuariosForms(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance and instance.id_dependencia:
+            secretaria = instance.id_dependencia.id_secretaria
+            self.fields['secretaria'].initial = secretaria
+            self.fields['id_dependencia'].queryset = Dependencias.objects.filter(id_secretaria=secretaria).order_by('nombre_dependencia')
+        else:
+            self.fields['id_dependencia'].queryset = Dependencias.objects.none()
         # Personalizar el widget para mostrar una opción diferente al usuario pero enviar el valor correcto
         self.fields = OrderedDict(self.fields.items())
+        self.fields.move_to_end('nombre', False)
+        self.fields.move_to_end('apellio_materno', False)
+        self.fields.move_to_end('apellido_paterno', False)
         self.fields.move_to_end('id_dependencia', False)
         self.fields.move_to_end('secretaria', False)
-        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all()])
+        self.fields['secretaria'].widget = forms.Select(choices=[(obj.pk, obj.nombre_secretaria) for obj in Secretarias.objects.all().order_by('nombre_secretaria')])
         self.fields['id_dependencia'].widget = forms.Select()
         self.fields['id_rol'].widget = forms.Select(choices=[(obj.pk, obj.rol) for obj in Roles.objects.all()])
 
